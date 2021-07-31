@@ -51,7 +51,7 @@ class Index extends Base
         $uid = $this->uid;
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $is_vip = UsersService::isVip($userinfo);
-        $source = input('source');
+        //$source = input('source');
         // custom_log('邀请人','代理'.print_r($source,true));
         //判断资料是否完善
         $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
