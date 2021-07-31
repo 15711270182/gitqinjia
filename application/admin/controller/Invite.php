@@ -50,13 +50,14 @@ class Invite extends Controller
     public function index()
     {
         $this->title = '用户列表';
-        $query = $this->_query($this->table3)->alias('p')
-            ->leftJoin('relation r','p.uid=r.bid')
+        $query = $this->_query($this->table1)->alias('r')
+            ->leftJoin('children p','r.bid= p.uid')
             ->join('userinfo m','r.bid=m.id');
         $field = 'count(*) as info_count,r.create_at,r.bid as uid,m.nickname,m.headimgurl,m.add_time,p.sex,p.year,p.phone,p.province,p.residence,p.status,p.balance,p.withdrawn_amount';
         $query->field($field)
             ->timeBetween('m.add_time#add_time')
             ->equal("r.bid#bid,p.phone#phone,m.nickname#nickname")
+            ->where(['r.type'=>0])
             ->group('r.bid')
             ->order('r.create_at desc')
             ->page();
