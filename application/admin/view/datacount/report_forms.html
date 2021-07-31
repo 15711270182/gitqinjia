@@ -1,0 +1,59 @@
+<div class="think-box-shadow store-total-container">
+  <div id="main" style="height:390px"></div>
+</div>
+<script>
+  require(['echarts'], function (echarts, chart) {
+    chart = echarts.init(document.getElementById('main'));
+    window.onresize = chart.resize;
+    chart.setOption({
+      tooltip: {trigger: 'axis'},
+      grid: {top: '10%', left: '3%', right: '8%', bottom: '3%', containLabel: true},
+      xAxis: [{
+        type: 'category', scale: false,
+        boundaryGap: false,
+        axisLabel: {
+          color: '#2f9de2',
+        },
+        data: eval('{:json_encode($statistical.xs)}')
+      }],
+      yAxis: [{
+        type: 'value',
+        scale: true,
+        max: function (value) {
+          return Math.ceil(value.max / 50) * 50 + 100;
+        },
+        axisLabel: {
+          color: '#2f9de2',
+          formatter: "{value}人"
+        },
+        splitLine: {
+          lineStyle: {
+            type: 'dashed',
+            color: '#cccccc'
+          }
+        }
+      }],
+      legend: {data: ['新增用户数', '填写资料数', '查看号码数']},
+      series: [
+        {
+          type: 'line',
+          name: '新增用户数',
+          label: {normal: {show: true, position: ['30%', '-100%'], offset: [10, -10], formatter: "{c}"}},
+          data: eval('{:json_encode($statistical.ys.user)}')
+        },
+        {
+          type: 'line',
+          name: '填写资料数',
+          label: {normal: {show: true, position: ['30%', '-100%'], offset: [10, -10], formatter: "{c}"}},
+          data: eval('{:json_encode($statistical.ys.children)}')
+        },
+        {
+          type: 'line',
+          name: '查看号码数',
+          label: {normal: {show: true, position: ['30%', '-100%'], offset: [10, -10], formatter: "{c}"}},
+          data: eval('{:json_encode($statistical.ys.tel)}')
+        }
+      ]
+    });
+  });
+</script>

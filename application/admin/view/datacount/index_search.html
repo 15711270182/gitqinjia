@@ -9,11 +9,17 @@
         </div>
 
         <div class="layui-form-item layui-inline">
-            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 查 询</button>
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon search_btn">&#xe615;</i> 查 询</button>
+            <span class="layui-btn layui-btn-primary" data-title="查询报表" data-modal='{:url("ReportForms")}?type=0'><i class="layui-icon out_excel">&#xe629;</i> 查询报表</span>
+            <span class="layui-btn layui-btn-primary" data-title="近四周统计" data-modal='{:url("ReportForms")}?type=1'><i class="layui-icon out_excel">&#xe629;</i> 近四周统计</span>
+            <span class="layui-btn layui-btn-primary" data-title="近六个月统计" data-modal='{:url("ReportForms")}?type=2'><i class="layui-icon out_excel">&#xe629;</i> 近六个月统计</span>
         </div>
     </form>
 </fieldset>
 
 <script>
     form.render();
+    function getReportForms(){
+
+    }
 </script>

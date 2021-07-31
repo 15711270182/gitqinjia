@@ -503,10 +503,10 @@ class Index extends Base
         if(empty($code)){
             return $this->errorReturn(self::errcode_fail,'code参数不能为空');
         }
-//        $checkcode = cache($tel);
-//        if(empty($checkcode)){
-//            return $this->errorReturn(self::errcode_fail,'验证码过期');
-//        }
+        $checkcode = cache($tel);
+        if(empty($checkcode)){
+            return $this->errorReturn(self::errcode_fail,'验证码过期');
+        }
         if($type == 1){
             $session3rd = input('session3rd');
             $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
@@ -515,13 +515,13 @@ class Index extends Base
                 return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
             }
         }
-//        if($checkcode == $code){
+        if($checkcode == $code){
             if($type == 1){ //验证通过 手机号存入数据库
                  $update['phone'] = $tel;
                  ChildrenModel::childrenEdit(['uid'=>$uid],$update);
             }
             return $this->successReturn('','成功',self::errcode_ok);
-//        }
+        }
         return $this->errorReturn(self::errcode_fail,'验证码错误');
     }
     /**

@@ -47,6 +47,7 @@ class Datacount extends Controller
             $search_list[$key]['children_count'] = count($this->getChildrenList($start, $end));
             $search_list[$key]['tel_count'] = count($this->getTelList($start, $end));
         }
+        cache('statistical_data', $search_list);
         $this->assign('today', $today);
         $this->assign('list', $search_list);
         return $this->fetch();
@@ -216,5 +217,99 @@ class Datacount extends Controller
     {
         if (empty($condition)) return array();
         return Db::table('userinfo')->where($condition)->find();
+    }
+
+    public function ReportForms()
+    {
+        $type = input('type');
+        if ($type == 0){
+            $statistical_data = cache('statistical_data');
+            $statistical = $this->createStatisticalFormat($statistical_data);
+        }elseif($type == 1){// 近四周报表
+            $weeks = $this->getWeeks();
+            foreach ($weeks as $key => $value){
+                $start = $value['start'].'000000';
+                $end = $value['end'].'235959';
+                $weeks[$key]['date'] = substr($value['start'], 4).'-'.substr($value['end'],4);
+                $weeks[$key]['start'] = strtotime(date($start));
+                $weeks[$key]['end'] = strtotime(date($end));
+            }
+            $search_list = array();
+            foreach ($weeks as $key => $value){
+                $search_list[$key]['date'] = $value['date'];
+                $search_list[$key]['user_count'] = count($this->getNewUserList($value['start'], $value['end']));
+                $search_list[$key]['children_count'] = count($this->getChildrenList($value['start'], $value['end']));
+                $search_list[$key]['tel_count'] = count($this->getTelList($value['start'], $value['end']));
+            }
+            $statistical = $this->createStatisticalFormat($search_list);
+        }else{
+            $months = $this->getMonths();
+            foreach ($months as $key => $value){
+                $start = str_replace('-','',$value['date']).'01000000';
+                $end = str_replace('-','',$value['date']).'31235959';
+                $months[$key]['start'] = strtotime(date($start));
+                $months[$key]['end'] = strtotime(date($end));
+            }
+            $search_list = array();
+            foreach ($months as $key => $value){
+                $search_list[$key]['date'] = $value['date'];
+                $search_list[$key]['user_count'] = count($this->getNewUserList($value['start'], $value['end']));
+                $search_list[$key]['children_count'] = count($this->getChildrenList($value['start'], $value['end']));
+                $search_list[$key]['tel_count'] = count($this->getTelList($value['start'], $value['end']));
+            }
+            $statistical = $this->createStatisticalFormat($search_list);
+        }
+        $this->assign('statistical', $statistical);
+        return $this->fetch();
+    }
+
+    /**
+     * 获取近4周
+     * @return array
+     */
+    public function getWeeks()
+    {
+        $weeks = array();
+        for ($i=4; $i > 0; $i--){
+            $weeks[$i]['start'] = date('Ymd', strtotime('-'.$i.' week Monday'));
+            $weeks[$i]['end'] = date('Ymd', strtotime('-'.($i-1) .' week Sunday'));
+        }
+        return $weeks;
+    }
+
+    /**
+     * 获取近6个月
+     * @return array
+     */
+    public function getMonths()
+    {
+        $months = array();
+        for ($i = 5; $i >= 0; $i--){
+            $months[$i]['date'] = date("Y-m",mktime(0, 0,0,date("m")- $i,1,date("Y")));
+        }
+        return $months;
+    }
+
+
+    /**生成报表格式
+     * @param $statistical_data
+     * @return array
+     */
+    public function createStatisticalFormat($statistical_data)
+    {
+        if (empty($statistical_data)) return array();
+        $statistical = array();
+        $statistical['xs'] = array();
+        $statistical['ys'] = array();
+        $statistical['ys']['user'] = array();
+        $statistical['ys']['children'] = array();
+        $statistical['ys']['tel'] = array();
+        foreach ($statistical_data as $key => $value){
+            array_push($statistical['xs'], $value['date']);
+            array_push($statistical['ys']['user'], $value['user_count']);
+            array_push($statistical['ys']['children'], $value['children_count']);
+            array_push($statistical['ys']['tel'], $value['tel_count']);
+        }
+        return $statistical;
     }
 }
