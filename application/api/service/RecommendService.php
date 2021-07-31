@@ -436,16 +436,7 @@ class RecommendService
         $residence_count = 0;
         $replenish_list = array();
         while ($residence_count < $total){
-            $age_condition = [
-                'min_age' => $request['age']['min_age'],
-                'max_age' => $request['age']['max_age']
-            ];
-            $height_condition = [
-                'min_height' => $request['height']['min_height'],
-                'max_height' => $request['height']['max_height']
-            ];
-            $request_condition = $this->getRequire($age_condition, $height_condition, $request['education']);
-            $other_list = $this->getOtherMatch($uid, $total, $request_condition, $had_id, $residence);
+            $other_list = $this->getOtherMatch($uid, $total, $request, $had_id, $residence);
             if ($other_list){
                 foreach ($other_list as $key => $value){
                     array_push($had_id, $value['uid']);
@@ -453,13 +444,13 @@ class RecommendService
                 }
             }
             if ($total){
-                if ($request['age'] < 18) break;
+                if ($request['age']['min_age'] < 18) break;
             }
-            $request['age']['min_age'] = $request_condition['age']['min_age'];
-            $request['age']['max_age'] = $request_condition['age']['max_age'];
-            $request['height']['min_height']= $request_condition['height']['min_height'];
-            $request['height']['max_height'] = $request_condition['height']['max_height'];
-            $request['education'] = $request_condition['education'];
+            $age_condition['min_age'] = $request['age']['min_age'];
+            $age_condition['max_age'] = $request['age']['max_age'];
+            $height_condition['min_height']= $request['height']['min_height'];
+            $height_condition['max_height'] = $request['height']['max_height'];
+            $request = $this->getRequire($age_condition, $height_condition, $request['education']);
             $residence_count = count($other_list);
             $total = $total - $residence_count;
         }
