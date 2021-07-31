@@ -115,7 +115,7 @@ class Order extends Base
         }
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $openid = $userinfo['openid'];
-        $notify_url = 'https://qin.njzec.com/api/order/orderNotify';
+        $notify_url = 'https://testqin.njzec.com/api/order/orderNotify';
         $options = [
             'body' => '充值',
             'out_trade_no' => $order_num,
