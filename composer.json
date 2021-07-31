@@ -1,0 +1,33 @@
+{
+  "type": "project",
+  "name": "zoujingli/thinkadmin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Anyon",
+      "email": "zoujingli@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6",
+    "ext-gd": "*",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-iconv": "*",
+    "ext-openssl": "*",
+    "ext-mbstring": "*",
+    "endroid/qr-code": "^1.9",
+    "topthink/framework": "5.1.*",
+    "zoujingli/ip2region": "^1.0",
+    "zoujingli/think-library": "5.1.x-dev",
+    "zoujingli/weopen-developer": "dev-master",
+    "weiwei/api-doc": "dev-master",
+    "jiaweixs/weapp": "^1.4"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer"
+    }
+  }
+}

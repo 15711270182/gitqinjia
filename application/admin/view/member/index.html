@@ -1,0 +1,81 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='member/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>创建时间</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>电话</th>
+            <th class='text-center nowrap'>剩余次数</th>
+            <th class='text-center nowrap'>邀请人ID</th>
+            <th class='text-center nowrap'>邀请人</th>
+            <th class='text-center nowrap'>资料</th>
+            <th class='text-center nowrap'>假用户</th>
+            <th class='text-center nowrap'>会员</th>
+            <th class='text-center nowrap'>注销</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.addtime|default=0}</td>
+            <td class='text-center nowrap'>{$vo.id}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.phone|default=''}</td>
+            <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
+            <td class='text-center nowrap'>{$vo.relation_id}</td>
+            <td class='text-center nowrap'>{$vo.relation_name}</td>
+            <td class='text-center nowrap'>{$vo.is_children|default=0}</td>
+            <td class='text-center nowrap'>{$vo.is_false|default=0}</td>
+            <td class='text-center nowrap'>
+                {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
+                {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
+            </td>
+
+            <td class='text-center nowrap'>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" data-title="子女详情" data-modal='{:url("look")}?id={$vo.id}'>子女详情</a>
+                {eq name='vo.team_status' value='1'}
+                <a data-dbclick class="layui-btn layui-btn-sm" data-title="审核电话" data-modal='{:url("checkphone")}?id={$vo.id}'>审核电话</a>
+                {/eq}
+<!--                <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('forbid')}" data-value="id#{$vo.id};status#0" data-csrf="{:systoken('forbid')}">禁 用</a>-->
+                {if condition="$vo.status eq 0"}
+                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要激活该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">激活</a>
+                {else /}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要注销该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">注销</a>
+                {/if}
+<!--                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该用户吗？" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

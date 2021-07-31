@@ -1,0 +1,28 @@
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        <?php if(count($list)){?>
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>序号</th>
+            <th class='text-center nowrap'>类型</th>
+            <th class='text-center nowrap'>备注</th>
+            <th class='text-center nowrap'>时间</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$key + 1}</td>
+            <td class='text-center nowrap'>{$vo.type}</td>
+            <td class='text-center nowrap'>{$vo.remarks}</td>
+            <td class='text-center nowrap'>{$vo.create_at}</td>
+        </tr>
+        {/foreach}
+        <?php }else{;?>
+        <div class="margin-bottom-15"><h2>暂无记录</h2></div>
+        <?php };?>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,46 @@
+<form onsubmit="return false;" action='{:url("width_save")}' data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+
+         <div class="layui-form-item">
+            <label class="layui-form-label">用户id</label>
+            <div class="layui-input-block">
+                <input name="" value='{$vo.uid}' disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input name="" disabled value='{$vo.nickname}' class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item">
+            <label class="layui-form-label">用户头像</label>
+            <div class="layui-input-block">
+                <img data-tips-image style="width:80px;height:80px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账户余额</label>
+            <div class="layui-input-block">
+               <input name="balance" disabled value='{$vo.balance/100}' class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">提现金额</label>
+            <div class="layui-input-block">
+               <input name="tx_money" required value='' class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.uid'}<input type='hidden' value='{$vo.uid}' name='uid'>{/notempty}
+    {notempty name='vo.balance'}<input type='hidden' value='{$vo.balance}' name='balance'>{/notempty}
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>

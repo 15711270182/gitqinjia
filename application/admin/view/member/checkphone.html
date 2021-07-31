@@ -1,0 +1,39 @@
+<form class="layui-form layui-box modal-form-box" action="{:url('passphone')}" data-auto="true" method="post">
+
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" value='{$info.phone|default=""}' class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+  
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($info['id'])}<input type='hidden' value='{$info.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>通过</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>

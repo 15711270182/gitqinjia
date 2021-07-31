@@ -1,0 +1,16 @@
+2021-07-05 17:10:24  2021-07-05 17:10:24  Array
+(
+    [access_token] => 46_xoCDwpwGBCR0595ECw8R9-23W1M4N8A8ED_5n9051hvkrd7Ajw5x44mevfv_RAUi9Hnd35lEeWQjZV-cOaeCnmoGAb_Zb6o3LPVbWA3p5LvpsCO3JOQB8QfjbKk8ZuqkRMOjgEd6iHRsODpEZSKaAGAUNF
+    [expires_in] => 7200
+)
+2021-07-05 17:10:24  {"touser":"oJj4v5w6qe1bCQgOlgOJ0sD8Vz1w","template_id":"aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM","page":"pages\/message\/message","data":{"first":{"value":"有人收藏了你的","color":"#FF0000"},"keyword1":{"value":"张家长","color":"#000000"},"keyword2":{"value":"14751087906 ","color":"#000000"},"keyword3":{"value":"2021-07-05 17:10","color":"#000000"},"remark":{"value":"2021-07-05 17:10","color":"#000000"}}}2021-07-05 17:10:24  Array
+(
+    [errcode] => 48001
+    [errmsg] => api unauthorized rid: 60e2cc80-42db4eeb-69908720
+)
+2021-07-05 17:15:40  {"touser":"oJj4v5w6qe1bCQgOlgOJ0sD8Vz1w","template_id":"aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM","page":"pages\/message\/message","data":{"first":{"value":"有人收藏了你的","color":"#FF0000"},"keyword1":{"value":"张家长","color":"#000000"},"keyword2":{"value":"14751087906 ","color":"#000000"},"keyword3":{"value":"2021-07-05 17:15","color":"#000000"},"remark":{"value":"有人收藏了你的","color":"#000000"}}}2021-07-05 17:15:40  Array
+(
+    [errcode] => 48001
+    [errmsg] => api unauthorized rid: 60e2cdbc-22c4dd7d-11db5d2d
+)
+

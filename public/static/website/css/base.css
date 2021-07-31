@@ -1,0 +1,836 @@
+/* 导航 */
+body{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+#bar{
+    width: 100%;  
+    height: 12%;
+    opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 0 12%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow:hidden;
+    z-index: 100;
+}
+#bar .logo{
+    width: 193px;
+    height: 98px;
+}
+#bar #menus{
+    list-style: none;
+    display: flex;
+    margin-top: 3%;
+}
+#bar #menus li{
+    height: 80px;
+    margin-left: 65px;
+    -webkit-transition: all  300ms  linear;
+    -moz-transition: all  300ms linear;
+    transition: all  300ms linear;
+}
+#bar #menus li a{  
+    padding: 0 10px; 
+font-size: 18px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #FFFFFF;
+    cursor: pointer;
+    text-decoration: none;
+    height: 80px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+  
+}
+#bar #menus li a .name{
+    margin-bottom: 7px;
+}
+#bar #menus li:hover { 
+background: rgba(204, 170, 131, 0.5);
+
+}
+#bar #menus li.sel {
+    background: rgba(204, 170, 131, 0.5);
+}
+/* ***************************************************** */
+#marry #section0{
+    position: relative;
+}
+#marry #section0 .bg{
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: -14%;
+}
+#marry #section0 .title{
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 200;
+}
+#marry #section0 .title .z_title{
+    text-align: center;
+    font-size: 46px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin: 0 auto 0;
+}
+#marry #section0 .title .s_title{
+ text-align: center;   
+font-size: 30px;
+font-family:Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+margin: 10px auto 0;
+}
+#marry #section0 .vode{
+    width: 48%;
+    height: 57%;
+    background-image: url(http://rs.kami5.com/marry/MacBook.png);
+    background-size: cover;
+    position: absolute;
+    bottom: 2%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+#marry #section0 .vode .air_video{
+    /* width: 654px;
+    height: 410px; */
+    position: absolute;
+    top: 6%;
+    left: 12%;
+    background: #000;
+    overflow: hidden;
+}
+#marry #section0 .vode .air_video .vjs-poster,#marry #section0 .vode .air_video .video-js .vjs-tech {
+    top:23px;
+}
+/* #marry #section0 .vode .air_video .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar{
+    bottom: -20px !important;
+}
+#marry #section0 .vode .air_video .video-js .vjs-control-bar{
+    bottom: -20px !important;
+} */
+#marry #section1 .title{
+    height: 63px;
+    text-align: center;
+    font-size: 30px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #242221;
+    margin-bottom: 91px;
+}
+#marry #section1 .title #vipNum{
+    color: #CCAA83;
+    font-size: 60px;
+}
+#marry #section1 .box{
+    width: 52%;
+    height: 75%;
+    background-image: url("http://rs.kami5.com/marry/vidbg.png");
+    background-size: cover;
+    margin: 0 auto;
+    position: relative;
+}
+#marry #section1 .box .vid_mid{
+    width: 255px;
+    height: 255px;
+    background-image: url(http://rs.kami5.com/marry/vidpicx2.png);
+    background-size: cover;
+    position: absolute;
+    top: 30%;
+    left: 38%;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#marry #section1 .box .ident{
+ position: absolute;   
+font-size: 19px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+-webkit-transition: all  300ms  linear;
+-moz-transition: all  300ms linear;
+transition: all  300ms linear;
+}
+#marry #section1 .box .ident:hover{
+    font-size: 28px;
+    font-weight: 500;
+}
+#marry #section1 .box .education{
+    top: 9%;
+    left: 14%;
+}
+#marry #section1 .box .myMrry{
+    top: 2%;
+    right: 27%;
+}
+#marry #section1 .box .income{
+    top: 48%;
+    left: 4%;
+}
+#marry #section1 .box .car{
+    top: 37%;
+    right: -1%;
+}
+#marry #section1 .box .card{
+    bottom: 13%;
+    left: 17%;
+}
+#marry #section1 .box .house{
+    bottom: 9%;
+    right: 32%;
+}
+#marry #section1 .box .occupation{
+    bottom: 22%;
+    right: 6%;
+}
+#marry #section2 {
+    position: relative;
+}
+#marry #section2 .top_bg{
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+}
+#marry #section2 .tip{
+ position: absolute;
+ top: 11%;
+ left: 20%;
+font-size: 24px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #242221;
+}
+#marry #section2 .air_video{
+    /* width: 805px;
+    height: 466px; */
+    position: absolute;
+    top: 23%;
+    left: 16%;
+    background: #B8B3CA;
+}
+/* #example_video_1{
+    width: 642px;
+    height: 455px;
+} */
+#marry #section2  #case{
+    width: 460px;
+   padding: 0;
+   list-style: none;
+   position: absolute;
+   left: 60%;
+   bottom: 4%;
+}
+#case .li{
+    width: 454px;
+    height: 162px;
+    border-right: 6px solid #fff;
+    background-color: #fff;
+    padding: 30px 27px;
+    box-sizing: border-box;
+    -webkit-transition: all  300ms  linear;
+    -moz-transition: all  300ms linear;
+    transition: all  300ms linear;
+}
+#case .li:hover{
+    background-color: #F5F5F5;
+}
+#case .li.click{   
+    background: #F5F5F5;
+    border-right-color: #CCAA83;
+}
+#case .li .li_title{
+    
+font-size: 20px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+}
+#case .li .txt{
+line-height: 27px; 
+font-size: 16px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+}
+/* ################# */
+#marry #section3{
+    position: relative;
+}
+#marry #section3 .mate{
+    width: 100%;
+    height: auto;
+}
+#marry #section3 .info{
+    width: 83%;
+    height: 60%;
+    /* background: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0)); */
+    position: absolute; 
+    left: 50%; top: 60%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#marry #section3 .info .mate_li{
+    width: 25%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+    /* position: relative; */
+    -webkit-transition: all  300ms  linear;
+    -moz-transition: all  300ms linear;
+    transition: all  300ms linear;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center; */
+    padding: 44px ;
+    box-sizing: border-box;
+    position: relative;
+}
+/* #marry #section3 .info .mate_li:hover{
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+} */
+#marry #section3 .info .mate_li.active{
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+}
+#marry #section3 .info .mate_li .word{
+    color: #fff;
+    position: absolute;
+    top: 57%;
+    width: 79%;
+    -webkit-transition: all  300ms  linear;
+    -moz-transition: all  300ms linear;
+    transition: all  300ms linear;
+}
+#marry #section3 .info .mate_li .word .name{
+    margin-bottom: 23px;
+    font-size: 28px;
+    font-family: Microsoft YaHei;
+    font-weight: 500;
+}
+#marry #section3 .info .mate_li .word .w_txt{
+    
+font-size: 18px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+margin-bottom: 50px;
+}
+#marry #section3 .info .mate_li.active .word {
+    top: 53%;
+}
+#marry #section3 .info .mate_li .word .w_txt span{
+    font-size: 28px;
+}
+/* #################### */
+#marry #section4 .suc_title p{
+    
+font-size: 28px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #242221;
+text-align: center;
+margin: 0;
+}
+#marry #section4 .suc_title .line{
+    width: 60px;
+    height: 8px;
+    background: #CCAA83;
+    margin: 10px auto;
+}
+#marry #section4 .info{
+    width: 100%;
+    position: relative;
+    margin-top: 80px;
+}
+#marry #section4 .info .suc_bg{
+    width: 100%;
+    height: auto;
+}
+#marry #section4 .info .list{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    padding: 0 10%;
+    box-sizing: border-box;
+    margin: 0;
+}
+#marry #section4 .info .list .li{
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#marry #section4 .info .list .li .num{
+    
+font-size: 50px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #FFFFFF;
+padding: 0;
+margin: 0;
+}
+#marry #section4 .info .list .li .tip{
+    font-size: 30px;
+    font-family: Microsoft YaHei;
+    color: #FFFFFF;
+    padding: 0;
+    margin: 0;
+}
+#marry #section4 .info .list .li.pre{
+    background-image: url("http://rs.kami5.com/marry/suc_icon_bg1.png");
+    background-size:cover;
+} 
+#marry #section4 .info .list .li.s_time{
+    background-image: url("http://rs.kami5.com/marry/suc_icon_bg2.png");
+    background-size:cover;
+} 
+#marry #section4 .info .list .li.c_time{
+    background-image: url("http://rs.kami5.com/marry/suc_icon_bg3.png");
+    background-size:cover;
+} 
+/* ************************ */
+#marry #section5 .wind{
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
+#marry #section5 .ex_1{
+    width: 37%;
+    height: auto;
+}
+#marry #section5 .box_left{
+    position: relative;
+}
+#marry #section5 .box_left::after{
+    content: " ";
+    display: block;
+   position: absolute;
+   bottom: 7px;
+   left:-30px;
+   width: 6px;
+   height: 180px;
+   background: linear-gradient(90deg, #1F1D1C 0%, #525050 100%);
+}
+#marry #section5 .box_left .ex_title{
+    margin-bottom: 55px;
+}
+#marry #section5 .ex_title .pos_ti{  
+font-size: 46px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #242221;
+margin-bottom: 5px;
+}
+#marry #section5 .ex_title .sub_ti{   
+font-size: 30px;
+font-family:Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+position: relative;
+}
+#marry #section5 .ex_title .sub_ti::after{
+    content: " ";
+    display: block;
+   position: absolute;
+   bottom: 7px;
+   left: 230px;
+   height: 6px;
+   width: 30px;
+   background-color: #242221;
+}
+#marry #section5 .ex_per {
+    margin-bottom: 25px;
+}
+#marry #section5 .ex_per .name{
+
+    font-size: 44px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #242221;
+}
+#marry #section5 .ex_per .time{
+    width: 126px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border: 2px solid #000000;  
+font-size: 20px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+margin-top: 10px;
+}
+
+#marry #section5 .thing{
+    width: 56%;
+    line-height: 28px;
+    font-size: 20px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #242221;
+}
+/* ***************************** */
+#marry #section6 .wind{
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
+#marry #section6 .ex_1{
+    width: 45%;
+    height: auto;
+}
+
+#marry #section6 .box_right{
+    position: relative;
+    margin-left: 100px;
+}
+#marry #section6 .box_right::after{
+    content: " ";
+    display: block;
+   position: absolute;
+   bottom: -42px;
+   right:0px;
+   width: 36px;
+   height: 8px;
+   background: linear-gradient(90deg, #1F1D1C 0%, #525050 100%);
+}
+#marry #section6 .box_right .pos_title{
+ padding-left: 100px;
+font-size: 34px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+text-align: right;
+box-sizing: border-box;
+}
+#marry #section6 .box_right .ex_per{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+#marry #section6 .box_right .ex_per .name{
+    
+font-size: 32px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #242221;
+    }
+    #marry #section6 .box_right .ex_per .time{
+        width: 126px;
+        height: 30px;
+        line-height: 32px;
+        text-align: center;
+        border: 2px solid #000000;  
+    font-size: 20px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #242221;
+    margin-top: 10px;
+    float: right;
+    }
+    
+    #marry #section6 .box_right .thing{
+        width: 70%;
+        line-height: 28px;
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #242221;
+        margin-top: 50px;
+        text-indent:39px;
+        float: right;
+    }
+    #marry #section6 .more{
+        width: 300px;
+        height: 70px;
+        line-height: 70px;
+        border: 1px solid #242221;
+        border-radius: 2px;
+  text-align: center;      
+font-size: 28px;
+font-family:Microsoft YaHei;
+font-weight: 500;
+color: #242221;
+margin: 60px auto 10px;
+/* -webkit-transition: all  300ms  linear;
+-moz-transition: all  300ms linear;
+transition: all  300ms linear; */
+    }
+    #marry #section6 .more:hover{
+        background: #CCAA83;  
+        color: #fff;
+        border-color: #CCAA83;
+    }
+
+    /* ************************ */
+    #marry #section7    {
+        background: #242221;
+    }
+#marry #section7 .box_top{
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+#marry #section7 .box_top .bg{
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+}
+#marry #section7 .box_top .info{
+    width: 59%;
+    height: 76%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: 37%;
+    margin-top: -11%;
+    left: 6%;
+    padding: 50px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#marry #section7 .info_left .p_title{
+    
+font-size: 26px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #FFFFFF;
+margin-bottom: 35px;
+}
+#marry #section7 .info_left input{
+    display: block;
+    width: 300px;
+    height: 60px;
+    line-height: 60px;
+    border: 1px solid #FFFFFF;
+    outline-style: none ;
+    border: 1px solid #ccc; 
+font-size: 22px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+background-color: transparent;
+padding-left: 20px;
+box-sizing: border-box;
+margin-bottom: 17px;
+}
+#marry #section7 .info_left input::-webkit-input-placeholder {color: #fff;}
+#marry #section7 .info_left input::-moz-placeholder {color: #fff;}
+#marry #section7 .info_left input:-ms-input-placeholder {color: #fff;}
+
+#marry #section7 .info_left .btn{
+    width: 300px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    background: #CCAA83;  
+font-size: 22px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+margin-top: 38px;
+}
+#marry #section7 .info_right .touch{
+    
+font-size: 18px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+}
+#marry #section7 .info_right .iphone{
+    font-size: 38px;
+    font-family: Microsoft YaHei;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+#marry #section7 .info_right .code{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+}
+#marry #section7 .info_right .code .code_item{
+    margin-right: 15px;
+}
+#marry #section7 .info_right .code .icon{
+    width: 120px;
+    height: 120px;
+}
+#marry #section7 .info_right .code .name{
+ text-align: center;   
+font-size: 18px;
+font-family: Microsoft YaHei;
+font-weight: 400;
+color: #FFFFFF;
+margin-top: 10px;
+}
+#marry #section7 .bott{
+    width: 100%;
+    height: 127px;
+    background: #242221;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+}
+#marry #section7 .bott .clause{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 480px;
+    height: 40px;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 2px;
+}
+#marry #section7 .bott .clause li{
+    width: 120px;
+    text-align: center;   
+font-size: 16px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #fff;
+opacity: 0.6;
+box-sizing: border-box;
+}
+#marry #section7 .bott .clause li:not(:last-child){
+    border-right: 1px solid #fff;
+}
+#marry #section7 .bott .clause li a{
+    width: 100%;
+    text-align: center;   
+font-size: 16px;
+font-family: Microsoft YaHei;
+font-weight: bold;
+color: #fff;
+opacity: 0.6;
+text-decoration:none;
+}
+#marry #section7 .bott .clause li a:active,#marry #section7 .bott .clause li a:hover{
+    color: #CCAA83;
+}
+#marry #section7 .bott .tip{
+    text-align: center;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #FFFFFF;
+    opacity: 0.6;
+    margin-top: 6px;
+}
+#marry #section7 .fp-tableCell{
+    position: relative;
+}
+/* ********************************************* */
+#wxcode{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 300;
+    display: none;
+}
+#wxcode .mask{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+#wxcode .send{
+    width: 461px;
+    height: 341px;
+    background-image: url("http://rs.kami5.com/marry/code_bg.png");
+    background-size: cover;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -200px;
+    padding: 50px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 305;
+}
+#wxcode .send .cose{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 310;
+}
+#wxcode .send .title{
+   
+font-size: 28px;
+font-family:Microsoft YaHei;
+font-weight: 500;
+color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 39px;
+}
+#wxcode .send .icon{
+    width: 171px;
+    height: 171px;
+    margin: 0 auto;
+}
+#bodyTip{
+    width: 328px;
+    line-height: 80px;
+    height: 80px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: auto;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;  
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 32px;
+    display: none;
+    z-index: 300;
+}

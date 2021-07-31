@@ -1,0 +1,324 @@
+2021-07-30 01:02:02  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 01:31:57  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 03:50:13  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => OTHERS
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => c45r4ce8bppcb8tmhozr4ve9d4y58ly7
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_16275249517UinDAU9
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 11831B15CD2C6E327BD785582DFD26FD
+    [time_end] => 20210729101556
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001132202107292226565979
+)
+2021-07-30 03:55:04  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 438q8otq67l98eia6dt0a5gog9afxyo3
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627525244bClK7Oby
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 6C0EC2DC7DED609008EE6011E8018702
+    [time_end] => 20210729102049
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001121202107296416851336
+)
+2021-07-30 04:02:03  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 04:17:51  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => jkiude2fn7km06l6ag714c2vdq2y0jsy
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627526614YhSrjfTb
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 7353F4418A51456E96A875C0B3D2196F
+    [time_end] => 20210729104339
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001219202107290462787062
+)
+2021-07-30 04:20:05  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => OTHERS
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => c45r4ce8bppcb8tmhozr4ve9d4y58ly7
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_16275249517UinDAU9
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 11831B15CD2C6E327BD785582DFD26FD
+    [time_end] => 20210729101556
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001132202107292226565979
+)
+2021-07-30 04:24:57  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 438q8otq67l98eia6dt0a5gog9afxyo3
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627525244bClK7Oby
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 6C0EC2DC7DED609008EE6011E8018702
+    [time_end] => 20210729102049
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001121202107296416851336
+)
+2021-07-30 04:31:57  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 04:47:48  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => jkiude2fn7km06l6ag714c2vdq2y0jsy
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627526614YhSrjfTb
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 7353F4418A51456E96A875C0B3D2196F
+    [time_end] => 20210729104339
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001219202107290462787062
+)
+2021-07-30 09:50:15  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => OTHERS
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => c45r4ce8bppcb8tmhozr4ve9d4y58ly7
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_16275249517UinDAU9
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 11831B15CD2C6E327BD785582DFD26FD
+    [time_end] => 20210729101556
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001132202107292226565979
+)
+2021-07-30 09:55:06  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 438q8otq67l98eia6dt0a5gog9afxyo3
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627525244bClK7Oby
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 6C0EC2DC7DED609008EE6011E8018702
+    [time_end] => 20210729102049
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001121202107296416851336
+)
+2021-07-30 10:02:05  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 10:17:53  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => BOC_DEBIT
+    [cash_fee] => 800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => jkiude2fn7km06l6ag714c2vdq2y0jsy
+    [openid] => of8n75cYYU4RZ2gR0gVugfBqhmbw
+    [out_trade_no] => xthl_1627526614YhSrjfTb
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => 7353F4418A51456E96A875C0B3D2196F
+    [time_end] => 20210729104339
+    [total_fee] => 800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001219202107290462787062
+)
+2021-07-30 10:31:57  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 16:02:06  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => ABC_DEBIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => 5u9c2z6s6mkiaymj9422myklh43hbr30
+    [openid] => of8n75SkkyH1SiQG_CA17Fu2BtYE
+    [out_trade_no] => xthl_1627547265Ek4D2sxg
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => AB2EE2E7DB14EA5893BDF23C5DF53049
+    [time_end] => 20210729162749
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001233202107296343721889
+)
+2021-07-30 17:12:33  支付回调结果Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => OTHERS
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => cu74xuvhjgpgpz9kwf6y2jsnkm8qi1ij
+    [openid] => of8n75bIbhi0UsrNg-vT1r-V9nRM
+    [out_trade_no] => xthl_1627636348eIQPveJe
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => DAA2957E6829F7570741C3436E4C32DA
+    [time_end] => 20210730171233
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001123202107305403347980
+)
+

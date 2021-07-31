@@ -1,0 +1,54 @@
+2021-07-04 12:16:11  xml===<xml><appid><![CDATA[wx70d65d2170dbacd7]]></appid>
+<bank_type><![CDATA[CITIC_CREDIT]]></bank_type>
+<cash_fee><![CDATA[8800]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[N]]></is_subscribe>
+<mch_id><![CDATA[1610267514]]></mch_id>
+<nonce_str><![CDATA[t14uueaj1bkqsjw8s5uweuo4e7q2gc2f]]></nonce_str>
+<openid><![CDATA[of8n75f7TSl2YpyXCQwy0iXICW3s]]></openid>
+<out_trade_no><![CDATA[xthl_1625372158W0mrETj0]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[C5AF1630140FC8FA6023A56AD7072062]]></sign>
+<time_end><![CDATA[20210704121610]]></time_end>
+<total_fee>8800</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200001223202107043056983209]]></transaction_id>
+</xml>2021-07-04 12:16:11  wx_back_array===Array
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => CITIC_CREDIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => t14uueaj1bkqsjw8s5uweuo4e7q2gc2f
+    [openid] => of8n75f7TSl2YpyXCQwy0iXICW3s
+    [out_trade_no] => xthl_1625372158W0mrETj0
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [sign] => C5AF1630140FC8FA6023A56AD7072062
+    [time_end] => 20210704121610
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001223202107043056983209
+)
+2021-07-04 12:16:11  $wx_back successArray
+(
+    [appid] => wx70d65d2170dbacd7
+    [bank_type] => CITIC_CREDIT
+    [cash_fee] => 8800
+    [fee_type] => CNY
+    [is_subscribe] => N
+    [mch_id] => 1610267514
+    [nonce_str] => t14uueaj1bkqsjw8s5uweuo4e7q2gc2f
+    [openid] => of8n75f7TSl2YpyXCQwy0iXICW3s
+    [out_trade_no] => xthl_1625372158W0mrETj0
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [time_end] => 20210704121610
+    [total_fee] => 8800
+    [trade_type] => JSAPI
+    [transaction_id] => 4200001223202107043056983209
+)
+

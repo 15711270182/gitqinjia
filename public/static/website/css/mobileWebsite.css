@@ -1,0 +1,526 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    width: 100vw;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+
+}
+
+#app {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo {
+    position: fixed;
+    top: .8rem;
+    left: .5rem;
+    width: 7rem;
+    height: 3rem;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #ccc;
+    width: 100%;
+    height: 13.125rem;
+    background-image: url("https://pics.njweiyi6.com//67c42fe37be9bad8/9eb455edac92d6f8.png");
+    background-size: cover;
+}
+
+.top-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    transform: translateY(-1.2rem);
+}
+
+.top-subtitle {
+    color: #fff;
+    font-size: 14px;
+    position: relative;
+    transform: translateY(-1rem);
+}
+
+.video {
+    width: 90%;
+    height: 13rem;
+    position: relative;
+    transform: translateY(-4.8rem);
+}
+
+.rz-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+    transform: translateY(-3rem);
+}
+
+.rz-icon {
+    width: 23px;
+    height: 23px;
+}
+
+.rz-title {
+    color: #242221;
+    font-size: 1rem;
+    margin: 0 4px;
+}
+
+.rz-title-a {
+    color: #CCAA83;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: DINOT;
+}
+
+.rz-img {
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+    transform: translateY(-2rem);
+}
+.videoCase-title{
+    background-color: #CCAA83;
+    width: 100%;
+    padding:13px 0;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+}
+/* 脱单数据 */
+.data {
+    position: relative;
+    width: 80%;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.date-left {
+    width: 50px;
+    position: absolute;
+    top: -6px;
+    left: 38px;
+}
+
+.date-right {
+    width: 50px;
+    position: absolute;
+    bottom: -2px;
+    right: 30px;
+}
+
+.data-p {
+    width: 100%;
+    text-align: center;
+    text-indent: 3rem;
+    color: #242221;
+    font-size: 14px;
+}
+.data-pbox{
+    position: relative;
+    margin-bottom: 2rem;
+    width: 90%;
+} 
+.data-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.data-box-item {
+    width: 5rem;
+    height: 5rem;
+    background-image: url("https://pics.njweiyi6.com//30392f1cc69fa369/225b28644595207a.png");
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.data-box-item-num{
+    font-size: 18px;
+    color: #242221;
+}
+.data-box-item-desc{
+    font-size: 12px;
+    color: #242221;
+}
+/* 案例切换 */
+.tab{
+    width: 70%;
+    padding: 15px 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.tab-active{
+    width: 45%;
+    color: #CCAA83;
+    font-size: 18px;
+    position: relative;
+    text-align: center;
+}
+.tab-active::after{
+    content: '';
+    width: 25px;
+    height: 3px;
+    background-color: #ccaa83;
+    border-radius: 2px;
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.tab-normal{
+    width: 45%;
+    color: #242221;
+    font-size: 14px;
+    text-align: center;
+}
+.tab-video{
+    width: 100%;
+    margin-bottom: 15px;
+}
+.tab-sign{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.tab-sign-item{
+    background-color: #CCAA83;
+    padding: 4px 10px;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    margin-right: 10px;
+}
+.tab-info{
+    font-size: 14px;
+    color: #242221;
+    width: 100%;
+}
+.tab-case-one{
+    /* display: none; */
+    width: 100%;
+    padding:0 30px;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+.tab-case-two{
+    display: none;
+    width: 100%;
+    padding:0 30px;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+/* 亮点 */
+
+.light{
+    width: 100%;
+    padding:0 30px;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+.light-li{
+    width: 100%;
+    border-top: 1px solid rgba(230, 230, 230, .5);
+    padding: 20px 0;
+    box-sizing: border-box;
+    display: flex;
+}
+.light-li:first-child{
+padding-top: 30px;
+}
+.light-li-img{
+    width: 4rem;
+    height: 4rem;
+    margin-right: 10px;
+    float: left;
+}
+.light-li-box{
+    max-width: 15.2rem;
+    word-break: break-all;
+}
+.light-li-box-top{
+    position: relative;
+    transform: translateY(-2px);
+    color: #242221;
+    font-size: 1rem;
+    margin-bottom: 3px;
+}
+.light-li-box-bottom{
+    width: 15.2rem;
+    word-break: break-all;
+    color:#656566;
+    font-size: 14px;
+}
+/* 联系我们 */
+.contact {
+    width: 100%;
+    height: 10rem;
+    background-image: url("https://pics.njweiyi6.com//c1f76b6094574953/bb6bfb7351da72d0.png");
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-title {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.contact-phone {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 20px;
+
+}
+
+.contact-btn {
+    width: 9rem;
+    height: 2.5rem;
+    background-color: #CCAA83;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    line-height: 2.5rem;
+}
+
+.case {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.case-top {
+    color: #242221;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 1.2rem;
+}
+
+.case-img {
+    width: 60.6%;
+    margin-bottom: 20px;
+}
+
+.case-title {
+    color: #242221;
+    font-size: 16px;
+    margin-bottom: 1rem;
+}
+
+.case-info {
+    width: 20rem;
+    color: #242221;
+    font-size: 14px;
+    text-indent: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.code {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2rem 16% 0;
+    box-sizing: border-box;
+    background-color: #242221;
+}
+
+.code-left {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.code-img {
+    width: 5rem;
+    height: 5rem;
+}
+
+.code-p {
+    color: #fff;
+    opacity: .6;
+    font-size: 14px;
+}
+
+.line{
+    width: 100%;
+    background-color: #242221;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    box-sizing: border-box;
+}
+.line-inner{
+    width: 90%;
+    background-color: #fff;
+    height: 1px;
+}
+.bottom {
+    border-top-width:80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 10%;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #242221;
+    box-sizing: border-box;
+    position: relative;
+    /* transform: translateY(-1px); */
+}
+
+.bottom-active {
+    opacity: .6;
+
+}
+.beian{
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+    width: 100%;
+    padding: 0rem 10% 1rem;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #242221;
+    box-sizing: border-box;
+    position: relative;
+    /* transform: translateY(-2px); */
+}
+.mask{
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    background-color: #000;
+    opacity: .6;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
+.form {
+	width: 80%;
+    position: fixed;
+    top: 200px;
+    background-color: #fff;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 11;
+    padding: 40px 35px;
+    box-sizing: border-box;
+    display: none;
+}
+.icon-close{
+    width: 2rem;
+    height: 2rem;
+    position: fixed;
+    right: 0;
+    top: -44px;  
+    z-index: 11;
+
+}
+.form-input {
+	font-size: 14px;
+	color: #CCAA83;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.form-name {
+	width: 100%;
+	height: 50px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+    margin-bottom: 14px;
+    border: 1px solid#CCAA83;
+}
+
+
+.form-btn {
+	width:100%;
+	height: 40px;
+	background: #CCAA83;	
+	line-height: 40px;
+	text-align: center;
+	color: #fff;
+	font-size: 30px;
+	font-family: SourceHanSansCN-Regular;
+}
+input {
+	border: none !important;
+	outline: none;
+    height: 30px;
+    width: 100%;
+}
+
+#model {
+	position: fixed;
+	top: 360px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 14px;
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	background-color: rgba(0,0,0,.8);
+	opacity: .8;
+	border-radius: 6px;
+	text-align: center;
+	display: none;
+	align-items: center;
+	justify-content: center;
+    color: #fff;
+    z-index: 100;
+}
+#model1 {
+	position: fixed;
+	top: 360px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 14px;
+    padding: 0 10px;
+    box-sizing: border-box;
+	height: 30px;
+	line-height: 30px;
+	background-color: rgba(0,0,0,.8);
+	opacity: .8;
+	border-radius: 6px;
+	text-align: center;
+	display: none;
+	align-items: center;
+	justify-content: center;
+    color: #fff;
+    z-index: 100;
+}
+

@@ -1,0 +1,88 @@
+{extend name='main'}
+
+{block name='content'}
+
+<style>
+
+    .store-total-container {
+        font-size: 14px;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    .store-total-container .store-total-icon {
+        top: 45%;
+        right: 8%;
+        font-size: 65px;
+        position: absolute;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .store-total-container .store-total-item {
+        color: #fff;
+        line-height: 4em;
+        padding: 15px 25px;
+        position: relative;
+    }
+
+    .store-total-container .store-total-item > div:nth-child(2) {
+        font-size: 46px;
+        line-height: 46px;
+    }
+
+</style>
+
+<div class="think-box-shadow store-total-container notselect">
+    <div class="margin-bottom-15"><h2>今日统计</h2></div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="store-total-item nowrap" data-title="新增用户列表"  title="查看详情" data-modal='{:url("newUser")}' style="background:linear-gradient(-125deg,#57bdbf,#2f9de2);cursor: pointer">
+                <div>新增用户数</div>
+                <div>{$today.user_count|default = 0}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="store-total-item nowrap" title="查看详情" data-title="填写资料列表" data-modal='{:url("newChildren")}' style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95);cursor: pointer">
+                <div>填写资料数</div>
+                <div>{$today.children_count|default = 0}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="store-total-item nowrap" title="查看详情" data-title="查看号码列表" data-modal='{:url("lookTel")}' style="background:linear-gradient(-113deg,#c543d8,#925cc3);cursor: pointer">
+                <div>查看号码数</div>
+                <div>{$today.tel_count|default = 0}</div>
+            </div>
+            <i class="store-total-icon layui-icon layui-icon-user"></i>
+        </div>
+    </div>
+</div>
+{include file='datacount/index_search'}
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>序号</th>
+            <th class='text-center nowrap'>日期</th>
+            <th class='text-center nowrap'>新增用户数</th>
+            <th class='text-center nowrap'>填写资料数</th>
+            <th class='text-center nowrap'>查看号码数</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$key + 1}</td>
+            <td class='text-center nowrap'>{$vo.date_name}</td>
+            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增用户列表" data-modal='{:url("newUser")}?date={$vo.date}'>{$vo.user_count}</td>
+            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="填写资料列表" data-modal='{:url("newChildren")}?date={$vo.date}'>{$vo.children_count}</td>
+            <td class='text-center nowrap' title="查看列表" style="cursor: pointer;color: #00a0e9" data-title="查看号码记录" data-modal='{:url("lookTel")}?date={$vo.date}'>{$vo.tel_count}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+{/block}

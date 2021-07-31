@@ -1,0 +1,185 @@
+<form data-auto="true" method="post" action="{:url('saveChildrenInfo')}" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body think-box-shadow padding-left-40">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
+            <legend>子女资料</legend>
+        </fieldset>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">性别:</span>
+                <select class="layui-select" required name="sex" lay-search>
+                    {foreach $sex_list as $key => $sex}
+                    {if isset($children.sex) and $children.sex eq $key}
+                    <option selected value="{$key}">{$sex}</option>
+                    {else}
+                    <option value="{$key}">{$sex}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">身高(cm):</span>
+                <input name="height" required class="layui-input" placeholder="请输入身高" value="{$children.height|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">出生年份:</span>
+                <input name="year" required class="layui-input" placeholder="请输入身高" value="{$children.year|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">居住地(省):</span>
+                <input name="province" required class="layui-input" placeholder="请输入居住地" value="{$children.province|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">居住地(市):</span>
+                <input name="residence" required class="layui-input" placeholder="请输入居住地" value="{$children.residence|default=''}">
+            </label>
+
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">家乡:</span>
+                <input name="hometown" class="layui-input" placeholder="请输入家乡" value="{$children.hometown  |default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">户口:</span>
+                <input name="native_place" class="layui-input" placeholder="请输入户口" value="{$children.native_place|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">学历:</span>
+                <select class="layui-select" required name="education" lay-search>
+                    {foreach education_list as $key => $education}
+                    {if isset($children.education) and $children.education eq $key}
+                    <option selected value="{$key}">{$education}</option>
+                    {else}
+                    <option value="{$key}">{$education}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">工作:</span>
+                <input name="work" required class="layui-input" placeholder="请输入工作" value="{$children.work|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">月收入:</span>
+                <select class="layui-select" required name="income" lay-search>
+                    {foreach income_list as $key => $income}
+                    {if isset($children.income) and $children.income eq $key}
+                    <option selected value="{$key}">{$income}</option>
+                    {else}
+                    <option value="{$key}">{$income}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">联系方式:</span>
+                <input name="phone" required class="layui-input" placeholder="请输入居住地" value="{$children.phone|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">有无房:</span>
+                <select class="layui-select" required name="house" lay-search>
+                    {foreach house_list as $key => $house}
+                    {if isset($children.house) and $children.house eq $key}
+                    <option selected value="{$key}">{$house}</option>
+                    {else}
+                    <option value="{$key}">{$house}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">有无车:</span>
+                <select class="layui-select" required name="cart" lay-search>
+                    {foreach car_list as $key => $car}
+                    {if isset($children.car) and $children.cart eq $key}
+                    <option selected value="{$key}">{$car}</option>
+                    {else}
+                    <option value="{$key}">{$car}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">学校:</span>
+                <input name="school" required class="layui-input" placeholder="请输入学校名称" value="{$children.school|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">相亲说明:</span>
+                <textarea class="layui-textarea" name="remarks">{$children.remarks|default=''}</textarea>
+            </label>
+        </div>
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
+            <legend>要求</legend>
+        </fieldset>
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">学历:</span>
+                <select class="layui-select" required name="expect_education" lay-search>
+                    {foreach education_list as $key => $education}
+                    {if isset($children.expect_education) and $children.expect_education eq $key}
+                    <option selected value="{$key}">{$education}</option>
+                    {else}
+                    <option value="{$key}">{$education}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最低身高(cm):</span>
+                <input name="min_height" required class="layui-input" placeholder="请输入最低身高" value="{$children.min_height|default='不限'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最高身高(cm):</span>
+                <input name="max_height" required class="layui-input" placeholder="请输入最高身高" value="{$children.max_height|default='不限'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最低年龄:</span>
+                <input name="min_age" required class="layui-input" placeholder="请输入最低年龄" value="{$children.min_age|default='不限'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">最高年龄:</span>
+                <input name="max_age" required class="layui-input" placeholder="请输入最高年龄" value="{$children.max_age|default='不限'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">推荐分:</span>
+                <input name="score" class="layui-input" placeholder="请输入推荐分" value="{$children.score|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">今日推荐分:</span>
+                <input name="today_score" class="layui-input" placeholder="请输入今日推荐分" value="{$children.today_score|default='0'}">
+            </label>
+        </div>
+
+        <div class="layui-form-item text-center">
+            {if isset($children['id'])}<input type='hidden' value='{$children.id}' name='id'>{/if}
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+            <button class="layui-btn" type="submit">保存</button>
+        </div>
+    </div>
+</form>
+
+
+
+<script>
+    window.form.render();
+</script>
+
+<style>
+    /* 支持样式代码 */
+</style>

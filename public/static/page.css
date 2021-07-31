@@ -1,0 +1,231 @@
+.page_color{width: 100%;background: #02af66;}
+/*index页面CSS*/
+.index_banner{width: 100%;}
+.index_banner .banners{width: 100%;}
+.index_nav{width: 100%;background: #02af66;}
+.index_nav .navList{width: 90%;margin: 0px auto;background: #fff;text-align: center;border-radius: 24px;margin-top: 30px;padding: 20px 0px;}
+.index_nav .navList .navAll{width: 90%;margin: 0px auto;}
+.index_nav .navList .navAll:after{display: block;content: "";clear: both;}
+.index_nav .navList .navs{width:calc(50% - 2px);float: left;margin-top: 20px;padding-bottom: 20px;font-size: 0.8rem;border-bottom: 1px solid #fff;}
+.index_nav .navList .navs.navBorder_btm{border-bottom: 1px solid #e5eeea;}
+.index_nav .navList .navs.navBorder_rit{border-right: 1px solid #e5eeea;}
+.index_nav .navList:after{display: block;content: "";clear: both;}
+.index_nav .navList .navs img{width: 50%;display: block;margin: 0px auto;margin-bottom: 10px;}
+.help{width: 40px;position: fixed;top: 40%;right: 0px;}
+.help .helpAll{}
+.helpAll .helps{text-align: center;background: rgba(0, 0, 0, 0.6);margin-bottom: 20px;color: #fff;font-size: 0.8rem;padding: 15px 5px;border-radius: 10px 0px 0px 10px;}
+.helpAll .helps img{}
+
+
+/*出题头部css*/
+.topic_Head{width: 100%;text-align: center;height: 100px;overflow: hidden;}
+.topic_Head .topic_show{width: 100px;height: 100px;background: #02af66;border-radius: 50%;color: #fff;font-size: 1.2rem;line-height: 140px;position: relative;top: -50px;margin: 0px auto;overflow: hidden;}
+.topic_Head .topic_show span{}
+.topic_Head .topic_show .topic_num{}
+.topic_Head .topic_tip{color: #02af66;font-size: 0.85rem;position: relative;top: -35px;}
+.topic_Head .topic_tip img{margin-right: 5px;}
+
+/*出题选择CSS*/
+.topBody{width: 100%;position: relative;}
+.topBody .tops{width: 90%;height: 11rem;margin: 0px auto;margin-top: 10%;}
+.topBody .tops img{width: 100%;}
+.topBody .topInfo{width: 68%;margin: 0px auto;position: absolute;top: 24%;left: 10%;font-size: 0.9rem;}
+.topBody .topInfo p{}
+.topChose{width: 90%;margin: 0px auto;font-size: 0.8rem;margin-top: 10%;}
+.topChose .tchose{margin-bottom: 1rem;line-height: 30px;}
+.topChose .tchose img{width: 30px;margin-right: 20px;display: block;float: left;}
+.topChose .tchose span{display: block;float: left;width: calc(100% - 50px);}
+.topChose .tchose:after{display: block;content: "";clear: both;}
+/*公共btn*/
+.topBtn{width: 100%;height: 4rem;position: fixed;left: 0px;bottom: 0px;}
+.topBtn .topBtns{width: 50%;height: 2.5rem;float: left;text-align: center;}
+.topBtn .topBtns span{display: block;border: 2px solid #02af66;width: 80%;margin: 0px auto;height: 100%;line-height: 2.5rem;color: #02af66;border-radius: 40px;}
+.topBtn .topBtns.topBtnsOn span{background: #02af66;color: #fff;}
+
+
+/*塞入红包css*/
+.redBody{width: 94%;margin: 1rem auto;}
+.redBody .redAll{width: 94%;margin: 0px auto;}
+.redBody .redAll .rdbox{width: 100%;height: 3rem;background: #fff;margin: 1rem 0;border-radius: 50px;line-height: 3rem;}
+.redAll .rdbox .rdTitle{font-size: 0.9rem;margin-left: 1rem;}
+.redAll .rdbox input{height: 2rem;border: 0px;text-align: right;font-size: 0.9rem;width: 50%;}
+.redAll .rdbox .lets{margin-left: 10px;}
+.redTip{text-align: center;margin-top: 2rem;}
+.redTip .p1{}
+.redTip .p1 a{}
+.redTip .p2{color: #e96037;font-size: 0.75rem;margin-top: .5rem;}
+.redMoney{text-align: center;margin-top: 2rem;}
+.redMoney .redM{font-size: 1.6rem;font-weight: bold;}
+.redMoney .redM span{font-size: 2rem;}
+.redMoney .rdMtip{margin-top: .2rem;font-size: 0.8rem;color: #666;}
+.topBtn .topBtn_big{width: 70%;margin: 0px auto;float: none;}
+
+
+.result{width: 90%;margin: 0px auto;text-align: center;}
+.result .overview{width: 100%;background: #fff;border-radius: 10px;margin: 1rem 0rem;box-shadow: 1px 1px 15px #afafaf;text-align: center;position: relative;margin-top: 4rem;}
+.result .overview .overAll{width: 30%;margin: 0px auto;position: absolute;top: -3rem;left: 35%;z-index: 99;}
+.overAll img{width: 100%;box-shadow: 1px 1px 15px #afafaf;border-radius: 50%;}
+.result .overview .overList{padding-top: 5rem;width: 100%;text-align: center;margin: 0px auto;font-size: 0.8rem;}
+.result .overview .overList:after{display: block;content: "";clear: both;}
+.overList .overs{width: 42%;height: 1.5rem;line-height: 1.5rem;float: left;padding: 0 4%;text-align: left;font-size: 0.9rem;margin-bottom: .5rem;}
+.overList .overs span{color: #000;font-weight: bold;margin-left: 10px;}
+.resuBody{width: 100%;background: #fff;border-radius: 10px;margin: 1rem 0rem;text-align: center;position: relative;box-shadow: 1px 1px 15px #afafaf;}
+.resuBody .resuTip{font-size: 1rem;line-height: 3rem;position: relative;}
+.resuBody .resuTips{position: relative;z-index: 2;font-weight: bold;}
+.resuBody .resuTip .resuBgc{background: #02af66;width: 5rem;height: .8rem;display: block;margin: 0px auto;border-radius: 20px;position: relative;top: -1.6rem;z-index: 0;}
+/*无记录*/
+.resuBody .resNone{width: 96%;margin: 0px auto;font-size: .8rem;padding-bottom: 15px;}
+.resuBody .resNone .resno{line-height: 1.2rem;}
+.resuBody .resNone .makeNew{display: block;border: 2px solid #02af66;width: 46%;margin: 15px auto;height: 100%;line-height: 2rem;color: #02af66;border-radius: 40px;}
+
+/*有记录*/
+.resuBody .resList{width: 94%;margin: 0px auto;height: 15.5rem;overflow: hidden;overflow-y: auto;}
+.resList .ress{width: 100%;height: 3rem;overflow: hidden;border-bottom: 1px solid #dedede;padding-bottom: 0.5rem;margin-bottom: .5rem;}
+.resList .ress .resL{width: 3rem;height: 3rem;float: left;border-radius: 50%;overflow: hidden;}
+.resList .ress .resL img{width: 100%;border-radius: 50%;}
+.resList .ress .resC{width: 42%;height: 90%;padding-top: 3px;float: left;text-align: left;padding-left: 0.5rem;font-size: .7rem;position: relative;}
+.resList .ress .resC .p1{font-size: .9rem;font-weight: bold;overflow: hidden;width: 100%;height: 1.4rem;}
+.resList .ress .resC .p2{width: 100%;position: absolute;bottom: 0px;}
+.resList .ress .resZ{width: 16%;height: 100%;font-size: .8rem;position: relative;float: left;text-align: center;}
+.resList .ress .resZ .p1{font-size: .8rem;}
+.resList .ress .resZ .p2{width: 100%;position: absolute;bottom: 0px;}
+.resList .ress .resZ .ptype1{color: #02af66;}
+.resList .ress .resZ .ptype2{color: #e96037;}
+.resList .ress .resR{width: 22%;height: 100%;float: right;font-size: 0.8rem;line-height: 3rem;text-align: center;}
+.resList .ress .resR .looks{padding: 5px 7px;border: 1px solid #02af66;color: #02af66;border-radius: 30px;font-size: .6rem;}
+
+/*页面内按钮*/
+.pageBtn{width: 100%;height: 3rem;}
+.pageBtn .pageBtns{width: 50%;height: 2rem;float: left;text-align: center;}
+.pageBtn .pageBtns span{display: block;border: 2px solid #02af66;width: 80%;margin: 0px auto;height: 100%;line-height: 2rem;color: #02af66;border-radius: 40px;font-size: .9rem;box-shadow: 1px 1px 15px #afafaf;}
+.pageBtn .pageBtnsOn span{background: #02af66;color: #fff;box-shadow: 1px 1px 15px #717171;}
+
+/*自定义弹出框*/
+.newAlt{width: 100%;height: 100%;background: rgba(0, 0, 0, 0.7);position: fixed;top: 0px;left: 0px;z-index: 999;display: none;}
+.newAlt .altAll{width: 90%;margin: 4rem auto;background: #fff;border-radius: 10px;}
+.newAlt .altAll .altH{position: relative;height: 4rem;}
+.altAll .altH img.altLogo{width: 30%;position: absolute;top: -3rem;left: 35%;}
+.newAlt .altAll span.close{position: absolute;right: 01rem;top: 2rem;}
+.newAlt .altAll span.close img{width: 2rem;}
+.newAlt .altAll .altData{box-shadow: none;}
+.altData .resuTip .resuBgc{width: 8rem;}
+.altData .resuInfo{font-size: 1.05rem;color: #000;position: relative;top: -1rem;}
+.altData .resList{height: 25rem;}
+.altData .resList .ress{text-align: left;}
+.altData .resList .ress .q_topics{margin-bottom: .4rem;}
+.altData .resList .ress .q_huida{margin-bottom: .4rem;color: #666;}
+.altData .resList .ress .q_rest{float: right;}
+.altData .resList .ress .q_rest img{width: 1.3rem;}
+
+/*我的出题记录CSS*/
+.chuti .ress{height: 4rem;}
+.chuti .ress .resC{width: 60%;}
+.chuti .ress .resC .p2{color: #999;}
+.chuti .ress .resR{width: 20%;line-height: 1rem;}
+.chuti .ress .resR .looks{padding: 5px 6px;border: 1px solid #02af66;color: #02af66;border-radius: 30px;font-size: .6rem;display: block;text-align: center;margin-bottom: .3rem;}
+.chuti .ress .resR .looks:nth-child(2){background: #02af66;color: #fff;}
+
+
+.qusBody{width: 94%;margin: 0px auto;padding: 1rem 0;}
+.qusBody .qusAll{}
+.qusAll .qusTip{}
+.qusAll .qusTip .qusTipPic{position: relative;}
+.qusAll .qusTip .qusTipPic:after{clear: both;display: block;content: "";}
+.qusAll .qusTip .qusTipPic img{width: 3rem;height: 3rem;border-radius: 50%;float: left;position: absolute;bottom: 0px;}
+.qusAll .qusTip .qusTip_span{padding: 10px;background: #02af66;float: left;color: #fff;font-size: 1rem;letter-spacing: 1px;width: 75%;margin-left: 3.5rem;border-radius: 10px 10px 10px 2px;}
+.qusAll .qusTip .qusTip_span b{font-weight: 100;color: #ffd594;}
+.qusAll .qusData{}
+.qusAll .qusData .qusNum{width: 100%;height: 3rem;line-height: 3rem;text-align: center;margin: 1rem 0;}
+.qusAll .qusData .qusNum .qusNums{padding: 10px 20px;background: #e2f4e8;color: #02af66;border-radius: 30px;}
+
+/*提问和问答模块css*/
+.qus_hui_all{height: 24rem;overflow: hidden;overflow-y: auto;padding-bottom: 7rem;}
+.qus_hui_all .qus_wen{margin-bottom: 1rem;}
+.qus_hui_all .qus_wen .qusTipPic{position: relative;}
+.qus_hui_all .qus_wen .qusTipPic:after{display: block;clear: both;content: "";}
+.qus_hui_all img.masterPic{width: 3rem;height: 3rem;border-radius: 50%;float: left;position: absolute;bottom: 0px;}
+.qus_hui_all .qus_wen .qus_span{padding: 10px;background: #02af66;float: left;color: #fff;font-size: 1rem;letter-spacing: 1px;width: 75%;margin-left: 3.5rem;border-radius: 10px 10px 10px 2px;}
+.qus_hui_all .qus_hui{position: relative;margin-bottom: 1rem;}
+.qus_hui_all .qus_hui:after{display: block;clear: both;content: "";}
+.qus_hui_all .qus_hui .qusTipPic{padding: 10px;background: #eef5f1;float: right;color: #fff;font-size: 1rem;letter-spacing: 1px;max-width: 75%;margin-right: 3.5rem;border-radius: 10px 10px 2px 10px;}
+.qus_hui_all img.userPic{width: 3rem;height: 3rem;border-radius: 50%;float: left;position: absolute;bottom: 0px;right: 0px;}
+.qus_hui_all img.huiPic{}
+
+/*选项按钮*/
+.huiBtn{width: 100%;height: 6rem;position: fixed;left: 0px;bottom: 0px;background: #fff;box-shadow: 0px 0px 50px #666;}
+.huiBtn .huiBtns{width: 50%;float: left;}
+.huiBtn .huiBtns img{width: 80%;margin: 0px auto;position: relative;top: -3.5rem;left: 10%;}
+
+/*未获奖css*/
+.noMoney{display: none;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.7);position: fixed;top: 0px;left: 0px;z-index: 999;}
+.noMoney .noBody{width: 100%;margin: 0px auto;margin-top: 10rem;position: relative;}
+.noMoney .noBody .noBG{width: 100%;position: relative;}
+.noBody .noBG img.redBG{width: 100%;}
+.noBody .noBG img.redClose{position: absolute;top: -3.5rem;right: 3rem;width: 3rem;}
+.noBody .noBinfo{width: 100%;position: absolute;top: 0px;left: 0px;text-align: center;color: #fff;}
+.noBody .noBinfo img.userPic{width: 24%;border-radius: 50%;margin-top: 2rem;}
+.noBody .noBinfo .noMtip{font-size: 1.6rem;line-height: 4rem;}
+.noBody .noBinfo .noMtips{line-height: 2.2rem;}
+.noBody .noBinfo .noM{}
+.noBody .noBinfo .noM img{width: 46%;} 
+
+/*帮助页面CSS*/
+.hpAll{width: 94%;margin: 0px auto;height: 36rem;overflow: hidden;overflow-y: auto;}
+.hpAll .hps{width: 90%;padding: 5%;margin: 1rem auto;background: #fff;border-radius: 10px;box-shadow: 1px 1px 15px #afafaf;}
+.hpAll .hps .hpHead{line-height: 1.1rem;font-size: 1.1rem;position: relative;padding-right: 10%;}
+.hpAll .hps .hpHead img{width: 6%;position: absolute;top: 0px;right: 0px;}
+.hpAll .hps .hpHead img.hps2{display: none;}
+.hpAll .hps .hpBody{display: none;margin-top: 1rem;color: #666;}
+
+
+/*投诉页面CSS*/
+.tousu{width: 100%;line-height: 4rem;}
+.tousu .tsTip{}
+.tousu .topChose{margin-top: 2%;}
+.tousu .topChose .tchose{}
+.tousu_btn{width: 50%;display: block;border: 2px solid #02af66;line-height: 2.5rem;border-radius: 40px;background: #02af66;color: #fff;text-align: center;margin: 2rem auto;}
+/*infos*/
+.getUser{}
+.getUser .getUtip{line-height: 3rem;}
+.getUser .userInp{width: 90%;height: 3rem;background: #f5f5f5;line-height: 3rem;margin: 1rem auto;border-radius: 40px;padding: 0 1rem;font-size: 1.2rem;}
+.getUser .userInp .uip{width: 32%;display: block;float: left;}
+.getUser .userInp input{width: 66%;height: 3rem;border: 0px;background: whitesmoke;font-size: 1.2rem;text-align: right;display: block;float: right;}
+
+/*客服页面css*/
+.kefu .kefu_tip{line-height: 1rem;font-size: 1.2rem;}	
+.kefu .txtArea{width: 98%;height: 8rem;font-size: 1rem;padding: 2%;border: 0px;color: #666;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*账户余额页面CSS*/
+.cardPage .card{text-align: center;}
+.cardPage .card .mLogo{width: 5rem;margin-top: 3rem;}
+.cardPage .card .p1{line-height: 3rem;}
+.cardPage .card .p2{font-size: 2rem;font-weight: bold;}
+.cardPage .card .p2 span{font-size: 2.2rem;}
+.cardPage .card .p3{line-height: 2rem;}
+.cardPage .card .card_btn{display: block;border: 2px solid #02af66;width: 50%;margin: 1rem auto;height: 100%;line-height: 2.5rem;border-radius: 40px;background: #02af66;color: #fff;}
+.cardPage .cardTip{width: 95%;margin: 0px auto;font-size: .9rem;}
+.cardPage .cardTips{font-size: 1rem;}
+.cardPage .cdTips{color: #666;line-height: 1.5rem;}
+.cardPage .cdTips.cdTips2{color: #e96037;}
+
+
+
+
+
+
+
+
+

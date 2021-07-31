@@ -1,0 +1,70 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='invite/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>创建时间</th>
+            <th class='text-center nowrap'>代理UID</th>
+            <th class='text-center nowrap'>代理信息</th>
+            <th class='text-center nowrap'>电话</th>
+            <th class='text-center nowrap'>填写资料数</th>
+            <th class='text-center nowrap'>支付订单数</th>
+            <th class='text-center nowrap'>奖励总额</th>
+            <th class='text-center nowrap'>可提余额</th>
+            <th class='text-center nowrap'>已提现金额</th>
+            <th class='text-center nowrap'>注销</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.addtime|default=0}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.phone|default=''}</td>
+            <td class='text-center nowrap'><a data-open='{:url("info_list")}?id={$vo.uid}'>{$vo.info_count}</a></td>
+            <td class='text-center nowrap'><a data-open='{:url("awards_list")}?id={$vo.uid}'>{$vo.order_count}</a></td>
+            <td class='text-center nowrap'>{$vo.total_money}</td>
+            <td class='text-center nowrap'>{$vo.balance}</td>
+            <td class='text-center nowrap'>{$vo.withdrawn_amount}</td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
+            </td>
+
+            <td class='text-center nowrap'>
+                {if condition="$vo.balance eq 0"}
+                 暂无余额
+                {else /}
+                <a class="layui-btn layui-btn-normal layui-btn-sm" data-title="提现" data-open='{:url("withdrawal")}?id={$vo.uid}'>提现</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

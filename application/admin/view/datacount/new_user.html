@@ -1,0 +1,32 @@
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        <?php if(count($list)){?>
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>序号</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>昵称</th>
+            <th class='text-center nowrap'>性别</th>
+            <th class='text-center nowrap'>真实名称</th>
+            <th class='text-center nowrap'>添加时间</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$key + 1}</td>
+            <td class='text-center nowrap'>{$vo.id}</td>
+            <td class='text-center nowrap'>{$vo.nickname}</td>
+            <td class='text-center nowrap'>{$vo.sex}</td>
+            <td class='text-center nowrap'>{$vo.realname|default=''}</td>
+            <td class='text-center nowrap'>{$vo.add_time}</td>
+        </tr>
+        {/foreach}
+        <?php }else{;?>
+        <div class="margin-bottom-15"><h2>暂无记录</h2></div>
+        <?php };?>
+        </tbody>
+    </table>
+</div>

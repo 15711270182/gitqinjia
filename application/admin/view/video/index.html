@@ -1,0 +1,63 @@
+{extend name='main'}
+
+{block name="button"}
+{if auth("add")}
+<button data-modal='{:url("add")}' data-title="添加视频" class='layui-btn layui-btn-sm layui-btn-primary'>添加视频</button>
+{/if}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='video/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>创建时间</th>
+            <th class='text-center nowrap'>标题</th>
+            <th class='text-center nowrap'>视频</th>
+            <!--<th class='text-center nowrap'>视频地址</th>-->
+            <th class='text-center nowrap'>分享图</th>
+            <th class='text-center nowrap'>播放量</th>
+            <th class='text-center nowrap'>状态</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr >
+            <td class='text-center nowrap'>{$vo.create_time|default=''}</td>
+            <td class='text-center nowrap'>{$vo.title|default=''}</td>
+            <td>
+                <video width="120" height="90" controls>
+                <source src="{$vo.url|default=''}" type="video/mp4">
+                </video>
+            </td>
+            <!--<td class='text-center nowrap'>{$vo.url|default=0}</td>-->
+            <td class='text-center nowrap'><img src="{$vo.share_img|default=''}" style="width:60px;height:60px;" data-tips-image class="inline-block"></td>
+            <td class='text-center nowrap'>{$vo.play_count|default=''}</td>
+            <td class='text-center nowrap'>
+                {eq name='vo.is_online' value='1'}<span class="color-gray">已上线</span>{/eq}
+
+                {eq name='vo.is_online' value='0'}<span class="color-gray">未上线</span>{/eq}
+            </td>
+       
+            <td class='text-center nowrap'>
+                {eq name='vo.is_online' value='1'}<span class="color-gray"><a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('downline')}" data-value="id#{$vo.id};status#0" data-csrf="{:systoken('forbid')}">下线</a></span>{/eq}
+
+                {eq name='vo.is_online' value='0'}<a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('online')}" data-value="id#{$vo.id};status#0" data-csrf="{:systoken('forbid')}">上线</a>{/eq}
+
+                <a class="layui-btn layui-btn-normal layui-btn-sm" data-title="编辑" data-modal='{:url("edit")}?id={$vo.id}'>编辑</a>
+                
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+
+{/block}
