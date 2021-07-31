@@ -224,6 +224,7 @@ class Datacount extends Controller
         $type = input('type');
         if ($type == 0){
             $statistical_data = cache('statistical_data');
+            if (empty($statistical_data)) return;
             $statistical = $this->createStatisticalFormat($statistical_data);
         }elseif($type == 1){// 近四周报表
             $weeks = $this->getWeeks();
