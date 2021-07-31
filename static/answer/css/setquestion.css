@@ -1,0 +1,41 @@
+*{margin: 0;padding: 0;}
+body{font-family:'HiraginoGBW31678e854d11d1b4';background-color: #ffdb2c;}
+a{color: #333333;text-decoration:none;}
+#contenter{max-width: 640px;margin: 0 auto;}
+#head{height:4rem;display:flex;justify-content:center;align-items:center;position: relative;}
+#head .num{width: 1.2rem;height: 1.2rem;line-height: 1.2rem;border-radius: 1.2rem;color: #333;font-size: 0.8rem;border: 2px solid #333;text-align: center;margin: 0rem 0.3rem;background-color: #fff;}
+#head .in{background-color: #ffdb2c;}
+#head .line{position: absolute;z-index: -1;left: 1rem;right: 1rem;height: 2px;background-color: #333;bottom: 1.98rem;}
+#tips{width: 11rem;height: 1rem;line-height: 1rem;background-color: #fff;position: relative;text-indent: 1.6rem;border-radius: 0.6rem;margin: 0 auto;font-size: 0.72rem;color: #333;padding-top: 0.2rem;}
+#tips .shield{width: 0.7rem;height: 0.8rem;line-height:0.8rem;position: absolute;z-index: 0;left: 0.4rem;top: 0.25rem;text-indent: 0;}
+#tips .shield img{width: 0.7rem;height: 0.8rem;vertical-align: top;}
+#info{margin:1.5rem 2rem;background-color: #fff;box-shadow:0px 15px 10px -15px #333;border-radius: 0.5rem;border: 2px solid #333;padding: 1rem 1rem 0.5rem;position: relative;}
+#info #replace{background-color: #ffdb2c;color: #333;border: 2px solid #333;font-size: 0.8rem;text-align: center;width: 4rem;height: 1.4rem;line-height:1.4rem;border-radius: 1.4rem;position: absolute;z-index: 0;right: 1rem;top: 0.8rem;}
+#info .question{line-height: 1.2rem;color: #333;font-size: 0.84rem;padding-right: 4.4rem;font-weight: 600;}
+#info .option{margin: 1.5rem 0rem;overflow: auto;padding: 1rem 0.8rem;line-height: 1.2rem;background-color: #f6f6f6;border-radius: 0.1rem;font-size: 0.8rem;}
+#info .option i{font-size: 1rem;}
+#next{background-color: #fff;height: 2rem;width: 12rem;line-height: 2rem;text-align: center;border-radius: 2rem;border:2px solid #333;color: #333;margin: 1rem auto;font-size: 0.8rem;}
+#submit{display:none;background-color: #fff;height: 2rem;width: 12rem;line-height: 2rem;text-align: center;border-radius: 2rem;border:2px solid #333;color: #333;margin: 1rem auto;font-size: 0.8rem;}
+#center{height: 2rem;display:none;}
+#center .center{width: 12rem;height: 2rem;margin: 1rem auto;}
+#center .center .next{background-color: #fff;height: 2rem;width: 12rem;line-height: 2rem;text-align: center;border-radius: 2rem;border:2px solid #333;color: #333;font-size: 0.8rem;}
+#center .center .submit{width: 12rem;line-height: 5rem;text-align: center;color: #333;font-size: 0.82rem;text-decoration: underline;}
+
+
+
+#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#f9492b;color: #fff;font-size: 0.72rem;line-height:1.1rem;font-weight:600;position: relative;text-indent: 1.2rem;}
+#head_tips .icon{width: 1rem;height: 1rem;position: absolute;z-index: 0;left: -0.8rem;top: 0.44rem;}
+#head_tips .icon img{width: 1rem;height: 1rem;}
+#tips_full{display:none;position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);}
+#tips_con{display:none;width: 15rem;min-height: 8rem;background-color: #fff;position: fixed;z-index: 100;top: 33%;left: 0;right: 0;margin: 0 auto;border-radius: 0.2rem;}
+#tips_con .tips_title{line-height: 2rem;color: #f9492b;text-align: center;padding:0.8rem 0rem 0.4rem;font-size: 1.1rem;font-weight: 500;position: relative;}
+#tips_con .tips_title .tips_close{width: 3.2rem;height: 1.4rem;line-height:1.4rem;background-color: #cdcdcd;color: #333;border-radius: 0.7rem;text-align: center;font-size: 0.72rem;position: absolute;z-index: 101;top: 0.5rem;right: 0.4rem;font-weight: 200;}
+#tips_con .tips_info{padding:0.4rem 0.8rem 0.8rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
+				
+#head_menu{margin: 1rem;height: 2rem;}
+#head_menu .gohome{width: 4.4rem;line-height:1.8rem;font-size:0.78rem;float: left;background-color: #4d3b6d;color: #fff;text-align: center;border-radius: 1rem;}
+#head_menu .gofaq{width: 4.4rem;line-height:1.8rem;font-size:0.78rem;float: right;background-color: #4d3b6d;color: #fff;text-align: center;border-radius: 1rem;}
+#fullbg{position: fixed;z-index: 100;top: 3rem;left: 0;right: 0;height: 100%;max-width: 640px;margin: 0 auto;display:none;}
+/*投诉*/
+#complain{position:fixed;z-index:1000;top:50%;left:0;width:2.2rem;height:1.6rem;line-height:1.6rem;background-color:#fcbe12;color:#fff;text-align:center;border-radius:0rem 0.2rem 0.2rem 0rem;font-size:0.82rem;}
+		

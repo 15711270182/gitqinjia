@@ -1,0 +1,105 @@
+
+#loading {position: fixed;z-index: 100;height: 100%;top: 0;left: 0;right: 0;background-color:rgba(0,0,0,0.8);}
+#loading .describe{font-size: 1.2rem;color: #fff;line-height: 6rem;height:6rem;font-weight: bold;text-align:center;}
+#loading .tips{width: 15rem;height: 15rem;background-color: #fff;border-radius: 0.4rem;margin: 0rem auto 2rem;padding: 0.8rem;}
+#loading .tips .tips_name{line-height:2.6rem;color: #f9492b;text-align: center;font-size: 1.2rem;font-weight: 500;position: relative;}
+#loading .tips .tips_info{padding:1rem 0rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
+#loading .tips .tips_info p{padding: 0.3rem 0rem;}
+#loading .tips .tips_info span{color:#fe0005;font-weight:700;}
+#loading .tips .countdown_btn{width: 12rem;height: 2.4rem;line-height:2.4rem;margin: 0rem auto;border-radius: 0.4rem;font-size: 0.88rem;text-align: center;background-color:#ffdb2c;color: #333;}
+#loading .tips .countdown_btn span{font-size:0.76rem;}
+#loading .countdown{font-size: 4rem;color: #fff;line-height: 6rem;font-weight: bold;text-align:center;}
+#loading .link_us{width:12rem;height:2.4rem;line-height:2.4rem;margin:0 auto;background-color: #fff;color: #333;border-radius: 0.4rem;text-align: center;font-size: 0.88rem;}
+#loading .close_loading {width: 2.4rem;line-height: 2.4rem; margin: 0 auto;color: #fff;border-radius: 1.2rem;text-align: center;font-size: 1.2rem; border: 1px solid #fff;}
+#loading .monster {
+  width: 110px;
+  height: 110px;
+  background-color: #E55A54;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  margin: 7rem auto;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: jumping 0.8s infinite alternate;
+}
+#loading .monster .eye {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#loading .monster .eyeball {
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background-color: #0C4475;
+}
+#loading .monster .mouth {
+  width: 32%;
+  height: 12px;
+  border-radius: 12px;
+  background-color: white;
+  margin-top: 15%;
+}
+#loading .monster:before, .monster:after {
+  content: "";
+  display: block;
+  width: 20%;
+  height: 10px;
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+#loading .monster:before {
+  transform: translateX(-70%) rotate(45deg);
+}
+#loading .monster:after {
+  transform: translateX(-30%) rotate(-45deg);
+}
+#loading .monster, .monster * {
+  transition: 0.5s;
+}
+#loading .monster.blue {
+  background-color: #0C4475;
+  animation-delay: 0.5s;
+}
+#loading .monster.blue .mouth, .monster.blue .eyeball {
+  background-color: #E55A54;
+}
+@keyframes jumping {
+  50% {
+    top: 0;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    top: -50px;
+    box-shadow: 0px 120px 50px rgba(0, 0, 0, 0.2);
+  }
+}
+@keyframes eyemove {
+  0%,10% {
+    transform: translate(50%);
+  }
+  90%,100% {
+    transform: translate(-50%);
+  }
+}
+#loading .monster .eyeball {
+  animation: eyemove 1.6s infinite alternate;
+}
+
+
+
+
+
+

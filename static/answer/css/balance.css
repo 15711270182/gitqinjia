@@ -1,0 +1,25 @@
+*{margin: 0;padding: 0;}
+body{font-family:'HiraginoGBW31678e854d11d1b4';background-color: #ffdb2c;}
+a{color: #333333;text-decoration:none;}
+#contenter{max-width: 640px;margin: 0 auto;}
+#head{position: relative;}
+#head .icon{width: 7rem;height: 7rem;margin: 0 auto;padding:0.7rem 0rem;}
+#head .icon img{width: 7rem;height: 7rem;vertical-align:middle;color: #333;}
+#head .describe{text-align: center;line-height: 2.2rem;font-size: 0.78rem;}
+#head .price{text-align: center;line-height: 2rem;font-size: 1.4rem;}
+#head .price span{font-size: 0.78rem;}
+#head #cash{width: 14rem;line-height: 2rem;background-color: #fff;color: #333;border-radius: 1rem;text-align: center;font-size: 0.82rem;margin: 0.6rem auto;}
+#tip{overflow: auto;padding: 0.5rem 2rem;}
+#tip .li{padding: 0.3rem 0rem;color: #333;line-height: 0.8rem;font-size: 0.7rem;}
+#tip .one{color:#fe0005;}
+
+#head_menu{padding: 0rem 2rem;height:3.1rem;position: relative;}
+#head_menu  .gohome{width: 4.3rem;line-height: 1.6rem;background-color: #333;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;left: 1rem;top: 1rem;}
+#head_menu  .gofaq{width: 4.3rem;line-height: 1.6rem;background-color: #fe0005;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;right: 1rem;top:1rem;}
+
+#fullbg{position: fixed;z-index: 100;top: 3rem;left: 0;right: 0;height: 100%;max-width: 640px;margin: 0 auto;display:none;}
+
+#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#fe0005;color: #fff;font-size: 0.82rem;}
+#head_tips p{text-align: right;color:#2E73D6;text-decoration:underline;}
+#face_ad{padding:0rem 1rem;}
+#face_ad img{width:100%;vertical-align:middle;}

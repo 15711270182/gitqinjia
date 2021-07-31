@@ -1,0 +1,95 @@
+		 *{margin: 0;padding: 0;}
+        body{font-family:'HiraginoGBW31678e854d11d1b4';background-color: #ffdb2c;}
+        a{color: #333333;text-decoration:none;}
+        #contenter{max-width: 640px;margin: 0 auto 3rem;}
+        #head{padding: 0rem 1rem;overflow: auto;position: relative;}
+		#head .bg{width: 100%;vertical-align: middle;}
+		#head .mine{width: 4rem;height: 5.5rem;position: absolute;z-index: 0;left: 2.5rem;bottom: 1.2rem;}
+		#head .mine .avatar{width: 4rem;height:4rem;}
+		#head .mine .avatar img{width: 4rem;height: 4rem;border-radius: 2rem;vertical-align: middle;}
+		#head .mine .name{line-height: 2rem;color: #333;text-align: center;font-size: 0.8rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+		#head .maker{width: 4rem;height: 5.5rem;position: absolute;z-index: 0;right: 2.5rem;bottom: 1.2rem;}
+		#head .maker .avatar{width: 4rem;height: 4rem;}
+		#head .maker .avatar img{width: 4rem;height: 4rem;border-radius: 2rem;vertical-align: middle;}
+		#head .maker .name{line-height: 2rem;color: #333;text-align: center;font-size: 0.8rem;overflow: hidden; white-space: nowrap; text-overflow:ellipsis;}
+		#head .result{position: absolute;z-index: 0;left:6.5rem;right: 6.5rem;bottom:2rem;height: 4rem;line-height: 2rem;text-align: center;color: #ffdb2c;font-size: 1.6rem;}
+		#head .result span{color: #ffa5ac;font-weight: 600;}
+		#btns{padding: 1rem 0rem;height: 2.96rem;display:flex;justify-content:center;align-items:center;}
+		#btns #play{width: 8.72rem;height: 2.96rem;background-image: url("../images/answer.btn.bg.png");background-size: cover;color: #fff;margin: 0rem 0.6rem;text-align: center;line-height: 2.5rem;font-weight: 600;font-size: 1.4rem;}
+		#btns #cash{width: 8.72rem;height: 2.96rem;background-image: url("../images/answer.btn.bg.png");background-size: cover;color: #fff;margin: 0rem 0.6rem;text-align: center;line-height: 2.5rem;font-weight: 600;font-size: 1.4rem;}
+	    
+		#operate{height: 2.4rem;margin:1rem;display: flex;justify-content: center;align-items: center;}
+        #operate .li{width: 8rem;height: 2.4rem;background-color: #333;box-shadow: #999 2px 2px 3px 1px;border-radius: 1.2rem;margin: 0rem 0.45rem;padding: 0rem 0.5rem;display: flex;justify-content: center;align-items: center;}
+		#operate .li .icon{width:1.4rem;height: 1.4rem;margin: 0.5rem 0rem;}
+        #operate .li .icon img{width:1.4rem;height: 1.4rem;}
+        #operate .li .title{width: 3.7rem;height: 2.4rem;line-height: 2.4rem;font-size: 0.84rem;color: #fff;text-align: center;}
+        
+		
+		#fullbg{display:none;position: fixed; z-index: 10;top: 0;bottom:0;right: 0;left: 0;max-width: 640px;margin: 0 auto;height: 100%;background-color: rgba(0,0,0,0.7);}
+        #info{display:none;position: fixed;overflow-y:scroll;overflow-x:hidden; z-index: 11;top: 15%;bottom:0;right: 0;left: 0;background-color: #fff;border-radius: 0.3rem;margin:0rem 2rem;height:70%;}
+        #info .info{position: relative;}
+        #info .info #close{width: 2rem;height: 2rem;position:fixed;z-index: 12;top: 2.6rem;right: 2.2rem; }
+        #info .info #close img{width: 2rem;height: 2rem;}
+        #info .title{background-color: #ffdb2c;color: #333;line-height: 2.4rem;text-align: center;font-size: 0.83rem;border-radius: 0.3rem 0.3rem 0rem 0rem;}
+        #info .tips{height:2.4rem;display:flex;justify-content:center;align-items:center;}
+        #info .tips .i{line-height: 2.4rem;font-size: 0.71rem;color: #333;padding: 0rem 0.4rem;}
+        #info .list{padding:0rem 0.8rem 0.8rem;font-size: 0.8rem;overflow-y: scroll;}
+        #info .list .li{overflow:auto;border-bottom: 1px dashed #cdcdcd;padding-bottom: 0.3rem;}
+        #info .list .li .q{font-size: 0.75rem;line-height: 1.4rem;}
+        #info .list .li .a{font-size: 0.75rem;color: #fe0005;line-height: 1rem;}
+        ::-webkit-scrollbar{width:0;height:1px}
+		::-webkit-scrollbar-thumb{border-radius:5px;-webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0);background:rgba(0,0,0,0);}
+
+		
+		#finally{margin:0rem 1rem;}
+		#finally .tips_head{height:4rem;background-color:#fff;border-radius:0.2rem;padding:0rem 0.8rem;}
+		#finally .tips_head .tips_head_name{ position: relative;line-height: 1.4rem; text-align: left;color: #ffdb2c;font-size: 0.9rem;font-weight: 800;padding-top: 0.8rem;}
+		#finally .tips_head .tips_head_name .end{position: absolute;z-index: 0;top: 1rem;right: 0rem;height: 1.4rem;line-height: 1.4rem;color: #999;width: 6rem;text-align: right;font-size: 0.7rem;font-weight: 400;}
+		#finally .tips_head .tips_head_desc{line-height: 1.4; padding-bottom: 0.4rem;text-align: center;color: #999;font-size: 0.7rem;position: relative;}
+		#finally .tips_head .tips_head_desc .status{position: absolute;z-index: 0; width: 50%; height: 1.4rem;right: 0rem;top: 0rem; text-align: right; color: #ffa5ac;font-weight: 600;}
+		#finally .tips_left{line-height:2.2rem;width:55%;text-align:left;font-size:0.74rem;color:#fff;float:left;overflow: hidden; white-space: nowrap;  text-overflow:ellipsis;}
+		#finally .tips_right{line-height:2.2rem;width:45%;text-align:right;font-size:0.74rem;color:#fff;float:right;overflow: hidden; white-space: nowrap;  text-overflow:ellipsis;}
+		#finally .tips_right span,#finally .tips_right span{font-weight:700;}
+		
+	
+        #finally .li{height: 2.6rem;position: relative;padding: 0.5rem;margin: 0.5rem 0rem;background-color: #fff;border-radius: 0.2rem;}
+        #finally .li .avatar{width: 2.6rem;height: 2.6rem;position: absolute;z-index: 0;left: 0.5rem;top: 0.5rem;}
+        #finally .li .avatar img{width: 2.6rem;height: 2.6rem;border-radius: 0.2rem;}
+        #finally .self .avatar img{ -webkit-filter: blur(2px);  filter: blur(2px);}
+		#finally .li .redpacket{width: 5rem;height: 2rem;position: absolute;z-index: 0;right: 0.5rem;top: 0.5rem;padding: 0.3rem 0rem;}
+        #finally .li .redpacket .r{line-height: 1rem;color: #fe0005;font-size: 0.76rem;text-align: right;font-weight:600;}
+        #finally .li .redpacket .r span{font-size: 1.2rem;}
+        #finally .li .redpacket .b{line-height: 1rem;color: #333;font-size: 0.7rem;text-align: right;}
+        
+		#finally .li .userinfo{padding: 0.2rem 5.5rem 0.2rem 3.2rem;height: 2.2rem;}
+        #finally .li .userinfo .nickname{line-height: 1.3rem;font-size: 0.78rem;font-weight:600;color: #333;}
+        #finally .self .userinfo .nickname{ -webkit-filter: blur(2px);  filter: blur(2px);}
+		#finally .li .userinfo .date{line-height: 1.3rem;font-size: 0.74rem;color: #333;}
+        #finally .finally .end{text-align: center;line-height: 2.2rem;font-size: 0.84rem;color: #333;}
+		
+
+		#redpacket{position: fixed;z-index: 100;top:0;left:0;right:0;margin:0 auto;height:100%;max-width:640px;background-color: rgba(0,0,0,0.7);display: flex;justify-content:center;align-items: center;}
+		#redpacket .redpacket{width: 15.12rem;height: 20.28rem;background-image: url("../images/redpacket.icon.png");background-size: cover;}
+		#redpacket .redpacket .money{color: #fff;text-align: center;padding-top: 8.5rem;line-height: 2rem;font-size: 1.4rem;}
+		#redpacket .redpacket .describe{color: #fff;text-align: center;line-height: 2rem;font-size: 0.78rem;}
+	
+		
+		
+		#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#f9492b;color: #fff;font-size: 0.72rem;line-height:1.1rem;font-weight:600;position: relative;text-indent: 1.2rem;}
+        #head_tips .icon{width: 1rem;height: 1rem;position: absolute;z-index: 0;left: -0.8rem;top: 0.44rem;}
+        #head_tips .icon img{width: 1rem;height: 1rem;}
+        #tips_full{display:none;position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);}
+        #tips_con{display:none;width: 15rem;min-height: 8rem;background-color: #fff;position: fixed;z-index: 100;top: 33%;left: 0;right: 0;margin: 0 auto;border-radius: 0.2rem;}
+        #tips_con .tips_title{line-height: 2rem;color: #f9492b;text-align: center;padding:0.8rem 0rem 0.4rem;font-size: 1.1rem;font-weight: 500;position: relative;}
+        #tips_con .tips_title .tips_close{width: 3.2rem;height: 1.4rem;line-height:1.4rem;background-color: #cdcdcd;color: #333;border-radius: 0.7rem;text-align: center;font-size: 0.72rem;position: absolute;z-index: 101;top: 0.5rem;right: 0.4rem;font-weight: 200;}
+        #tips_con .tips_info{padding:0.4rem 0.8rem 0.8rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
+		
+		#more{width: 12rem;height: 2rem;line-height:2rem;text-decoration:underline;background-color: #ffdb2c;color: #333;text-align: center;margin:1rem auto;border-radius: 1rem;font-size: 0.82rem;}
+		
+		#head_menu{padding: 0rem 2rem;height:3.1rem;position: relative;}
+		#head_menu  .gohome{width: 4.3rem;line-height: 1.6rem;background-color: #333;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;left: 1rem;top: 1rem;}
+		#head_menu  .gofaq{width: 4.3rem;line-height: 1.6rem;background-color: #fe0005;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;right: 1rem;top:1rem;}
+
+		 /*投诉*/
+		#complain{position:fixed;z-index:1000;bottom:30%;left:0;width:1.3rem;height:2rem;line-height:1rem;background-color:#fcbe12;color:#fff;text-align:center;border-radius:0rem 0.2rem 0.2rem 0rem;font-size:0.82rem;padding:0.2rem 0rem 0.1rem;font-weight:600;}
+		

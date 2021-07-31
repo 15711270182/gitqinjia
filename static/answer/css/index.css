@@ -1,0 +1,28 @@
+*{margin: 0;padding: 0;}
+body{font-family:'HiraginoGBW31678e854d11d1b4';background-color: #ffdb2c;}
+a{color: #333333;text-decoration:none;}
+#contenter{max-width: 640px;margin: 0 auto;}
+#head{padding: 0rem 2rem;overflow: auto;position: relative;}
+#head img{width: 100%;vertical-align: middle;}
+#head  #problem{width: 4.3rem;line-height: 1.6rem;background-color: #333;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;left: 1rem;top: 1rem;}
+#head  #suggestion{width: 4.3rem;line-height: 1.6rem;background-color: #fe0005;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;right: 1rem;top:1rem;}
+#list{height:16rem;}
+#list .li{background-image: url("../images/index.btn.bg.png");background-size: cover;width: 16.84rem;height: 3.4rem;line-height: 3.4rem;color: #fff;font-size: 0.8rem;text-align: center;margin: 0.3rem auto;}
+
+#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#f9492b;color: #fff;font-size: 0.72rem;line-height:1.1rem;font-weight:600;position: relative;text-indent: 1.2rem;}
+#head_tips .icon{width: 1rem;height: 1rem;position: absolute;z-index: 0;left: -0.8rem;top: 0.44rem;}
+#head_tips .icon img{width: 1rem;height: 1rem;}
+#tips_full{display:none;position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);}
+#tips_con{display:none;width: 15rem;min-height: 8rem;background-color: #fff;position: fixed;z-index: 100;top: 33%;left: 0;right: 0;margin: 0 auto;border-radius: 0.2rem;}
+#tips_con .tips_title{line-height: 2rem;color: #f9492b;text-align: center;padding:0.8rem 0rem 0.4rem;font-size: 1.1rem;font-weight: 500;position: relative;}
+#tips_con .tips_title .tips_close{width: 3.2rem;height: 1.4rem;line-height:1.4rem;background-color: #cdcdcd;color: #333;border-radius: 0.7rem;text-align: center;font-size: 0.72rem;position: absolute;z-index: 101;top: 0.5rem;right: 0.4rem;font-weight: 200;}
+#tips_con .tips_info{padding:0.4rem 0.8rem 0.8rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
+#complain{position:fixed;z-index:1000;bottom:30%;left:0;width:1.3rem;height:2rem;line-height:1rem;background-color:#fcbe12;color:#fff;text-align:center;border-radius:0rem 0.2rem 0.2rem 0rem;font-size:0.82rem;padding:0.2rem 0rem 0.1rem;font-weight:600;}
+		
+
+#is_new{position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;}
+#is_new .is_new_icon{width:16.56rem;height:20.36rem;position:relative;}
+#is_new .is_new_icon .is_new_close{width:2rem;height:2rem;position:absolute;z-index:100;top:-3rem;right:0rem;}
+#is_new .is_new_icon .is_new_close img{width:2rem;height:2rem;}
+#is_new .is_new_icon .icon{width:16.56rem;height:20.36rem;}		
+		

@@ -1,0 +1,41 @@
+*{margin: 0;padding: 0;}
+        body{font-family:'微软雅黑 Light';background-color: #ffdb2c;}
+        a{color: #333333;text-decoration:none;}
+        #contenter{max-width: 640px;margin: 0 auto 3rem;}
+        #head{height:2.2rem;padding:1rem;display: flex;justify-content: center;align-items: center;font-size: 0.88rem;}
+        #head .myAnswerQuestion{width: 8.5rem;height: 2.2rem;line-height:2.2rem;background-color:#fe4161;color:#fff;margin: 0rem 0.5rem;border-radius: 1.1rem;text-align: center;}
+        #head .mySetQuestion{width: 8.3rem;height: 2rem;line-height:2rem;border:0.1rem solid #68529a;color:#fff;margin: 0rem 0.5rem;border-radius: 1.1rem;text-align: center;}
+        #record{padding: 0rem 1rem;}
+        #record .no_data{padding: 2rem 0rem;}
+        #record .no_data .icon{width: 6rem;height: 6rem;margin: 0 auto;}
+        #record .no_data .icon img{width: 6rem;height: 6rem;}
+        #record .no_data .describe{text-align: center;line-height: 4rem;color: #fff;font-size: 0.9rem;}
+        #record .li{height: 2.6rem;position: relative;background-color:#fff;padding: 0.5rem;border-radius: 0.2rem;margin: 0.5rem 0rem;}
+        #record .li .avatar{width: 2.6rem;height: 2.6rem;position: absolute;z-index: 0;left: 0.5rem;top: 0.5rem;}
+        #record .li .avatar img{width: 2.6rem;height: 2.6rem;border-radius: 0.2rem;vertical-align: middle;}
+        #record .li .redpacket{width: 5rem;height: 2rem;position: absolute;z-index: 0;right: 0.5rem;top: 0.5rem;padding: 0.3rem 0rem;}
+        #record .li .redpacket .r{line-height: 1rem;color: #fe0005;font-size: 0.72rem;text-align: right;}
+        #record .li .redpacket .b{line-height: 1rem;color: #333;font-size: 0.7rem;text-align: right;}
+        #record .li .userinfo{padding: 0.2rem 5.5rem 0.2rem 3rem;height: 2.2rem;}
+        #record .li .userinfo .nickname{line-height: 1.1rem;font-size: 0.84rem;color: #333;}
+        #record .li .userinfo .date{line-height: 1.1rem;font-size: 0.72rem;color: #999;}
+        		
+		#record .end{text-align: center;line-height: 4rem;font-size: 0.84rem;color: #333;margin: 0rem auto;}
+		#more{width: 12rem;height: 2rem;line-height:2rem;text-decoration:underline;background-color: #ffdb2c;color: #333;text-align: center;margin:1rem auto;border-radius: 1rem;font-size: 0.82rem;}
+		
+		#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#f9492b;color: #fff;font-size: 0.72rem;line-height:1.1rem;font-weight:600;position: relative;text-indent: 1.2rem;}
+        #head_tips .icon{width: 1rem;height: 1rem;position: absolute;z-index: 0;left: -0.8rem;top: 0.44rem;}
+        #head_tips .icon img{width: 1rem;height: 1rem;}
+        #tips_full{display:none;position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);}
+        #tips_con{display:none;width: 15rem;min-height: 8rem;background-color: #fff;position: fixed;z-index: 100;top: 33%;left: 0;right: 0;margin: 0 auto;border-radius: 0.2rem;}
+        #tips_con .tips_title{line-height: 2rem;color: #f9492b;text-align: center;padding:0.8rem 0rem 0.4rem;font-size: 1.1rem;font-weight: 500;position: relative;}
+        #tips_con .tips_title .tips_close{width: 3.2rem;height: 1.4rem;line-height:1.4rem;background-color: #cdcdcd;color: #333;border-radius: 0.7rem;text-align: center;font-size: 0.72rem;position: absolute;z-index: 101;top: 0.5rem;right: 0.4rem;font-weight: 200;}
+        #tips_con .tips_info{padding:0.4rem 0.8rem 0.8rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
+		
+		#head_menu{padding: 0rem 2rem;height:3.1rem;position: relative;}
+		#head_menu  .gohome{width: 4.3rem;line-height: 1.6rem;background-color: #333;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;left: 1rem;top: 1rem;}
+		#head_menu  .gofaq{width: 4.3rem;line-height: 1.6rem;background-color: #fe0005;color: #fff;border-radius: 0.8rem;text-align: center;font-size: 0.7rem;position: absolute;z-index: 0;right: 1rem;top:1rem;}
+
+		 /*投诉*/
+		#complain{position:fixed;z-index:1000;bottom:30%;left:0;width:1.3rem;height:2rem;line-height:1rem;background-color:#fe0005;color:#fff;text-align:center;border-radius:0rem 0.2rem 0.2rem 0rem;font-size:0.82rem;padding:0.2rem 0rem 0.1rem;font-weight:600;}
+		

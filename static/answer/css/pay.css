@@ -1,0 +1,27 @@
+		*{margin: 0;padding: 0;}
+        body{font-family:'微软雅黑 Light';background-color: #ffdb2c;}
+        a{color: #333333;text-decoration:none;}
+        #contenter{max-width: 640px;margin: 0 auto;}
+        #main{padding:0.5rem 1rem;}
+        #main .item{height: 2.6rem;background-color: #fff;border-radius: 0.4rem;position: relative;margin: 1rem 0rem;}
+        #main .item input{height: 2.6rem;width:88%;background-color: rgba(0,0,0,0);border:none;padding: 0rem 6%;text-align: right; outline:none;font-size: 0.72rem;}
+        #main .item .l{width: 6rem;height:2.6rem;position: absolute;z-index: 0;left: 0.7rem;top: 0;line-height: 2.6rem;font-size: 0.78rem;}
+        #main .item .r{width: 1rem;height:2.6rem;position: absolute;z-index: 0;right: 0.7rem;top: 0;line-height: 2.6rem;font-size: 0.78rem;text-align: right;}
+        #main .item_tips{height: 2.4rem;background-color: #fff;border-radius: 0.4rem;position: relative;margin: 1rem 0rem;padding: 0.1rem 0.8rem;}
+        #main .item_tips .title{line-height: 1.2rem;font-size: 0.76rem;color: #333;}
+        #main .item_tips .describe{line-height: 1.2rem;font-size: 0.68rem;color: #fe0005;}
+        #main .money{line-height: 1.4rem;text-align: center;color: #fe0005;font-size: 1rem;padding: 0.5rem 0rem;}
+        #main .money span{color: #fe0005;font-size: 0.72rem;}
+        #main .money p{text-align: center;font-size: 0.84rem;}
+        #main .btn{height: 2.6rem;background-color: #fff;border-radius: 0.4rem;position: relative;margin: 1rem 0rem;text-align: center;line-height: 2.6rem;color: #333;font-size: 0.9rem;}
+        #main .desc{text-align: center;line-height: 1.2rem;font-size: 0.76rem;color:#ca9825;}
+		#fullbg{position: fixed;z-index: 100;top: 3rem;left: 0;right: 0;height: 100%;max-width: 640px;margin: 0 auto;display:none;}
+		
+		#head_tips{display:none;margin: 0 auto;max-width: 640px;padding:0.4rem;background-color:#f9492b;color: #fff;font-size: 0.72rem;line-height:1.1rem;font-weight:600;position: relative;text-indent: 1.2rem;}
+        #head_tips .icon{width: 1rem;height: 1rem;position: absolute;z-index: 0;left: -0.8rem;top: 0.44rem;}
+        #head_tips .icon img{width: 1rem;height: 1rem;}
+        #tips_full{display:none;position: fixed;z-index: 99;top:0;left:0;right:0;height:100%;max-width: 640px;margin: 0 auto;background-color: rgba(0,0,0,0.7);}
+        #tips_con{display:none;width: 15rem;min-height: 8rem;background-color: #fff;position: fixed;z-index: 100;top: 33%;left: 0;right: 0;margin: 0 auto;border-radius: 0.2rem;}
+        #tips_con .tips_title{line-height: 2rem;color: #f9492b;text-align: center;padding:0.8rem 0rem 0.4rem;font-size: 1.1rem;font-weight: 500;position: relative;}
+        #tips_con .tips_title .tips_close{width: 3.2rem;height: 1.4rem;line-height:1.4rem;background-color: #cdcdcd;color: #333;border-radius: 0.7rem;text-align: center;font-size: 0.72rem;position: absolute;z-index: 101;top: 0.5rem;right: 0.4rem;font-weight: 200;}
+        #tips_con .tips_info{padding:0.4rem 0.8rem 0.8rem;line-height: 1.6rem;color: #333;font-size: 0.88rem;}
