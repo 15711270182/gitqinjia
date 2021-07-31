@@ -1,0 +1,21 @@
+{
+  "name": "jiaweixs/simplecache",
+  "description": "A PHP Simple Cache Base on File.",
+  "keywords": ["cache","simple cache"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "JiaweiXS",
+      "email": "kurobafear@hotmail.com"
+    }
+  ],
+  "require": {
+    "php": "^5.5.9 || ^7.0"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "JiaweiXS\\": "src/"
+    }
+  }
+}
