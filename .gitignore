@@ -5,3 +5,5 @@
 /.git
 /nbproject
 /composer.lock
+/Log
+/runtime
