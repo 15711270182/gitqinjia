@@ -65,8 +65,8 @@ class RecommendService
                 $update_recommendid = [];
                 // 获取高配
                 $height_match_list = $this->getHeightMatch($uid, $had_cancellation_count, $had_id);
-                if (!empty($new_recommend)){
-                    foreach ($new_recommend as $key => $value){
+                if (!empty($height_match_list)){
+                    foreach ($height_match_list as $key => $value){
                         array_push($re_list, $value);
                         array_push($had_id, $value['uid']);
                         array_push($update_recommendid, $value['uid']); // 将新获取的uid存更新数组
