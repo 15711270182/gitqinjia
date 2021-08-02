@@ -80,120 +80,24 @@ class Service
     public function responseMsg()
     {
         custom_log("ResponseMsg", '1111111');
-        //	custom_log("Keywords", print_r($all_keywords, true));
         $postStr = file_get_contents('php://input');
         if (!empty($postStr) && is_string($postStr)) {
             $postArr = json_decode($postStr, true);
             $medai_id = cache('Kefu_media_id');
-            $medai_id2 = cache('Kefu_media_id_2');
+//            $medai_id2 = cache('Kefu_media_id_2');
             custom_log('Answerkefu', '$postArr==' . print_r($postArr, true));
-            if (!empty($postArr['MsgType']) && $postArr['MsgType'] == 'event') { // 文本消息
-                custom_log('AnswerkefuAuth', '发送文字消息==' . '自动回复');
-                $fromUsername = $postArr['FromUserName']; // 发送者openid
-//                $context = $postArr['Content'];
-//                $data = array(
-//                    "touser" => $fromUsername,
-//                    "msgtype" => "image",
-//                    "image" => array(
-//                        "media_id" => $medai_id
-//                    )
-//                );
-                $data1 = array(
-                    "touser" => $fromUsername,
-                    "msgtype" => "text",
-                    "text" => array(
-                        "content" => "Hi，铂金之恋小助手很高兴为你服务，咨询哪些问题，请点击选择
-1、<a href=\"weixin://bizmsgmenu?msgmenucontent=关注微信公众号&msgmenuid=1\" >关注微信公众号</a>
-2、<a href=\"weixin://bizmsgmenu?msgmenucontent=会员&msgmenuid=1\" >如何开通铂金之恋会员？</a>
-3、<a href=\"weixin://bizmsgmenu?msgmenucontent=金币&msgmenuid=1\" >如何购买金币？</a>
-4、<a href=\"weixin://bizmsgmenu?msgmenucontent=联系人工客服&msgmenuid=1\">以上回到没用，请联系人工客服？</a>"
-                    )
-                );
-
-//                custom_log('Answerkefu', '发送文字消息==' . print_r($data, true));
-//                $this->sendKfMessage($data);
-                $this->sendKfMessage($data1);
-            }
-
             if (!empty($postArr['MsgType']) && $postArr['MsgType'] == 'text') { // 文本消息
                 custom_log('Answerkefu', '发送文字消息==' . '您好，我是客服小新，有什么能帮助你?');
                 $fromUsername = $postArr['FromUserName']; // 发送者openid
                 $context = $postArr['Content'];
-//                    $data = array(
-//                        "touser" => $fromUsername,
-//                        "msgtype" => "image",
-//                        "image" => array(
-//                            "media_id" => $medai_id
-//                        )
-//                    );
-                $string = $context;
+//                $string = $context;
                 //指定的字符串
-                $arr = ['金币','会员', '充值', '买','获取'];
-
-                preg_match_all('#('.implode('|', $arr).')#', $string, $wordsFound);
-                //获取匹配到的字符串，array_unique()函数去重。如需获取总共出现次数，则不需要去重
-                $wordsFound = array_unique($wordsFound[0]);
-                if($wordsFound){
-                    $data = array(
-                        "touser" => $fromUsername,
-                        "msgtype" => "text",
-                        "text" => array(
-                            "content" => "<a href=\"http://inlove.njzec.com/web/web/index?type=2\" >苹果用户充值金币入口>></a>
-
-
-<a href=\"http://inlove.njzec.com/web/web/index\" >苹果用户购买会员入口>></a>"
-                        )
-                    );
-                    if(isset($data)){
-
-                        $this->sendKfMessage($data);
-                    }
-                    die;
-                }
-
-
+//                $arr = ['金币','会员', '充值', '买','获取'];
+//
+//                preg_match_all('#('.implode('|', $arr).')#', $string, $wordsFound);
+//                //获取匹配到的字符串，array_unique()函数去重。如需获取总共出现次数，则不需要去重
+//                $wordsFound = array_unique($wordsFound[0]);
                 switch ($context) {
-                    case '联系人工客服':
-                        $data = array(
-                            "touser" => $fromUsername,
-                            "msgtype" => "image",
-                            "image" => array(
-                                "media_id" => $medai_id2
-                            )
-                        );
-                        break;
-                    case '会员':
-                        $data = array(
-                            "touser" => $fromUsername,
-                            "msgtype" => "image",
-                            "image" => array(
-                                "media_id" => $medai_id2
-                            )
-                        );
-                        $data1 = array(
-                            "touser" => $fromUsername,
-                            "msgtype" => "text",
-                            "text" => array(
-                                "content" => "因为微信相关规定，暂不支持苹果用户在小程序内直接购买会员和金币。如要购买请联系客服"
-                            )
-                        );
-                        break;
-                    case '金币':
-                        $data = array(
-                            "touser" => $fromUsername,
-                            "msgtype" => "image",
-                            "image" => array(
-                                "media_id" => $medai_id2
-                            )
-                        );
-                        $data1 = array(
-                            "touser" => $fromUsername,
-                            "msgtype" => "text",
-                            "text" => array(
-                                "content" => "因为微信相关规定，暂不支持苹果用户在小程序内直接购买会员和金币。如要购买请联系客服"
-                            )
-                        );
-                        break;
                     case '1':
                         $data = array(
                             "touser" => $fromUsername,
@@ -206,10 +110,11 @@ class Service
                             "touser" => $fromUsername,
                             "msgtype" => "text",
                             "text" => array(
-                                "content" => "关注公众号的好处：
-1.可及时接收异性的喜欢通知和聊天消息
-2.每天可增加20%的曝光量
-3.每天可多解锁1位嘉宾"
+                                "content" => "如遇到以下问题,请天添加官方助手处理：
+                                    1.修改现居地
+                                    2.修改性别
+                                    3.暂停使用
+                                    4.退款"
                             )
                         );
                         break;
@@ -225,18 +130,15 @@ class Service
                             "touser" => $fromUsername,
                             "msgtype" => "text",
                             "text" => array(
-                                "content" => "关注公众号的好处：
-1.可及时接收异性的喜欢通知和聊天消息
-2.每天可增加20%的曝光量
-3.每天可多解锁1位嘉宾"
+                               "content" => "如遇到以下问题,请天添加官方助手处理：
+                                    1.修改现居地
+                                    2.修改性别
+                                    3.暂停使用
+                                    4.退款"
                             )
                         );
                         break;
                 }
-
-
-//                    custom_log('Answerkefu', '发送文字消息==' . print_r($data, true));
-//                    $this->sendKfMessage($data);
                 if(isset($data)){
                     $this->sendKfMessage($data);
                 }
