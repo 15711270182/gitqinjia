@@ -84,9 +84,6 @@ class Service
         if (!empty($postStr) && is_string($postStr)) {
             $postArr = json_decode($postStr, true);
             $medai_id = cache('Kefu_media_id');
-            if(empty($medai_id)){
-                $medai_id = $this->uploadImgMedia();
-            }
 //            $medai_id2 = cache('Kefu_media_id_2');
             custom_log('Answerkefu', '$postArr==' . print_r($postArr, true));
             if (!empty($postArr['MsgType']) && $postArr['MsgType'] == 'text') { // 文本消息
