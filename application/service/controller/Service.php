@@ -84,6 +84,9 @@ class Service
         if (!empty($postStr) && is_string($postStr)) {
             $postArr = json_decode($postStr, true);
             $medai_id = cache('Kefu_media_id');
+            if(empty($medai_id)){
+                $medai_id = $this->uploadImgMedia();
+            }
 //            $medai_id2 = cache('Kefu_media_id_2');
             custom_log('Answerkefu', '$postArr==' . print_r($postArr, true));
             if (!empty($postArr['MsgType']) && $postArr['MsgType'] == 'text') { // 文本消息
@@ -111,10 +114,10 @@ class Service
                             "msgtype" => "text",
                             "text" => array(
                                 "content" => "如遇到以下问题,请天添加官方助手处理：
-                                    1.修改现居地
-                                    2.修改性别
-                                    3.暂停使用
-                                    4.退款"
+1.修改现居地
+2.修改性别
+3.暂停使用
+4.退款"
                             )
                         );
                         break;
@@ -131,10 +134,10 @@ class Service
                             "msgtype" => "text",
                             "text" => array(
                                "content" => "如遇到以下问题,请天添加官方助手处理：
-                                    1.修改现居地
-                                    2.修改性别
-                                    3.暂停使用
-                                    4.退款"
+1.修改现居地
+2.修改性别
+3.暂停使用
+4.退款"
                             )
                         );
                         break;
@@ -214,7 +217,7 @@ class Service
 //        Kefu_media_id_2
         $access_token = $this->get_accessToken();
         $url = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=" . $access_token . '&type=image';
-        $data['media'] = new CURLFile(realpath('./newqrcode2.jpg'));
+        $data['media'] = new CURLFile(realpath('./qrcode.jpg'));
         $data[] = "image/jpeg";
         // 以'json'格式发送post的https请求
         $curl = curl_init();
