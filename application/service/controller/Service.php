@@ -110,11 +110,12 @@ class Service
                             "touser" => $fromUsername,
                             "msgtype" => "text",
                             "text" => array(
-                                "content" => "如遇到以下问题,请天添加官方助手处理：
-1.修改现居地
-2.修改性别
-3.暂停使用
-4.退款"
+                                "content" => "如遇到以下问题,请添加官方助手处理：
+1.修改性别
+2.修改年份
+3.修改现居地
+4.暂停使用
+5.退款"
                             )
                         );
                         break;
@@ -130,11 +131,12 @@ class Service
                             "touser" => $fromUsername,
                             "msgtype" => "text",
                             "text" => array(
-                               "content" => "如遇到以下问题,请天添加官方助手处理：
-1.修改现居地
-2.修改性别
-3.暂停使用
-4.退款"
+                               "content" => "如遇到以下问题,请添加官方助手处理：
+1.修改性别
+2.修改年份
+3.修改现居地
+4.暂停使用
+5.退款"
                             )
                         );
                         break;
