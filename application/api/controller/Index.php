@@ -574,7 +574,7 @@ class Index extends Base
         if(!$uid){
             return $this->errorReturn(self::errcode_fail,'分享人uid不能为空');
         }
-        cache('shareposter-'.$uid, null);
+//        cache('shareposter-'.$uid, null);
         $url = cache('shareposter-'.$uid);
         if(!$url){
             $Poster = new Poster();

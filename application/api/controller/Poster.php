@@ -174,6 +174,7 @@ class Poster extends Controller
         $sourceurl_data = $this->qiniuupload($local_path);
         $s_arr = json_decode($sourceurl_data,true);
         $sourceurl_qiniu = $s_arr['img'];
+        cache('shareposter-'.$uid,$sourceurl_qiniu);
         return $sourceurl_qiniu;
     }
 
