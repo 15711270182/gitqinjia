@@ -67,7 +67,7 @@
                 <span class="color-green">月收入:</span>
                 <select class="layui-select" required name="income" lay-search>
                     {foreach income_list as $key => $income}
-                    {if isset($children.income) and $children.income eq $key}
+                    {if $children.income eq $key}
                     <option selected value="{$key}">{$income}</option>
                     {else}
                     <option value="{$key}">{$income}</option>
@@ -85,7 +85,7 @@
                 <span class="color-green">有无房:</span>
                 <select class="layui-select" required name="house" lay-search>
                     {foreach house_list as $key => $house}
-                    {if isset($children.house) and $children.house eq $key}
+                    {if $children.house eq $key}
                     <option selected value="{$key}">{$house}</option>
                     {else}
                     <option value="{$key}">{$house}</option>
@@ -97,7 +97,7 @@
                 <span class="color-green">有无车:</span>
                 <select class="layui-select" required name="cart" lay-search>
                     {foreach car_list as $key => $car}
-                    {if isset($children.car) and $children.cart eq $key}
+                    {if $children.cart eq $key}
                     <option selected value="{$key}">{$car}</option>
                     {else}
                     <option value="{$key}">{$car}</option>
