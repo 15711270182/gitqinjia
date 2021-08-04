@@ -195,10 +195,8 @@ class User extends Base
         if(empty($field)){
             return $this->errorReturn(self::errcode_fail,'field参数不能为空');
         }
-        if($field != 'expect_education'){
-            if(empty($value)){
-                return $this->errorReturn(self::errcode_fail,'values参数不能为空');
-            }
+        if(empty($value)){
+            return $this->errorReturn(self::errcode_fail,'values参数不能为空');
         }
 
         //0过不了 empty 的判断

@@ -144,13 +144,24 @@ class Member extends Controller
         );
         // 学历列表学历
         $education_list = array(
-            '0' => '不限学历',
+            '0' => '暂未填写',
             '1' => '中专及以下',
             '2' => '高中',
             '3' => '大专以上',
             '4' => '本科以上',
             '5' => '研究生以上',
             '6' => '博士'
+        );
+        // 学历列表学历
+        $expect_education_list = array(
+            '0' => '暂未填写',
+            '1'=>'不限学历',
+            '2' => '中专及以下',
+            '3' => '高中',
+            '4' => '大专以上',
+            '5' => '本科以上',
+            '6' => '研究生以上',
+            '7' => '博士'
         );
         // 月收入列表
         $income_list = array(
@@ -180,6 +191,7 @@ class Member extends Controller
         $this->house_list = $house_list;
         $this->income_list = $income_list;
         $this->education_list = $education_list;
+        $this->expect_education_list = $expect_education_list;
         $this->fetch();
     }
     //保存子女信息
