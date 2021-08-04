@@ -128,7 +128,7 @@
                 <span class="color-green">学历:</span>
                 <select class="layui-select" required name="expect_education" lay-search>
                     {foreach education_list as $key => $education}
-                    {if isset($children.expect_education) and $children.expect_education eq $key}
+                    {if $children.expect_education eq $key}
                     <option selected value="{$key}">{$education}</option>
                     {else}
                     <option value="{$key}">{$education}</option>
