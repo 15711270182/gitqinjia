@@ -193,7 +193,7 @@ class UsersService
     }
     public static function expect_education($value){
         $expect_education = '';
-        $expect_educationArr = ['0' => '暂未填写', '1' => '不限学历', '2' => '中专以上', '3' => '高中以上','4'=>'大专以上','5'=>'本科以上','6'=>'研究生以上','7'=>'博士'];
+        $expect_educationArr = ['0' => '暂未填写', '1' => '不限学历', '2' => '中专以上', '3' => '高中以上','4'=>'大专以上','5'=>'本科以上','6'=>'研究生以上'];
         if($value){
             $expect_education = $expect_educationArr[$value];
         }
