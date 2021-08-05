@@ -702,26 +702,30 @@ class User extends Base
         $num = 12;
         $dy_count = 0;
         foreach($list as $k=>$v){
-            //订阅号模板内容
-            $dy_openid   = $v['openid'];
-            $dy_data['thing1'] = array('value' => "我们为你推荐了"."{$num}"."位新朋友");
-            $dy_data['thing2'] = array('value' => "点击小程序进行查看");
-            $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
-            $param = [
-                'touser'=>$dy_openid,
-                'template_id'=>$dy_temp_id,
-                'page'=>'pages/index/index',
-                'data'=>$dy_data
-            ];
-            $res = $this->shiwuSendMsg($param,2);
-            if($res == true){
-                $add['uid'] = $v['id'];
-                $add['openid'] = $v['openid'];
-                $add['type'] = 1;
-                $add['create_time'] = date('Y-m-d H:i:s');
-                Db::name('send_record')->insertGetId($add);
-                $dy_count++;
+            $find = ChildrenModel::childrenFind(['uid'=>$v['id']]);
+            if(empty($find)){ //未完善资料
+                //订阅号模板内容
+                $dy_openid   = $v['openid'];
+                $dy_data['thing1'] = array('value' => "我们为您推荐了很有新朋友,请及时完善资料~");
+                $dy_data['thing2'] = array('value' => "点击小程序进行查看");
+                $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
+                $param = [
+                    'touser'=>$dy_openid,
+                    'template_id'=>$dy_temp_id,
+                    'page'=>'pages/home/home',
+                    'data'=>$dy_data
+                ];
+                $res = $this->shiwuSendMsg($param,2);
+                if($res == true){
+                    $add['uid'] = $v['id'];
+                    $add['openid'] = $v['openid'];
+                    $add['type'] = 1;
+                    $add['create_time'] = date('Y-m-d H:i:s');
+                    Db::name('send_record')->insertGetId($add);
+                    $dy_count++;
+                }
             }
+
         }
         echo $dy_count;die;
     }
