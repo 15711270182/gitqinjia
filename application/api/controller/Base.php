@@ -28,7 +28,7 @@ class Base extends Controller
         $action =   $this->request->action();
         $controller=$this->request->controller();
         $api = $controller.'/'.$action;
-        if($controller != 'Token' && $api != 'Index/getuserlist' && $api != 'Index/childrendetails' && $api != 'Index/checktel' && $api != 'Index/checkcode' && $api != 'Index/getvideolist' && $api != 'Index/getvideoinfo' && $api != 'Index/shareinfo' && $api != 'Index/ques') { //不需要检测的接口
+        if($controller != 'Token' && $api != 'Index/getuserlist' && $api != 'Index/childrendetails' && $api != 'Index/checktel' && $api != 'Index/checkcode' && $api != 'Index/getvideolist' && $api != 'Index/getvideoinfo' && $api != 'Index/shareinfo' && $api != 'Index/ques' && $api !='Index/pushsubuser') { //不需要检测的接口
             if (!in_array($action, ['session', 'auth', 'getcdntoken', 'getphone', 'paymemberh5', 'ordernotify', 'payscoreh5', 'pageeditor'])) {
                 //判断当前用户登录状态
                 $user = UsersService::check($session3rd,$debug_uid);
@@ -133,12 +133,16 @@ class Base extends Controller
      * @author: zy
      * @Time: ${DATE}   ${TIME}
      */
-    public function shiwuSendMsg($data)
+    public function shiwuSendMsg($data,$type=0)
     {
         try {
-            $config['appid'] = 'wx33665f6f8d16b7c1';
-            $config['appsecret'] = '3148bd0bbda1b6aa7d084da6f698ac88';
-            $temp = WechatService::WeChatTemplate($config);
+            if($type == 2){
+                $temp = WechatService::WeMiniNewtmpl(config('wechat.miniapp'));
+            }else{
+                $config['appid'] = 'wx33665f6f8d16b7c1';
+                $config['appsecret'] = '3148bd0bbda1b6aa7d084da6f698ac88';
+                $temp = WechatService::WeChatTemplate($config);
+            }
             $temp->send($data);
             //模板消息推送成功录入
             return true;

@@ -693,4 +693,36 @@ class User extends Base
 
         return $user;
     }
+
+    public function pushSubUser(){
+        $list = UserModel::userSelectPage(['is_subscribe'=>1]);
+        if(empty($list)){
+            echo '无可推送数据';die;
+        }
+        $num = 12;
+        $dy_count = 0;
+        foreach($list as $k=>$v){
+            //订阅号模板内容
+            $dy_openid   = $v['openid'];
+            $dy_data['thing1'] = array('value' => "我们为你推荐了"."{$num}"."位新朋友");
+            $dy_data['thing2'] = array('value' => "点击小程序进行查看");
+            $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
+            $param = [
+                'touser'=>$dy_openid,
+                'template_id'=>$dy_temp_id,
+                'page'=>'pages/index/index',
+                'data'=>$dy_data
+            ];
+            $res = $this->shiwuSendMsg($param,2);
+            if($res == true){
+                $add['uid'] = $v['uid'];
+                $add['openid'] = $v['openid'];
+                $add['type'] = 1;
+                $add['create_time'] = date('Y-m-d H:i:s');
+                Db::name('send_record')->insertGetId($add);
+                $dy_count++;
+            }
+        }
+        echo $dy_count;die;
+    }
 }
