@@ -695,7 +695,7 @@ class User extends Base
     }
 
     public function pushSubUser(){
-        $list = UserModel::userSelectPage(['is_subscribe'=>1]);
+        $list = UserModel::userSelectPage(['is_subscribe'=>1],'id,openid');
         if(empty($list)){
             echo '无可推送数据';die;
         }
@@ -715,7 +715,7 @@ class User extends Base
             ];
             $res = $this->shiwuSendMsg($param,2);
             if($res == true){
-                $add['uid'] = $v['uid'];
+                $add['uid'] = $v['id'];
                 $add['openid'] = $v['openid'];
                 $add['type'] = 1;
                 $add['create_time'] = date('Y-m-d H:i:s');
