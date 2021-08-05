@@ -682,6 +682,25 @@ class Index extends Base
             return $this->errorReturn(self::errcode_fail,'生成失败');
         }
     }
+
+    /**
+     * @Notes:记录已订阅数据
+     * @Interface subRecord
+     * @author: zy
+     * @Time: 2021/08/05
+     */
+    public function subRecord(){
+        $uid = $this->uid;
+        $userInfo = UserModel::userFind(['id'=>$uid]);
+        if(empty($userInfo)){
+            return $this->errorReturn(self::errcode_fail,'数据异常,查无用户');
+        }
+        if($userInfo['is_subscribe'] == 0){
+            UserModel::userEdit(['id'=>$uid],['is_subscribe'=>1]);
+            return $this->successReturn('','成功',self::errcode_ok);
+        }
+        return $this->successReturn('','成功',self::errcode_ok);
+    }
     /**
      * 用户数据转化成前端需要的样式
      * @author zy

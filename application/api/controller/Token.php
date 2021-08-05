@@ -72,8 +72,13 @@ class Token extends Base
                             RelationModel::relationAdd($relation);
                         }
                     }
+                    $userInfo = UserModel::userFind(['id'=>$resId],'id as uid,openid,unionid');
                 }
-                return $this->errorReturn(self::errcode_fail, '没有找到对应的用户数据，静默失败');
+                $c_data = $userInfo;
+                $c_data['session_key'] = $session_key;
+                $session3rd = randomFromDev(16);
+                cache(config('wechat.miniapp.appid') . '_SESSION__' . $session3rd, $c_data);
+                return $this->errorReturn(self::errcode_fail, $session3rd);
             }
 
             $c_data = $result['member'];

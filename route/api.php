@@ -28,6 +28,7 @@ Route::group('api/index',function(){
     Route::any('shareInfo', 'api/index/shareInfo'); //获取分享海报图
     Route::any('ques', 'api/index/ques'); //获取常见问题
     Route::any('erwma', 'api/index/erwma'); //获取首页二维码地址
+    Route::any('subRecord', 'api/index/subRecord'); //记录已订阅消息
 });
 //用户模块
 Route::group('api/user',function(){
