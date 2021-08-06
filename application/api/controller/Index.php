@@ -197,10 +197,6 @@ class Index extends Base
             //如果不是会员 则获取支付类型
             $need_pay = 1;
             $len = count($list);
-            //去掉后三个
-            unset($list[$len-1]);
-            unset($list[$len-2]);
-            unset($list[$len-3]);
             if($paytype == 1){
                 $pay_recommend = array();
                 $pay_recommend[0] = $list[$len-3];
@@ -216,6 +212,10 @@ class Index extends Base
                     db::name('recommend_record')->where($map)->update($data);
                 }
             }
+            //去掉后三个
+            unset($list[$len-1]);
+            unset($list[$len-2]);
+            unset($list[$len-3]);
         }
         $data = [];
         $data['uid'] = $uid;
