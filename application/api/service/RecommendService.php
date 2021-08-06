@@ -40,7 +40,7 @@ class RecommendService
         // 查询今日推荐记录
         $condition['uid'] = $uid;
         $condition['date'] = $date;
-        $today_recommend = Db::table('recommend_record')->where($condition)->select();
+        $today_recommend = Db::table('recommend_record')->where($condition)->order('is_match desc')->select();
         if ($today_recommend){
             $had_id = array(); // 已经记录的id 将不再匹配
             $had_cancellation_id = array(); // 记录已经注销的recommendid, 用于更新今日推荐列表

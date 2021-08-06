@@ -51,16 +51,14 @@ class Index extends Base
         $uid = $this->uid;
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $is_vip = UsersService::isVip($userinfo);
-        //$source = input('source');
-        // custom_log('邀请人','代理'.print_r($source,true));
-        //判断资料是否完善
-        $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
-        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_c);
         $is_wechat = 0;
         $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
         if($is_gz){
             $is_wechat = 1;
         }
+        //判断资料是否完善
+        $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
+        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_c);
         $info = array_values($cInfo);
         $info_status = 1; //资料完善
         foreach($info as $k=>$v){
@@ -99,8 +97,6 @@ class Index extends Base
                 $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
             }
         }
-        //如果推荐购买会员
-        //取昨天有没有今日推荐
         $map = [];
         $map['uid'] = $uid;
         $map['date'] = $date;
@@ -112,12 +108,12 @@ class Index extends Base
         }
         //获取推荐列表
         $recommend = $NewRecommend->getRecommend($uid,$date,$num);
-        $tomorrow_yes = db::name('tomorrow_recommend')->where($map)->select();
+        $tomorrow_yes = Db::name('tomorrow_recommend')->where($map)->order('is_match desc')->select();
         //看明日推荐有没有数据
         $map = [];
         $map['uid'] = $uid;
         $map['date'] = $todate;
-        $tomorrow_new = db::name('tomorrow_recommend')->where($map)->select();
+        $tomorrow_new = Db::name('tomorrow_recommend')->where($map)->order('is_match desc')->select();
         $len = count($recommend);
         //没有明日推荐 则从今日的数据中取出两条放到明日推荐里面
         if(!$tomorrow_new){
@@ -147,6 +143,7 @@ class Index extends Base
                 $map = array();
                 $map['uid'] = $value['recommendid'];
                 $temp[$key] = ChildrenModel::childrenFind($map);
+                $temp[$key]['is_match'] = $value['is_match'];
             }
             $tomorrow_new = $temp;
         }
@@ -167,13 +164,18 @@ class Index extends Base
                 $map = array();
                 $map['uid'] = $value['recommendid'];
                 $temp_tomorrow[$key] = ChildrenModel::childrenFind($map);
+                $temp_tomorrow[$key]['is_match'] = $value['is_match'];
             }
             $list  = array_merge($temp_tomorrow,$recommend);
+            $is_match =  array_column($list,'is_match');//取出数组中is_match的一列，返回一维数组
+            array_multisort($is_match,SORT_DESC,$list);
+
         }else{
             $list = $recommend;
         }
         foreach($list as $key => $value){
             $list[$key] = $this->userchange($value);
+            $list[$key]['is_match'] = $value['is_match'];
         }
         foreach($list as $key => $value){
             $map = array();
@@ -182,80 +184,48 @@ class Index extends Base
             $map['is_del'] = 1;
             $is_collection = CollectionModel::collectionFind($map);
             //1是未收藏 2是收藏了
+            $list[$key]['is_collection'] = 2;
             if(empty($is_collection)){
                 $list[$key]['is_collection'] = 1;
-            }else{
-                $list[$key]['is_collection'] = 2;
             }
         }
         $children = ChildrenModel::childrenFind(['uid'=>$uid]);
-        //如果是会员则不需要出支付的 直接返回十五个
+        //如果是会员
         if($is_vip == 1){
-            $data = array();
-            $data['uid'] = $uid;
-            $data['need_pay'] = 0;
-            $data['list'] = $list;
-            $data['paytype'] = $paytype;
-            $data['tomorrow'] = $tomorrow_arr;
-            $data['num'] = count($list);
-            $data['last_time'] = $last_time;
-            $data['self_sex'] = $children['sex'];
-            $data['product'] = $product;
-            $data['user_status'] = $userinfo['status'];
-            $data['info_status'] = $info_status;
-            $data['is_wechat'] = $is_wechat;
-            return $this->successReturn($data,'成功',self::errcode_ok);
-        }
-        //如果不是会员 则获取支付类型
-        if($paytype == 2){
+            $need_pay = 0;
+        }else{
+            //如果不是会员 则获取支付类型
+            $need_pay = 1;
             $len = count($list);
             //去掉后三个
             unset($list[$len-1]);
             unset($list[$len-2]);
             unset($list[$len-3]);
-            //取出买次数的大数据
-            $data = array();
-            $data['uid'] = $uid;
-            $data['need_pay'] = 1;
-            $data['list'] = $list;
-            $data['paytype'] = $paytype;
-            $data['tomorrow'] = $tomorrow_arr;
-            $data['num'] = count($list);
-            $data['last_time'] = $last_time;
-            $data['self_sex'] = $children['sex'];
-            $data['product'] = $product;
-            $data['user_status'] = $userinfo['status'];
-            $data['info_status'] = $info_status;
-            $data['is_wechat'] = $is_wechat;
-            return $this->successReturn($data,'成功',self::errcode_ok);
+            if($paytype == 1){
+                $pay_recommend = array();
+                $pay_recommend[0] = $list[$len-3];
+                $pay_recommend[1] = $list[$len-2];
+                $pay_recommend[2] = $list[$len-1];
+                foreach($pay_recommend as $key => $value){
+                    $map = array();
+                    $map['uid'] = $uid;
+                    $map['date'] = $date;
+                    $map['recommendid'] = $value['uid'];
+                    $data = array();
+                    $data['type'] = 3;
+                    db::name('recommend_record')->where($map)->update($data);
+                }
+            }
         }
-        //是会员
-        $len = count($list);
-        $pay_recommend = array();
-        $pay_recommend[0] = $list[$len-3];
-        $pay_recommend[1] = $list[$len-2];
-        $pay_recommend[2] = $list[$len-1];
-        foreach($pay_recommend as $key => $value){
-            $map = array();
-            $map['uid'] = $uid;
-            $map['date'] = $date;
-            $map['recommendid'] = $value['uid'];
-            $data = array();
-            $data['type'] = 3;
-            db::name('recommend_record')->where($map)->update($data);
-        }
-        $len = count($list);
-        //去掉后三个
-        unset($list[$len-1]);
-        unset($list[$len-2]);
-        unset($list[$len-3]);
-        $data = array();
+        $data = [];
         $data['uid'] = $uid;
-        $data['need_pay'] = 1;
+        $data['need_pay'] = $need_pay;
         $data['list'] = $list;
+        if(isset($pay_recommend)){
+            $data['pay_recommend'] = $pay_recommend;
+        }
         $data['tomorrow'] = $tomorrow_arr;
         $data['paytype'] = $paytype;
-        $data['pay_recommend'] = $pay_recommend;
         $data['num'] = count($list);
         $data['last_time'] = $last_time;
         $data['self_sex'] = $children['sex'];
