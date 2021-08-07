@@ -21,6 +21,7 @@ use app\api\model\WechatFans;
 use app\wechat\service\FansService;
 use app\wechat\service\MediaService;
 use app\wechat\service\WechatService;
+use app\api\service\ScoreService;
 use library\Controller;
 use think\Db;
 use think\Exception;
@@ -416,6 +417,8 @@ class Push extends Controller
                             'create_at' => time()
                         ];
                         Db::name('tel_count')->strict(false)->insertGetId($params);
+
+                        ScoreService::instance()->weightScoreInc($userinfo['id'],28);
                     }
                     
                 }

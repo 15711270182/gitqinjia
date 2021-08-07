@@ -16,6 +16,7 @@ namespace app\api\controller;
 use app\api\model\Relation;
 use app\api\model\TelCollection;
 use app\api\service\UsersService;
+use app\api\service\ScoreService;
 use app\api\model\User as UserModel;
 use app\api\model\Children as ChildrenModel;
 use app\api\model\Collection as CollectionModel;
@@ -83,11 +84,13 @@ class User extends Base
                 ];
                 RelationModel::relationAdd($relation);
                 TelCollection::tcountAdd($telcount);
+                ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
             }else{
                 if($count['type'] == 1){ //静默未填写资料的状态
                     RelationModel::relationEdit(['uid'=>$uid,'bid'=>$source],['type'=>0,'update_time'=>date('Y-m-d H:i:s')]);
                     UserModel::getuserInt(['id'=>$source],'count');
                     TelCollection::tcountAdd($telcount);
+                    ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
                 }
 
             }
@@ -198,24 +201,23 @@ class User extends Base
         if(empty($value)){
             return $this->errorReturn(self::errcode_fail,'values参数不能为空');
         }
-
         //0过不了 empty 的判断
         if($value == '/'){
             $value = 0;
         }
         $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
         //第一次完善加分  1 school 学校 2 hometown 家乡 3 native_place 户籍 5 work 职业 6 house 房子 7 cart 车子
-        switch($field){
-            case 'school':if(empty($cInfo[$field])){$type = 1;} break;
-            case 'hometown':if(empty($cInfo[$field])){$type = 2;} break;
-            case 'native_place':if(empty($cInfo[$field])){$type = 3;} break;
-            case 'work':if(empty($cInfo[$field])){$type = 5;} break;
-            case 'house':if($cInfo[$field] == 0){$type = 6;} break;
-            case 'cart':if($cInfo[$field] == 0){$type = 7;} break;
-        }
-        if (!empty($type)) {
-            userscore($uid,$type);
-        }
+//        switch($field){
+//            case 'school':if(empty($cInfo[$field])){$type = 1;} break;
+//            case 'hometown':if(empty($cInfo[$field])){$type = 2;} break;
+//            case 'native_place':if(empty($cInfo[$field])){$type = 3;} break;
+//            case 'work':if(empty($cInfo[$field])){$type = 5;} break;
+//            case 'house':if($cInfo[$field] == 0){$type = 6;} break;
+//            case 'cart':if($cInfo[$field] == 0){$type = 7;} break;
+//        }
+//        if (!empty($type)) {
+//            userscore($uid,$type);
+//        }
         //修改的数据
         $update['update_time'] = date('Y-m-d H:i:s');
         if($field == 'ask_age' || $field == 'ask_height'){
@@ -249,6 +251,7 @@ class User extends Base
         if (empty($cInfo)){
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
+        ScoreService::instance()->editScoreInc($uid,$field,$value);
         $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
         if($res){
             return $this->successReturn('','修改成功',self::errcode_ok);
@@ -264,17 +267,18 @@ class User extends Base
      */
     public function editRemarks()
     {
-       $uid = $this->uid;
+        $uid = $this->uid;
         $remark = input("remarks", '', 'htmlspecialchars_decode');
         if(!$remark){
             return $this->errorReturn(self::errcode_fail,'数据不能为空');
         }
-        $map['uid'] = $uid;
         $data['remarks'] = $remark;
-        $res = ChildrenModel::childrenEdit($map,$data);
+        $data['update_time'] = date('Y-m-d H:i:s');
+        $res = ChildrenModel::childrenEdit(['uid'=>$uid],$data);
         if(!$res){
             return $this->errorReturn(self::errcode_fail,'更新失败');
         }
+        ScoreService::instance()->weightScoreInc($uid, 1);//相亲说明增加权重分
         return $this->successReturn('','更新成功',self::errcode_ok);
     }
     /**
@@ -434,6 +438,7 @@ class User extends Base
                     'create_at' => time()
                 ];
                 CollectionModel::collectionAdd($params);
+                ScoreService::instance()->weightScoreInc($uid,30,$bid);
             }
             return $this->successReturn('','成功',self::errcode_ok);
         }
@@ -444,6 +449,11 @@ class User extends Base
         $res = CollectionModel::collectionEdit(['id'=>$collection['id']],$update);
         if(!$res){
             return $this->errorReturn(self::errcode_fail,'操作失败');
+        }
+        if($type == 1){ //收藏
+            ScoreService::instance()->weightScoreInc($uid,30,$bid);
+        }else{
+            ScoreService::instance()->weightScoreInc($uid,31,$bid);
         }
         return $this->successReturn('','成功',self::errcode_ok);
     }
@@ -741,5 +751,134 @@ class User extends Base
 
         }
         echo $dy_count;die;
+    }
+
+
+    public function test(){
+        $field = "uid,height,residence,education,income,bro,parents,native_place,hometown,school,house,cart,remarks,expect_education,max_age,max_height";
+        $list =  ChildrenModel::childrenSelect(['status'=>1],$field);
+        foreach($list as $k=>$v){
+            if($v['height']){
+                ScoreService::instance()->weightScoreInc($v['uid'],32);//身高
+            }
+            if($v['residence']){
+                ScoreService::instance()->weightScoreInc($v['uid'],2);//身高
+            }
+            if($v['education']){
+                ScoreService::instance()->weightScoreInc($v['uid'],3);
+            }
+            if($v['income']){
+                ScoreService::instance()->weightScoreInc($v['uid'],4);
+            }
+            if($v['bro']){
+                ScoreService::instance()->weightScoreInc($v['uid'],5);
+            }
+            if($v['parents']){
+                ScoreService::instance()->weightScoreInc($v['uid'],6);
+            }
+            if($v['native_place']){
+                ScoreService::instance()->weightScoreInc($v['uid'],7);
+            }
+            if($v['hometown']){
+                ScoreService::instance()->weightScoreInc($v['uid'],8);
+            }
+            if($v['school']){
+                ScoreService::instance()->weightScoreInc($v['uid'],9);
+            }
+            if($v['house']){
+                if($v['house'] == 1){
+                    ScoreService::instance()->weightScoreInc($v['uid'],12);
+                }
+                if($v['house'] == 2){
+                    ScoreService::instance()->weightScoreInc($v['uid'],13);
+                }
+                if($v['house'] == 3){
+                    ScoreService::instance()->weightScoreInc($v['uid'],14);
+                }
+            }
+            if($v['cart']){
+                if($v['cart'] == 1){
+                    ScoreService::instance()->weightScoreInc($v['uid'],15);
+                }
+                if($v['cart'] == 2){
+                    ScoreService::instance()->weightScoreInc($v['uid'],16);
+                }
+                if($v['cart'] == 3){
+                    ScoreService::instance()->weightScoreInc($v['uid'],17);
+                }
+            }
+            if($v['remarks']){
+                ScoreService::instance()->weightScoreInc($v['uid'],1);
+            }
+            if($v['expect_education']){
+                ScoreService::instance()->weightScoreInc($v['uid'],18);
+            }
+            if($v['max_age']){
+                ScoreService::instance()->weightScoreInc($v['uid'],19);
+            }
+            if($v['max_height']){
+                ScoreService::instance()->weightScoreInc($v['uid'],20);
+            }
+
+        }
+        echo '11';die;
+    }
+
+    public function test_bb(){
+        //邀请填写资料加分
+        $info1 = Db::name('relation')->alias('r')
+            ->leftJoin('children p','r.uid= p.uid')
+            ->field("r.uid,r.bid")
+            ->where(['r.type'=>0])
+            ->order('r.create_at desc')
+            ->select();
+        foreach($info1 as $k=>$v){
+            ScoreService::instance()->weightScoreInc($v['bid'],21,$v['uid']);
+        }
+//        关注公众号
+        $info2 = Db::name('userinfo')->alias('r')
+            ->leftJoin('wechat_fans p','r.unionid= p.unionid')
+            ->field("r.id")
+            ->where(['r.status'=>1,'p.subscribe'=>1])
+            ->select();
+        foreach($info2 as $k=>$v){
+            ScoreService::instance()->weightScoreInc($v['id'],28);
+        }
+//        购买会员
+        $info3 = Db::name('order')->alias('o')
+            ->join('product p','o.goods_id= p.id')
+            ->where(['o.status'=>1])->select();
+        foreach($info3 as $k=>$v){
+            if($v['type'] == 2){
+                 switch($v['num']){
+                    case 1:ScoreService::instance()->weightScoreInc($v['uid'],23);//购买1次卡增加权重分
+                    break;
+                    case 5:ScoreService::instance()->weightScoreInc($v['uid'],24);//购买5次卡增加权重分
+                    break;
+                    case 10:ScoreService::instance()->weightScoreInc($v['uid'],25);//购买10次卡增加权重分
+                    break;
+                    default:break;
+                 }
+            }else{
+                ScoreService::instance()->weightScoreInc($v['uid'],22);//购买月卡增加权重分
+            }
+
+        }
+//        查看手机号
+        $info4 = Db::name('tel_collection')->where(['is_del'=>1])->select();
+        foreach($info4 as $k=>$v){
+            ScoreService::instance()->weightScoreInc($v['bid'],26,$v['uid']);//被查看
+            ScoreService::instance()->weightScoreInc($v['uid'],27,$v['bid']);//查看
+        }
+        //收藏取消收藏
+        $info5 = Db::name('collection')->where(['is_show'=>0])->select();
+        foreach($info5 as $k=>$v){
+            if($v['is_del'] == 1){
+                ScoreService::instance()->weightScoreInc($v['uid'],30,$v['bid']);//收藏
+            }
+            if($v['is_del'] == 2){
+                ScoreService::instance()->weightScoreInc($v['uid'],31,$v['bid']);//取消收藏
+            }
+        }
     }
 }

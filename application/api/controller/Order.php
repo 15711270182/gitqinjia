@@ -22,6 +22,7 @@ use app\api\model\Product as ProductModel;
 use app\api\model\Children as ChildrenModel;
 use app\api\model\User as UserModel;
 use app\api\model\TelCollection as Tel;
+use app\api\service\ScoreService;
 use think\Db;
 use think\Queue;
 
@@ -197,6 +198,7 @@ class Order extends Base
                 $data['is_vip'] = 1;
                 $data['endtime'] = $time;
                 UserModel::userEdit($map,$data);
+                ScoreService::instance()->weightScoreInc($orderInfo['uid'],22);//购买月卡增加权重分
             }else
             {
                 //增加次数
@@ -213,7 +215,15 @@ class Order extends Base
                         'create_at' => time()
                     ];
                     Tel::tcountAdd($params);
-//                    Db::name('tel_count')->strict(false)->insertGetId($params);
+                    switch($goods['num']){
+                        case 1:ScoreService::instance()->weightScoreInc($orderInfo['uid'],23);//购买1次卡增加权重分
+                        break;
+                        case 5:ScoreService::instance()->weightScoreInc($orderInfo['uid'],24);//购买5次卡增加权重分
+                        break;
+                        case 10:ScoreService::instance()->weightScoreInc($orderInfo['uid'],25);//购买10次卡增加权重分
+                        break;
+                        default:break;
+                    }
                 }
                 custom_log('payorder','支付'.print_r($res,true));
             }
