@@ -82,4 +82,12 @@ class Children extends Model
     public static function getchildrenColumn($where = [],$column = 'id'){
         return Db::name('children')->where($where)->column($column);
     }
+
+    public static function getchildrenInt($where = [],$field = '',$count = '1'){
+        return Db::name('children')->where($where)->setInc($field,$count);
+    }
+    public static function getchildrenDec($where = [],$field = '',$count = '1'){
+        return Db::name('children')->where($where)->setDec($field,$count);
+    }
+
 }
