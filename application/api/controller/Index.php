@@ -15,6 +15,7 @@
 namespace app\api\controller;
 use app\api\model\TelCollection;
 use app\api\model\Video as VideoModel;
+use app\api\service\ScoreService;
 use app\api\service\UsersService;
 use app\api\service\RecommendService;
 use app\api\service\Qrcode;
@@ -39,6 +40,189 @@ use WeChat\Product;
  */
 class Index extends Base
 {
+    public function home_test()
+    {
+        $uid = $this->uid;
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        $is_vip = UsersService::isVip($userinfo);
+        $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
+        $is_wechat = !empty($is_gz)?1:0;//是否关注公众号
+        //判断资料是否完善
+        $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
+        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_c);
+        $info = array_values($cInfo);
+        $info_status = 1; //资料完善
+        foreach($info as $k=>$v){
+            if(empty($v)){
+                 $info_status = 0; //资料未完善
+                 break;
+            }
+        }
+        if($info_status == 1){
+            $realname = UserModel::userValue(['id'=>$uid],'realname');
+            if(empty($realname)){
+                $info_status = 0; //资料未完善
+            }
+        }
+        if(date('H') >= 10){ //剩余时间
+            $temp_time = strtotime(date('Y-m-d').' 23:59:59')+10*3600;
+            $date = date('Ymd');
+        }else{
+            $temp_time = strtotime(date('Y-m-d').'09:59:59');
+            $date = date('Ymd',strtotime('-1 days'));
+        }
+        $todate = date('Ymd',strtotime($date)+24*3600);
+        // dump($todate);exit;
+        $last_time = $temp_time - time();
+        //取用户需要的支付的类型 1:购买会员 2：购买次数
+        $paytype = $userinfo['paytype'];
+        $field = "id,title,type,num,price,create_at,discount,old_price";
+        $product = ProductModel::productSelect(['type'=>$paytype,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
+        foreach ($product as $key => $value) {
+            $product[$key]['day_price'] = round($value['price']/$value['num']/100, 1);
+            if($paytype == 1){
+                $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
+            }
+        }
+        $map = [];
+        $map['uid'] = $uid;
+        $map['date'] = $date;
+        $NewRecommend = new RecommendService();
+        $tomorrow_exist = $NewRecommend->existTomorrowRecommend($map);
+        $num = 17;
+        if($tomorrow_exist){
+            $num = 15;
+        }
+        //获取推荐列表
+        $recommend = $NewRecommend->getRecommend($uid,$date,$num);
+        $tomorrow_yes = Db::name('tomorrow_recommend')->where($map)->order('is_match desc')->select();
+        //看明日推荐有没有数据
+        $map = [];
+        $map['uid'] = $uid;
+        $map['date'] = $todate;
+        $tomorrow_new = Db::name('tomorrow_recommend')->where($map)->order('is_match desc')->select();
+        $len = count($recommend);
+        //没有明日推荐 则从今日的数据中取出两条放到明日推荐里面
+        if(!$tomorrow_new){
+            $tomorrow_new = array();
+            $tomorrow_new[0] = $recommend[$len-1];
+            $tomorrow_new[1] = $recommend[$len-2];
+            foreach($tomorrow_new as $key => $value){
+                $data = array();
+                $data['uid'] = $uid;
+                $data['recommendid'] = $value['uid'];
+                $data['date'] = $todate;
+                $data['addtime'] = time();
+                $data['is_match'] = $value['is_match'];
+                db::name('tomorrow_recommend')->insert($data);
+                //更新状态为明日推荐
+                $map = array();
+                $map['uid'] = $uid;
+                $map['date'] = $date;
+                $map['recommendid'] = $value['uid'];
+                db::name('recommend_record')->where($map)->update(['type'=>2]);
+            }
+        }else{
+            $temp = array();
+            foreach($tomorrow_new as $key => $value){
+                $map = array();
+                $map['uid'] = $value['recommendid'];
+                $temp[$key] = ChildrenModel::childrenFind($map);
+                $temp[$key]['is_match'] = $value['is_match'];
+            }
+            $tomorrow_new = $temp;
+        }
+        unset($recommend[$len-1]);
+        unset($recommend[$len-2]);
+        $tomorrow_arr = array();
+        foreach($tomorrow_new as $key => $value){
+            $temp = $this->userchange($value);
+            $tomorrow_arr[$key]['headimgurl'] = $temp['headimgurl'];
+            $tomorrow_arr[$key]['first'] = $temp['first'];
+            $tomorrow_arr[$key]['remark'] = $temp['remark'];
+            $tomorrow_arr[$key]['sex'] = $temp['sex'];
+        }
+        //f如果昨天有明日推荐则整合
+        $temp_tomorrow = array();
+        if($tomorrow_yes){
+            foreach($tomorrow_yes as $key => $value){
+                $map = array();
+                $map['uid'] = $value['recommendid'];
+                $temp_tomorrow[$key] = ChildrenModel::childrenFind($map);
+                $temp_tomorrow[$key]['is_match'] = $value['is_match'];
+            }
+            $list  = array_merge($temp_tomorrow,$recommend);
+            $is_match =  array_column($list,'is_match');//取出数组中is_match的一列，返回一维数组
+            array_multisort($is_match,SORT_DESC,$list);
+
+        }else{
+            $list = $recommend;
+        }
+        foreach($list as $key => $value){
+            $list[$key] = $this->userchange($value);
+            $list[$key]['is_match'] = $value['is_match'];
+        }
+        foreach($list as $key => $value){
+            $map = array();
+            $map['uid'] = $uid;
+            $map['bid'] = $value['uid'];
+            $map['is_del'] = 1;
+            $is_collection = CollectionModel::collectionFind($map);
+            //1是未收藏 2是收藏了
+            $list[$key]['is_collection'] = 2;
+            if(empty($is_collection)){
+                $list[$key]['is_collection'] = 1;
+            }
+        }
+        $children = ChildrenModel::childrenFind(['uid'=>$uid]);
+        //如果是会员
+        if($is_vip == 1){
+            $need_pay = 0;
+        }else{
+            //如果不是会员 则获取支付类型
+            $need_pay = 1;
+            $len = count($list);
+            if($paytype == 1){
+                $pay_recommend = array();
+                $pay_recommend[0] = $list[$len-3];
+                $pay_recommend[1] = $list[$len-2];
+                $pay_recommend[2] = $list[$len-1];
+                foreach($pay_recommend as $key => $value){
+                    $map = array();
+                    $map['uid'] = $uid;
+                    $map['date'] = $date;
+                    $map['recommendid'] = $value['uid'];
+                    $data = array();
+                    $data['type'] = 3;
+                    db::name('recommend_record')->where($map)->update($data);
+                }
+            }
+            //去掉后三个
+            unset($list[$len-1]);
+            unset($list[$len-2]);
+            unset($list[$len-3]);
+        }
+        $sort_type =  array_column($list,'sort_type');//取出数组中sort_type的一列，返回一维数组
+        array_multisort($sort_type,SORT_DESC,$list);
+        $data = [];
+        $data['uid'] = $uid;
+        $data['need_pay'] = $need_pay;
+        $data['list'] = $list;
+        if(isset($pay_recommend)){
+            $data['pay_recommend'] = $pay_recommend;
+        }
+        $data['tomorrow'] = $tomorrow_arr;
+        $data['paytype'] = $paytype;
+        $data['num'] = count($list);
+        $data['last_time'] = $last_time;
+        $data['self_sex'] = $children['sex'];
+        $data['product'] = $product;
+        $data['user_status'] = $userinfo['status'];
+        $data['info_status'] = $info_status;
+        $data['is_wechat'] = $is_wechat;
+        ScoreService::instance()->weightScoreInc($uid,29);
+        return $this->successReturn($data,'成功',self::errcode_ok);
+    }
     /**
      * @Notes:首页推荐 登录情况下
      * @Interface home
@@ -233,6 +417,7 @@ class Index extends Base
         $data['user_status'] = $userinfo['status'];
         $data['info_status'] = $info_status;
         $data['is_wechat'] = $is_wechat;
+        ScoreService::instance()->weightScoreInc($uid,29);
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
@@ -414,6 +599,8 @@ class Index extends Base
             if($result == true){
                 $data['three'] = substr($children['phone'],0,3).' '.substr($children['phone'],3,4).' '.substr($children['phone'],7,4);
                 $data['status'] = 1;//1是可以看
+                ScoreService::instance()->weightScoreInc($bid,26,$uid);//被查看的人增加权重分
+                ScoreService::instance()->weightScoreInc($uid,27,$bid);//查看的人增加权重分
                 return $this->successReturn(['data'=>$data,'count'=>0],'成功',self::errcode_ok);
             }
             return $this->errorReturn(self::errcode_fail,'查看失败');
@@ -730,6 +917,14 @@ class Index extends Base
         $user['five']  = $five.$cart;
         $user['six']   = $six;
         $user['remark'] = $value['remarks'];
+        //根据资料完善程度  排序
+        $type_five = $user['five'];
+        if($user['five'] == '暂未填写'){
+            $type_five = '';
+        }
+        $newType = [$user['first'], $user['three'], $user['four'], $type_five, $user['six'], $user['remark']];
+        $user['sort_type'] = count(array_filter($newType));
+
         //查询用户父母的名称
         $pare = UserModel::userFind(['id'=>$value['uid']]);
         $user['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';

@@ -121,7 +121,7 @@ class RecommendService
             foreach ($re_list as $key => $value){
                 $map = array();
                 $map['uid'] = $value['uid'];
-                db::name('children')->where($map)->setDec('today_score',5);
+//                db::name('children')->where($map)->setDec('today_score',5);
                 $data = array();
                 $data['uid'] = $uid;
                 $data['recommendid'] = $value['uid'];
@@ -156,20 +156,20 @@ class RecommendService
         }
         // 最高年龄
         if ($user_info['max_age'] == 0 || $user_info['max_age'] === 999){
-            $max_age = 80;
+            $max_age = 45;
         }else{
             $max_age = $user_info['max_age'];
         }
         // 身高条件
         // 最小身高要求
         if ($user_info['min_height'] == 0 || $user_info['min_height'] == 999){
-            $min_height = 140;
+            $min_height = 150;
         }else{
             $min_height = $user_info['min_height'];
         }
         // 最高身高要求
         if ($user_info['max_height'] == 0 || $user_info['max_height'] == 999){
-            $max_height = 220;
+            $max_height = 190;
         }else{
             $max_height = $user_info['max_height'];
         }
@@ -228,6 +228,7 @@ class RecommendService
         $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
 
         // 教育要求
+        $condition['education'] = $user_info['education'];
         if ($user_info['expect_education']){
             $condition['education'] = $user_info['expect_education'];
         }
@@ -235,18 +236,27 @@ class RecommendService
         $matchDb = Db::table('children')->where($condition);
 
         // 年龄要求
-        // 最小年龄
-        $max_year = $this->getYearByAge($user_info['min_age']);
-        if ($user_info['min_age'] == 999 || $user_info['min_age'] == 0){
+        // 选择择偶年龄 不限 18岁起  未选择 按子女的年龄相符
+        if ($user_info['min_age'] == 999){ //年龄最小不限
             $min_age = 18;
             $max_year = $this->getYearByAge($min_age);
+        }else{
+            if($user_info['min_age'] > 0 ){
+                $max_year = $this->getYearByAge($user_info['min_age']);
+            }else{
+                $max_year = $user_info['year']+2;
+            }
         }
-
         // 最大年龄
-        $min_year = $this->getYearByAge($user_info['max_age']);
-        if($user_info['max_age'] == 999 || $user_info['max_age'] == 0){
-            $max_age = 80;
+        if($user_info['max_age'] == 999){ //年龄最大不限
+            $max_age = 45;
             $min_year = $this->getYearByAge($max_age);
+        }else{
+            if($user_info['max_age'] > 0){
+                 $min_year = $this->getYearByAge($user_info['max_age']);
+            }else{
+                 $min_year =  $user_info['year']-2;
+            }
         }
         $matchDb->where('year', 'between', "$min_year, $max_year");
 
@@ -256,11 +266,10 @@ class RecommendService
         if ($user_info['min_height'] == 999 || $user_info['min_height'] == 0){
             $condition['min_height'] = 150;
         }
-
         // 最高身高
         $max_height = $user_info['max_height'];
         if ($user_info['max_height'] == 999 || $user_info['max_height'] == 0){
-            $condition['max_height'] = 220;
+            $condition['max_height'] = 190;
         }
         $matchDb->where('height', 'between', "$min_height, $max_height");
 
@@ -268,7 +277,7 @@ class RecommendService
         array_unique($new_not_id_arr);
 
         $matchDb->where('uid', 'notin', $new_not_id_arr);
-        $match_list = $matchDb->limit($num)->order('today_score desc')->select();
+        $match_list = $matchDb->limit($num)->order('weight_score desc,year desc')->select();
         if (!empty($match_list)){
             foreach ($match_list as $key => $value){
                 $match_list[$key]['is_match']  = 2;
@@ -314,7 +323,7 @@ class RecommendService
         $MatchDb = $MatchDb->where('uid', 'notin', array_unique(array_merge($notIn_id, $had_id)));
 
         // 根据匹配条件获取推荐
-        $other_list_match_list = $MatchDb->limit($num)->order('today_score desc')->select();
+        $other_list_match_list = $MatchDb->limit($num)->order('weight_score desc,year desc')->select();
 
         foreach ($other_list_match_list as $key => $value){
             $other_list_match_list[$key]['is_match'] = 1;
