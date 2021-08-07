@@ -232,7 +232,6 @@ class RecommendService
 
         // 获取最近记录(近三天推荐,收藏,联系)
         $had_recommend_id = $this->hadRecommend($uid);
-
         $condition['status'] = 1;
         $condition['residence'] = $user_info['residence'];
         $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
@@ -287,7 +286,21 @@ class RecommendService
         array_unique($new_not_id_arr);
 
         $matchDb->where('uid', 'notin', $new_not_id_arr);
+        //获取收藏较多  查看较多的用户 的用户优先展示
+//        $recommend_id = $this->amoreRecommend($uid);
+//         foreach($new_not_id_arr as $k){
+//            foreach($recommend_id as $j => $v){
+//                if(in_array($k,$recommend_id) && $k==$v){
+//                    $recommend_id[$j]='';
+//                }
+//            }
+//        }
+//        $new_recommend_id = array_merge(array_filter($recommend_id));
+//        if($new_recommend_id){
+//            $matchDb->whereOr('uid', 'in', $new_recommend_id);
+//        }
         $match_list = $matchDb->limit($num)->order('weight_score desc,year desc')->select();
+//        var_dump(Db::table('children')->getLastSql());die;
         if (!empty($match_list)){
             foreach ($match_list as $key => $value){
                 $match_list[$key]['is_match']  = 2;
@@ -312,7 +325,7 @@ class RecommendService
         $user_info = Db::table('children')->where('uid', $uid)->find();
         // 获取近期三天推荐过,收藏,联系的记用户uid,将不再推荐
         $notIn_id = $this->hadRecommend($uid);
-
+        $recommend_id = $this->amoreRecommend($uid);
         $MatchDb = Db::table('children');
         $condition['is_del'] = 1;
         $condition['status'] = 1;
@@ -329,12 +342,22 @@ class RecommendService
 
         // 身高
         if ($request_condition['height']) $MatchDb->where('height', 'between',[$request_condition['height']['min_height'], $request_condition['height']['max_height']]);
-
-        $MatchDb = $MatchDb->where('uid', 'notin', array_unique(array_merge($notIn_id, $had_id)));
-
+        $notInID =  array_unique(array_merge($notIn_id, $had_id));
+        $MatchDb = $MatchDb->where('uid', 'notin', $notInID);
+        //根据收藏和查看的比较多的先展示
+        foreach($notInID as $k){
+            foreach($recommend_id as $j => $v){
+                if(in_array($k,$recommend_id) && $k==$v){
+                    $recommend_id[$j]='';
+                }
+            }
+        }
+        $new_recommend_id = array_merge(array_filter($recommend_id));
+        if($new_recommend_id){
+            $MatchDb = $MatchDb->whereOr('uid', 'in', $new_recommend_id);
+        }
         // 根据匹配条件获取推荐
         $other_list_match_list = $MatchDb->limit($num)->order('weight_score desc,year desc')->select();
-
         foreach ($other_list_match_list as $key => $value){
             $other_list_match_list[$key]['is_match'] = 1;
         }
@@ -600,10 +623,54 @@ class RecommendService
             array_push($had_tel_id_list, $value['bid']);
         }
 
-        $not_id_list = array_merge($near_three_id_list, $had_tel_id_list, $had_tel_id_list);
+        $not_id_list = array_merge($near_three_id_list, $had_collection_id_list, $had_tel_id_list);
         return array_unique($not_id_list);
     }
 
+    public function amoreRecommend($uid)
+    {
+        $sex = Db::table('children')->where(['uid'=>$uid])->value('sex');
+        $sex_new = $sex == 1 ? 2 : 1;
+
+        // 获取被收藏比较多的用户
+        $collection_id_list = array();
+        $collection_where['c.is_del'] = 1;
+        $collection_where['u.sex'] = $sex_new;
+        $collection_where['u.status'] = 1;
+        $collection_list = Db::table('collection')->alias('c')
+            ->join('children u','c.bid= u.uid')
+            ->field("count(*) as count,c.bid")
+            ->where($collection_where)
+            ->where("c.bid <> '{$uid}'")
+            ->group('c.bid')
+            ->order('count desc')
+            ->select();
+        foreach ($collection_list as $key => $value){
+            if($value['count'] > 1){
+                array_push($collection_id_list, $value['bid']);
+            }
+        }
+        // 获取被查看比较多的用户
+        $tel_id_list = array();
+        $tel_where['t.is_del'] = 1;
+        $tel_where['u.sex'] = $sex_new;
+        $tel_where['u.status'] = 1;
+        $had_tel_list = Db::table('tel_collection')->alias('t')
+            ->join('children u','t.bid= u.uid')
+            ->field("count(*) as count,t.bid")
+            ->where($tel_where)
+            ->where("t.bid <> '{$uid}'")
+            ->group('t.bid')
+            ->order('count desc')
+            ->select();
+        foreach ($had_tel_list as $key => $value){
+            if($value['count'] > 1){
+                 array_push($tel_id_list, $value['bid']);
+            }
+        }
+        $id_list = array_merge($collection_id_list, $tel_id_list);
+        return array_unique($id_list);
+    }
     /**
      * 根据 uid 获取 children 信息
      * @param $uid
