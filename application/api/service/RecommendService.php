@@ -149,16 +149,26 @@ class RecommendService
         $re_list = array();
         $user_info = $this->getChildrenInfoByUid($uid);
         // 最小年龄
-        if ($user_info['min_age'] == 0 || $user_info['min_age'] == 999) {
+        if ($user_info['min_age'] == 999) {
             $min_age = 22;
         }else{
-            $min_age = $user_info['min_age'];
+            if($user_info['min_age'] > 0){
+                $min_age = $user_info['min_age'];
+            }else{
+                $a = $this->getYearAge($user_info['year']);
+                $min_age = $a-3;
+            }
         }
         // 最高年龄
-        if ($user_info['max_age'] == 0 || $user_info['max_age'] === 999){
+        if ($user_info['max_age'] === 999){
             $max_age = 45;
         }else{
-            $max_age = $user_info['max_age'];
+            if($user_info['max_age'] > 0){
+                $max_age = $user_info['max_age'];
+            }else{
+                $a = $this->getYearAge($user_info['year']);
+                $max_age = $a+3;
+            }
         }
         // 身高条件
         // 最小身高要求
@@ -537,6 +547,20 @@ class RecommendService
         return date('Y') - $age;
     }
 
+    //将生日转化为年龄
+    public function getYearAge($birthday){
+         $age = strtotime($birthday);
+         if($age === false){
+          return false;
+         }
+         list($y1,$m1,$d1) = explode("-",date("Y-m-d",$age));
+         $now = strtotime("now");
+         list($y2,$m2,$d2) = explode("-",date("Y-m-d",$now));
+         $age = $y2 - $y1;
+         if((int)($m2.$d2) < (int)($m1.$d1))
+          $age -= 1;
+         return $age;
+    }
 
     /**
      * 获取最近三天,已收藏,已联系的 记录,将不予推荐
