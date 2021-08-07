@@ -15,6 +15,7 @@
 namespace app\api\controller;
 use app\api\model\TelCollection;
 use app\api\model\Video as VideoModel;
+use app\api\model\WeightScore;
 use app\api\service\ScoreService;
 use app\api\service\UsersService;
 use app\api\service\RecommendService;
@@ -49,7 +50,7 @@ class Index extends Base
      */
     public function home()
     {
-         $uid = $this->uid;
+        $uid = $this->uid;
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $is_vip = UsersService::isVip($userinfo);
         $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
@@ -229,7 +230,13 @@ class Index extends Base
         $data['user_status'] = $userinfo['status'];
         $data['info_status'] = $info_status;
         $data['is_wechat'] = $is_wechat;
-        ScoreService::instance()->weightScoreInc($uid,29);
+        $s_time = date('Y-m-d 00:00:00');
+        $e_time = date('Y-m-d H:i:s');
+        $where_s = "uid = '{$uid}' and type = 29 and create_time between '{$s_time}' and '{$e_time}'";
+        $is_find = WeightScore::scoreRecordFind($where_s);
+        if(!$is_find){
+             ScoreService::instance()->weightScoreInc($uid,29);
+        }
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
