@@ -480,10 +480,10 @@ class Index extends Base
         if(empty($code)){
             return $this->errorReturn(self::errcode_fail,'code参数不能为空');
         }
-//        $checkcode = cache($tel);
-//        if(empty($checkcode)){
-//            return $this->errorReturn(self::errcode_fail,'验证码过期');
-//        }
+        $checkcode = cache($tel);
+        if(empty($checkcode)){
+            return $this->errorReturn(self::errcode_fail,'验证码过期');
+        }
         if($type == 1){
             $session3rd = input('session3rd');
             $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
@@ -492,13 +492,13 @@ class Index extends Base
                 return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
             }
         }
-//        if($checkcode == $code){
+        if($checkcode == $code){
             if($type == 1){ //验证通过 手机号存入数据库
                  $update['phone'] = $tel;
                  ChildrenModel::childrenEdit(['uid'=>$uid],$update);
             }
             return $this->successReturn('','成功',self::errcode_ok);
-//        }
+        }
         return $this->errorReturn(self::errcode_fail,'验证码错误');
     }
     /**
@@ -805,14 +805,28 @@ class Index extends Base
      */
     public function sendTjMsg()
     {
-        $dy_openid   = 'of8n75YM-J-IL08PQt-wVIdNSnO0';
-        $dy_data['thing1'] = array('value' => "我们为您推荐了12位相亲对象");
-        $dy_data['thing2'] = array('value' => "点击小程序进行查看");
-        $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
+//        $dy_openid   = 'of8n75YM-J-IL08PQt-wVIdNSnO0';
+//        $dy_data['thing1'] = array('value' => "我们为您推荐了12位相亲对象");
+//        $dy_data['thing2'] = array('value' => "点击小程序进行查看");
+//        $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
+//        $param = [
+//            'touser'=>$dy_openid,
+//            'template_id'=>$dy_temp_id,
+//            'page'=>'pages/home/home',
+//            'data'=>$dy_data
+//        ];
+//        $res = $this->shiwuSendMsg($param,2);
+
+        $dy_data['thing1'] = array('value' => "12");
+        $dy_data['thing2'] = array('value' => "10:10");
+        $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
         $param = [
-            'touser'=>$dy_openid,
+            'touser'=>'of8n75YM-J-IL08PQt-wVIdNSnO0',
             'template_id'=>$dy_temp_id,
             'page'=>'pages/home/home',
+            'miniprogram' => [
+                'pagepath'=>'pages/home/home',
+            ],
             'data'=>$dy_data
         ];
         $res = $this->shiwuSendMsg($param,2);
