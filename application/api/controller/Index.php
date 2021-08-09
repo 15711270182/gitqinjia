@@ -805,25 +805,17 @@ class Index extends Base
      */
     public function sendTjMsg()
     {
-        $tip = '今日推荐的12位相亲对象';
-        $remark = '点击查看资料';
-        $data = array();
-        $data['first'] = array('value'=>$tip,'color'=>'#FF0000');
-        $data['keyword1'] = array('value'=>'完美亲家','color'=>'#0000ff');
-        $data['keyword2'] = array('value'=>'同城相亲对象','color'=>'#0000ff');
-        $data['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-        $arr = array();
-        $arr['touser'] = 'oJj4v58TbZh8pY2qeFeZ6P6IPbOo';
-        $arr['template_id'] = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
-        $arr['page'] = 'pages/home/home';
-        $arr['data'] = $data;
-        $arr["miniprogram"]["pagepath"] = "pages/home/home";
-        $arr['miniprogram']['appid'] = 'wx70d65d2170dbacd7';
-        $config = array();
-        $config['appid'] = 'wx33665f6f8d16b7c1';
-        $config['appsecret'] = '3148bd0bbda1b6aa7d084da6f698ac88';
-        $temp = WechatService::WeChatTemplate($config);
-        $res = $temp->send($arr);
+        $dy_openid   = 'of8n75YM-J-IL08PQt-wVIdNSnO0';
+        $dy_data['thing1'] = array('value' => "我们为您推荐了12位相亲对象");
+        $dy_data['thing2'] = array('value' => "点击小程序进行查看");
+        $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
+        $param = [
+            'touser'=>$dy_openid,
+            'template_id'=>$dy_temp_id,
+            'page'=>'pages/home/home',
+            'data'=>$dy_data
+        ];
+        $res = $this->shiwuSendMsg($param,2);
         var_dump($res);die;
         $where['u.status'] = 1;
         $where['u.id'] = '1001';
