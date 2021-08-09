@@ -735,6 +735,7 @@ class User extends Base
                 ];
                 $res = $this->shiwuSendMsg($param,2);
                 if($res == true){
+                    UserModel::getuserDec(['id'=>$v['id']],'is_subscribe',1);
                     $add['uid'] = $v['id'];
                     $add['openid'] = $v['openid'];
                     $add['type'] = 1;
