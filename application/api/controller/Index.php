@@ -28,6 +28,7 @@ use app\api\model\Product as ProductModel;
 use app\api\model\User as UserModel;
 use app\api\model\Team as TeamModel;
 use app\api\model\Poster as PosterModel;
+use app\wechat\service\WechatService;
 use think\Controller;
 use think\Db;
 use think\Queue;
@@ -806,24 +807,23 @@ class Index extends Base
     {
         $tip = '今日推荐的12位相亲对象';
         $remark = '点击查看资料';
-        $temp_id = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
         $data = array();
         $data['first'] = array('value'=>$tip,'color'=>'#FF0000');
         $data['keyword1'] = array('value'=>'完美亲家','color'=>'#0000ff');
         $data['keyword2'] = array('value'=>'同城相亲对象','color'=>'#0000ff');
         $data['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-        $param = [
-            'touser'=>'oJj4v51jPcPR2waEKPOJkl0M9C-k',
-            'template_id'=>$temp_id,
-            'page'=>'pages/home/home',
-            'data'=>$data,
-            'miniprogram' => [
-                'pagepath'=>'pages/home/home',
-                'appid'=>'wx70d65d2170dbacd7',
-            ],
-        ];
-
-        $res = $this->shiwuSendMsg($param);
+        $arr = array();
+        $arr['touser'] = 'oJj4v58TbZh8pY2qeFeZ6P6IPbOo';
+        $arr['template_id'] = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
+        $arr['page'] = 'pages/home/home';
+        $arr['data'] = $data;
+        $arr["miniprogram"]["pagepath"] = "pages/home/home";
+        $arr['miniprogram']['appid'] = 'wx70d65d2170dbacd7';
+        $config = array();
+        $config['appid'] = 'wx33665f6f8d16b7c1';
+        $config['appsecret'] = '3148bd0bbda1b6aa7d084da6f698ac88';
+        $temp = WechatService::WeChatTemplate($config);
+        $res = $temp->send($arr);
         var_dump($res);die;
         $where['u.status'] = 1;
         $where['u.id'] = '1001';
