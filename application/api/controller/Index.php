@@ -815,7 +815,6 @@ class Index extends Base
 //        var_dump($list);die;
         foreach($list as $key => $value){
             if($value['subscribe'] == 1){ //关注公众号 发模板
-                $w_openid = $value['w_openid'];
                 $tip = '今日推荐的12位相亲对象';
                 $remark = '点击查看资料';
                 $temp_id = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
@@ -825,23 +824,22 @@ class Index extends Base
                 $data['keyword2'] = array('value'=>'同城相亲对象','color'=>'#0000ff');
                 $data['remark'] = array('value'=>$remark,'color'=>'#0000ff');
                 $param = [
-                    'touser'=>$w_openid,
+                    'touser'=>$value['w_openid'],
                     'template_id'=>$temp_id,
                     'page'=>'pages/home/home',
+                    'data'=>$data,
                     'miniprogram' => [
                         'pagepath'=>'pages/home/home',
                     ],
-                    'data'=>$data
                 ];
                 $this->shiwuSendMsg($param);
             }else{
                 //发送订阅模板
-                $dy_openid   = $value['x_openid'];
                 $dy_data['thing1'] = array('value' => "12");
                 $dy_data['thing2'] = array('value' => "10:10");
                 $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
                 $param = [
-                    'touser'=>$dy_openid,
+                    'touser'=>$value['x_openid'],
                     'template_id'=>$dy_temp_id,
                     'page'=>'pages/home/home',
                     'miniprogram' => [
