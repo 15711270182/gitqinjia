@@ -480,10 +480,10 @@ class Index extends Base
         if(empty($code)){
             return $this->errorReturn(self::errcode_fail,'code参数不能为空');
         }
-        $checkcode = cache($tel);
-        if(empty($checkcode)){
-            return $this->errorReturn(self::errcode_fail,'验证码过期');
-        }
+//        $checkcode = cache($tel);
+//        if(empty($checkcode)){
+//            return $this->errorReturn(self::errcode_fail,'验证码过期');
+//        }
         if($type == 1){
             $session3rd = input('session3rd');
             $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
@@ -492,13 +492,13 @@ class Index extends Base
                 return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
             }
         }
-        if($checkcode == $code){
+//        if($checkcode == $code){
             if($type == 1){ //验证通过 手机号存入数据库
                  $update['phone'] = $tel;
                  ChildrenModel::childrenEdit(['uid'=>$uid],$update);
             }
             return $this->successReturn('','成功',self::errcode_ok);
-        }
+//        }
         return $this->errorReturn(self::errcode_fail,'验证码错误');
     }
     /**
@@ -674,15 +674,12 @@ class Index extends Base
             return $this->errorReturn(self::errcode_fail,'数据异常,查无用户');
         }
         if($type == 1){
-            if($userInfo['is_subscribe2'] == 0){
-                UserModel::userEdit(['id'=>$uid],['is_subscribe2'=>1]);
-                return $this->successReturn('','成功',self::errcode_ok);
-            }
+            UserModel::getuserInt(['id'=>$uid],'is_subscribe2',1);
+            return $this->successReturn('','成功',self::errcode_ok);
         }else{
-            if($userInfo['is_subscribe'] == 0){
-                UserModel::userEdit(['id'=>$uid],['is_subscribe'=>1]);
-                return $this->successReturn('','成功',self::errcode_ok);
-            }
+            UserModel::getuserInt(['id'=>$uid],'is_subscribe',1);
+            return $this->successReturn('','成功',self::errcode_ok);
+
         }
         return $this->successReturn('','成功',self::errcode_ok);
     }
@@ -842,7 +839,7 @@ class Index extends Base
                 }
             }else{
                 //发送订阅模板(填写资料)
-                if($value['is_subscribe2'] == 1){
+                if($value['is_subscribe2'] > 0){
                     $dy_data['number2'] = array('value' => "12",'color'=>'#0000ff');
                     $dy_data['time4'] = array('value' => "10:10",'color'=>'#0000ff');
                     $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";

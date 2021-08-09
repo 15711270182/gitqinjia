@@ -712,7 +712,8 @@ class User extends Base
      */
     public function pushSubUser(){
         //订阅号模板内容
-        $list = UserModel::userSelectPage(['is_subscribe'=>1],'id,openid');
+        $where = "is_subscribe > 0";
+        $list = UserModel::userSelectPage($where,'id,openid');
         if(empty($list)){
             echo '无可推送数据';die;
         }
