@@ -813,7 +813,7 @@ class Index extends Base
             ->alias('u')
             ->where($where)
             ->join('wechat_fans c','u.unionid=c.unionid')
-            ->field('u.openid as x_openid ,c.openid as w_openid,c.subscribe as subscribe,u.id as uid')
+            ->field('u.openid as x_openid ,u.is_subscribe2,c.openid as w_openid,c.subscribe as subscribe,u.id as uid')
             ->select();
 //        var_dump($list);die;
         foreach($list as $key => $value){
@@ -842,24 +842,26 @@ class Index extends Base
                     $count1++;
                 }
             }else{
-                //发送订阅模板
-                $dy_data['number2'] = array('value' => "12",'color'=>'#0000ff');
-                $dy_data['time4'] = array('value' => "10:10",'color'=>'#0000ff');
-                $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
-                $param = [
-                    'touser'=>$value['x_openid'],
-                    'template_id'=>$dy_temp_id,
-                    'page'=>'pages/home/home',
-                    'data'=>$dy_data
-                ];
-                $res = $this->shiwuSendMsg($param,2);
-                if($res == true){
-                    $add['uid'] = $value['uid'];
-                    $add['openid'] = $value['x_openid'];
-                    $add['type'] = 2;
-                    $add['create_time'] = date('Y-m-d H:i:s');
-                    Db::name('send_record')->insertGetId($add);
-                    $count2++;
+                //发送订阅模板(填写资料)
+                if($value['is_subscribe2'] == 1){
+                    $dy_data['number2'] = array('value' => "12",'color'=>'#0000ff');
+                    $dy_data['time4'] = array('value' => "10:10",'color'=>'#0000ff');
+                    $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
+                    $param = [
+                        'touser'=>$value['x_openid'],
+                        'template_id'=>$dy_temp_id,
+                        'page'=>'pages/home/home',
+                        'data'=>$dy_data
+                    ];
+                    $res = $this->shiwuSendMsg($param,2);
+                    if($res == true){
+                        $add['uid'] = $value['uid'];
+                        $add['openid'] = $value['x_openid'];
+                        $add['type'] = 2;
+                        $add['create_time'] = date('Y-m-d H:i:s');
+                        Db::name('send_record')->insertGetId($add);
+                        $count2++;
+                    }
                 }
             }
         }
