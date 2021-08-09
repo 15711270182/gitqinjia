@@ -805,32 +805,6 @@ class Index extends Base
      */
     public function sendTjMsg()
     {
-//        $dy_openid   = 'of8n75YM-J-IL08PQt-wVIdNSnO0';
-//        $dy_data['thing1'] = array('value' => "我们为您推荐了12位相亲对象");
-//        $dy_data['thing2'] = array('value' => "点击小程序进行查看");
-//        $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
-//        $param = [
-//            'touser'=>$dy_openid,
-//            'template_id'=>$dy_temp_id,
-//            'page'=>'pages/home/home',
-//            'data'=>$dy_data
-//        ];
-//        $res = $this->shiwuSendMsg($param,2);
-
-        $dy_data['number2'] = array('value' => "12");
-        $dy_data['time4'] = array('value' => "10:10");
-        $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
-        $param = [
-            'touser'=>'of8n75YM-J-IL08PQt-wVIdNSnO0',
-            'template_id'=>$dy_temp_id,
-            'page'=>'pages/home/home',
-            'miniprogram' => [
-                'pagepath'=>'pages/home/home',
-            ],
-            'data'=>$dy_data
-        ];
-        $res = $this->shiwuSendMsg($param,2);
-        var_dump($res);die;
         $where['u.status'] = 1;
         $where['u.id'] = '1001';
         $list = Db::table('userinfo')
@@ -864,8 +838,8 @@ class Index extends Base
                 $this->shiwuSendMsg($param);
             }else{
                 //发送订阅模板
-                $dy_data['thing1'] = array('value' => "12");
-                $dy_data['thing2'] = array('value' => "10:10");
+                $dy_data['number2'] = array('value' => "12",'color'=>'#0000ff');
+                $dy_data['time4'] = array('value' => "10:10",'color'=>'#0000ff');
                 $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
                 $param = [
                     'touser'=>$value['x_openid'],
