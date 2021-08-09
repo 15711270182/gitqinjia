@@ -667,13 +667,21 @@ class Index extends Base
      */
     public function subRecord(){
         $uid = $this->uid;
+        $type = input('type'); //0静默未填写  1填写完资料
         $userInfo = UserModel::userFind(['id'=>$uid]);
         if(empty($userInfo)){
             return $this->errorReturn(self::errcode_fail,'数据异常,查无用户');
         }
-        if($userInfo['is_subscribe'] == 0){
-            UserModel::userEdit(['id'=>$uid],['is_subscribe'=>1]);
-            return $this->successReturn('','成功',self::errcode_ok);
+        if($type == 1){
+            if($userInfo['is_subscribe2'] == 0){
+                UserModel::userEdit(['id'=>$uid],['is_subscribe2'=>1]);
+                return $this->successReturn('','成功',self::errcode_ok);
+            }
+        }else{
+            if($userInfo['is_subscribe'] == 0){
+                UserModel::userEdit(['id'=>$uid],['is_subscribe'=>1]);
+                return $this->successReturn('','成功',self::errcode_ok);
+            }
         }
         return $this->successReturn('','成功',self::errcode_ok);
     }
@@ -787,4 +795,72 @@ class Index extends Base
         $user['four'] = $userinfo['headimgurl'];
         return $user;
     }
+    /**
+     * @Notes:推荐更新通知
+     * @Interface send10Message
+     * @return bool
+     * @author: zy
+     * @Time: 2021/08/09 10:00
+     */
+    public function sendTjMsg()
+    {
+        $where['u.status'] = 1;
+        $where['u.id'] = 1001;
+        $list = Db::table('userinfo')
+            ->alias('u')
+            ->where($where)
+            ->join('wechat_fans c','u.unionid=c.unionid')
+            ->field('u.openid as x_openid ,c.openid as w_openid,c.subscribe as subscribe,u.id as uid')
+            ->select();
+//        var_dump($list);die;
+        foreach($list as $key => $value){
+            if($value['subscribe'] == 1){ //关注公众号 发模板
+                $w_openid = $value['w_openid'];
+                $tip = '今日推荐的12位相亲对象';
+                $remark = '点击查看资料';
+                $temp_id = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
+                $data = array();
+                $data['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                $data['keyword1'] = array('value'=>'完美亲家','color'=>'#0000ff');
+                $data['keyword2'] = array('value'=>'同城相亲对象','color'=>'#0000ff');
+                $data['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                $param = [
+                    'touser'=>$w_openid,
+                    'template_id'=>$temp_id,
+                    'page'=>'pages/home/home',
+                    'miniprogram' => [
+                        'pagepath'=>'pages/home/home',
+                    ],
+                    'data'=>$data
+                ];
+                $this->shiwuSendMsg($param);
+            }else{
+                //发送订阅模板
+                $dy_openid   = $value['x_openid'];
+                $dy_data['thing1'] = array('value' => "12");
+                $dy_data['thing2'] = array('value' => "10:10");
+                $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
+                $param = [
+                    'touser'=>$dy_openid,
+                    'template_id'=>$dy_temp_id,
+                    'page'=>'pages/home/home',
+                    'miniprogram' => [
+                        'pagepath'=>'pages/home/home',
+                    ],
+                    'data'=>$dy_data
+                ];
+                $res = $this->shiwuSendMsg($param,2);
+                if($res == true){
+                    $add['uid'] = $value['uid'];
+                    $add['openid'] = $value['x_openid'];
+                    $add['type'] = 2;
+                    $add['create_time'] = date('Y-m-d H:i:s');
+                    Db::name('send_record')->insertGetId($add);
+                }
+            }
+        }
+        return true;
+
+    }
+
 }
