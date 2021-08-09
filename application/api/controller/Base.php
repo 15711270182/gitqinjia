@@ -147,6 +147,7 @@ class Base extends Controller
             //模板消息推送成功录入
             return true;
         } catch (\Exception $e) {
+            custom_log('新版发送订阅消息参数', json_encode($data) . $e->getMessage());
             return false;
         }
     }
