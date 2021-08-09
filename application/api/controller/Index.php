@@ -817,8 +817,8 @@ class Index extends Base
 //        ];
 //        $res = $this->shiwuSendMsg($param,2);
 
-        $dy_data['thing1'] = array('value' => "12");
-        $dy_data['thing2'] = array('value' => "10:10");
+        $dy_data['number2'] = array('value' => "12");
+        $dy_data['time4'] = array('value' => "10:10");
         $dy_temp_id = "1RFAByNMyfpaHKRtJT3GxKtDTfqwcfNA_741ss62OGs";
         $param = [
             'touser'=>'of8n75YM-J-IL08PQt-wVIdNSnO0',
