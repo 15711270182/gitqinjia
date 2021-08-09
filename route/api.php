@@ -8,6 +8,8 @@ use think\facade\Route;
 Route::group('api/token',function(){
     Route::any('wxLogin', 'api/token/wxLogin'); //用户登录接口
     Route::any('checkLoginStatus', 'api/token/checkLoginStatus'); //检验用户登录状态
+    Route::any('getPhone', 'api/token/getPhone'); //获取手机号
+
 });
 
 Route::group('api/index',function(){
