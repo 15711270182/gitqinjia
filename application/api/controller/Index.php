@@ -804,8 +804,29 @@ class Index extends Base
      */
     public function sendTjMsg()
     {
+        $tip = '今日推荐的12位相亲对象';
+        $remark = '点击查看资料';
+        $temp_id = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
+        $data = array();
+        $data['first'] = array('value'=>$tip,'color'=>'#FF0000');
+        $data['keyword1'] = array('value'=>'完美亲家','color'=>'#0000ff');
+        $data['keyword2'] = array('value'=>'同城相亲对象','color'=>'#0000ff');
+        $data['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+        $param = [
+            'touser'=>'oJj4v51jPcPR2waEKPOJkl0M9C-k',
+            'template_id'=>$temp_id,
+            'page'=>'pages/home/home',
+            'data'=>$data,
+            'miniprogram' => [
+                'pagepath'=>'pages/home/home',
+                'appid'=>'wx70d65d2170dbacd7',
+            ],
+        ];
+
+        $this->shiwuSendMsg($param);
+        die;
         $where['u.status'] = 1;
-        $where['u.id'] = 1001;
+        $where['u.id'] = '1001';
         $list = Db::table('userinfo')
             ->alias('u')
             ->where($where)
