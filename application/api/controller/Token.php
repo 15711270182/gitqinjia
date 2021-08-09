@@ -141,4 +141,24 @@ class Token extends Base
         }
         return $this->successReturn('', '登陆有效', self::errcode_ok);
     }
+
+    /**
+     * @Notes:获取手机号
+     * @Interface getPhone
+     * @author: zy
+     * @Time: 2021/08/09   14:50
+     */
+    public function getPhone()
+    {
+        $encryptedData = input("encryptedData", '', 'htmlspecialchars_decode');
+        $iv = input("iv", '', 'htmlspecialchars_decode');
+        $WechatService = new TokenService();
+
+        $result = $WechatService->session();
+        $sessionKey = $result['session_key'];
+
+        $result = \We::WeMiniCrypt(config('wechat.miniapp'))->decode($iv, $sessionKey, $encryptedData);
+        custom_log('授权获取手机号',print_r($result,true));
+        return json_encode(['code' => 200, 'data' => $result]);
+    }
 }
