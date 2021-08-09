@@ -805,8 +805,10 @@ class Index extends Base
      */
     public function sendTjMsg()
     {
+        $count1 = 0;
+        $count2 = 0;
         $where['u.status'] = 1;
-        $where['u.id'] = '1001';
+        $where['u.id'] = '479';
         $list = Db::table('userinfo')
             ->alias('u')
             ->where($where)
@@ -835,7 +837,10 @@ class Index extends Base
                     ],
                 ];
 
-                $this->shiwuSendMsg($param);
+                $res1 = $this->shiwuSendMsg($param);
+                if($res1 == true){
+                    $count1++;
+                }
             }else{
                 //发送订阅模板
                 $dy_data['number2'] = array('value' => "12",'color'=>'#0000ff');
@@ -845,9 +850,6 @@ class Index extends Base
                     'touser'=>$value['x_openid'],
                     'template_id'=>$dy_temp_id,
                     'page'=>'pages/home/home',
-                    'miniprogram' => [
-                        'pagepath'=>'pages/home/home',
-                    ],
                     'data'=>$dy_data
                 ];
                 $res = $this->shiwuSendMsg($param,2);
@@ -857,11 +859,12 @@ class Index extends Base
                     $add['type'] = 2;
                     $add['create_time'] = date('Y-m-d H:i:s');
                     Db::name('send_record')->insertGetId($add);
+                    $count2++;
                 }
             }
         }
-        return true;
-
+        $count = $count1 + $count2;
+        echo $count;die;
     }
 
 }
