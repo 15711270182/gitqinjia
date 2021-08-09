@@ -830,8 +830,10 @@ class Index extends Base
                     'data'=>$data,
                     'miniprogram' => [
                         'pagepath'=>'pages/home/home',
+                        'appid'=>'wx70d65d2170dbacd7',
                     ],
                 ];
+
                 $this->shiwuSendMsg($param);
             }else{
                 //发送订阅模板
