@@ -797,7 +797,7 @@ class Index extends Base
         return $user;
     }
     /**
-     * @Notes:推荐更新通知
+     * @Notes:推荐更新通知 - 发送模板消息
      * @Interface send10Message
      * @return bool
      * @author: zy

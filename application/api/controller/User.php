@@ -704,20 +704,14 @@ class User extends Base
         return $user;
     }
 
+    /**
+     * @Notes:用户静默授权未完善资料 - 推送订阅消息
+     * @Interface pushSubUser
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
     public function pushSubUser(){
-//        //订阅号模板内容
-//        $dy_openid   = 'of8n75YM-J-IL08PQt-wVIdNSnO0';
-//        $dy_data['thing1'] = array('value' => "我们为您推荐了12位相亲对象");
-//        $dy_data['thing2'] = array('value' => "点击小程序进行查看");
-//        $dy_temp_id = "h7hV5I03Ve_flhZm9n7lH4TWzqZvjDsIxkqV5MpE6gM";
-//        $param = [
-//            'touser'=>$dy_openid,
-//            'template_id'=>$dy_temp_id,
-//            'page'=>'pages/home/home',
-//            'data'=>$dy_data
-//        ];
-//        $res = $this->shiwuSendMsg($param,2);
-//        var_dump($res);die;
+        //订阅号模板内容
         $list = UserModel::userSelectPage(['is_subscribe'=>1],'id,openid');
         if(empty($list)){
             echo '无可推送数据';die;
