@@ -808,14 +808,13 @@ class Index extends Base
         $count1 = 0;
         $count2 = 0;
         $where['u.status'] = 1;
-        $where['u.id'] = '479';
+//        $where['u.id'] = '479';
         $list = Db::table('userinfo')
             ->alias('u')
             ->where($where)
             ->join('wechat_fans c','u.unionid=c.unionid')
             ->field('u.openid as x_openid ,u.is_subscribe2,c.openid as w_openid,c.subscribe as subscribe,u.id as uid')
             ->select();
-//        var_dump($list);die;
         foreach($list as $key => $value){
             if($value['subscribe'] == 1){ //关注公众号 发模板
                 $tip = '今日推荐的12位相亲对象';
