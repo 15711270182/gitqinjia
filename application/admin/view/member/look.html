@@ -49,7 +49,7 @@
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs3 relative">
                 <span class="color-green">学历:</span>
-                <select class="layui-select" required name="education" lay-search>
+                <select class="layui-select" name="education" lay-search>
                     {foreach education_list as $key => $education}
                     {if isset($children.education) and $children.education eq $key}
                     <option selected value="{$key}">{$education}</option>
@@ -60,12 +60,19 @@
                 </select>
             </label>
             <label class="layui-col-xs4 relative">
+                <span class="color-green">学校:</span>
+                <input name="school" class="layui-input" placeholder="请输入学校名称" value="{$children.school|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
                 <span class="color-green">职业:</span>
                 <input name="work"  class="layui-input" placeholder="请输入职业" value="{$children.work|default=''}">
             </label>
+
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs4 relative">
                 <span class="color-green">月收入:</span>
-                <select class="layui-select" required name="income" lay-search>
+                <select class="layui-select" name="income" lay-search>
                     {foreach income_list as $key => $income}
                     {if $children.income eq $key}
                     <option selected value="{$key}">{$income}</option>
@@ -75,15 +82,9 @@
                     {/foreach}
                 </select>
             </label>
-        </div>
-        <div class="layui-form-item layui-row layui-col-space15">
-            <label class="layui-col-xs3 relative">
-                <span class="color-green">联系方式:</span>
-                <input name="phone" required class="layui-input" placeholder="请输入居住地" value="{$children.phone|default=''}">
-            </label>
             <label class="layui-col-xs4 relative">
                 <span class="color-green">有无房:</span>
-                <select class="layui-select" required name="house" lay-search>
+                <select class="layui-select" name="house" lay-search>
                     {foreach house_list as $key => $house}
                     {if $children.house eq $key}
                     <option selected value="{$key}">{$house}</option>
@@ -95,7 +96,7 @@
             </label>
             <label class="layui-col-xs4 relative">
                 <span class="color-green">有无车:</span>
-                <select class="layui-select" required name="cart" lay-search>
+                <select class="layui-select" name="cart" lay-search>
                     {foreach car_list as $key => $car}
                     {if $children.cart eq $key}
                     <option selected value="{$key}">{$car}</option>
@@ -106,10 +107,34 @@
                 </select>
             </label>
         </div>
-        <div class="layui-form-item layui-row layui-col-space15">
-            <label class="layui-col-xs11 relative">
-                <span class="color-green">学校:</span>
-                <input name="school" class="layui-input" placeholder="请输入学校名称" value="{$children.school|default=''}">
+         <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">联系方式:</span>
+                <input name="phone" required class="layui-input" placeholder="请输入联系方式" value="{$children.phone|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">家中排行:</span>
+                <select class="layui-select" name="bro" lay-search>
+                    {foreach ['0' => '暂未填写', '1' => '独生子女', '2' => '老大', '3' => '老二','4'=>'老三'] as $k => $v}
+                    {if $k.'' eq  $children.bro}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">父母情况:</span>
+                <select class="layui-select" name="parents" lay-search>
+                    {foreach ['0' => '暂未填写', '1' => '父母健在', '2' => '单亲家庭', '3' => '父亲健在','4'=>'母亲健在'] as $k => $v}
+                    {if $children.parents eq $k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+                </select>
             </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
@@ -126,7 +151,7 @@
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs3 relative">
                 <span class="color-green">学历:</span>
-                <select class="layui-select" required name="expect_education" lay-search>
+                <select class="layui-select" name="expect_education" lay-search>
                     {foreach expect_education_list as $key => $education}
                     {if $children.expect_education eq $key}
                     <option selected value="{$key}">{$education}</option>
@@ -138,21 +163,21 @@
             </label>
             <label class="layui-col-xs4 relative">
                 <span class="color-green">最低身高(cm):</span>
-                <input name="min_height" required class="layui-input" placeholder="请输入最低身高" value="{$children.min_height|default='不限'}">
+                <input name="min_height" class="layui-input" placeholder="请输入最低身高" value="{$children.min_height}">
             </label>
             <label class="layui-col-xs4 relative">
                 <span class="color-green">最高身高(cm):</span>
-                <input name="max_height" required class="layui-input" placeholder="请输入最高身高" value="{$children.max_height|default='不限'}">
+                <input name="max_height" class="layui-input" placeholder="请输入最高身高" value="{$children.max_height}">
             </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs4 relative">
                 <span class="color-green">最低年龄:</span>
-                <input name="min_age" required class="layui-input" placeholder="请输入最低年龄" value="{$children.min_age|default='不限'}">
+                <input name="min_age" class="layui-input" placeholder="请输入最低年龄" value="{$children.min_age}">
             </label>
             <label class="layui-col-xs4 relative">
                 <span class="color-green">最高年龄:</span>
-                <input name="max_age" required class="layui-input" placeholder="请输入最高年龄" value="{$children.max_age|default='不限'}">
+                <input name="max_age" class="layui-input" placeholder="请输入最高年龄" value="{$children.max_age}">
             </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
