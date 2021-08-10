@@ -46,8 +46,8 @@ class RecommendService
             $had_cancellation_id = array(); // 记录已经注销的recommendid, 用于更新今日推荐列表
             foreach($today_recommend as $key => $value){
                 $children_info = Db::table('children')->where('uid', $value['recommendid'])->find();
-                if ($children_info['status'] == 0){
-                    // 删除已经注销用户
+                if ($children_info['status'] == 0 || $children_info['is_ban'] == 0){
+                    // 删除已经注销用户 已禁用的用户
                     $had_key_arr = [];
                     $had_key_arr['recommendid'] = $value['recommendid'];
                     $had_key_arr['uid'] = $value['uid'];
@@ -233,6 +233,7 @@ class RecommendService
         // 获取最近记录(近三天推荐,收藏,联系)
         $had_recommend_id = $this->hadRecommend($uid);
         $condition['status'] = 1;
+        $condition['is_ban'] = 1;
         $condition['residence'] = $user_info['residence'];
         $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
 
@@ -329,6 +330,7 @@ class RecommendService
         $MatchDb = Db::table('children');
         $condition['is_del'] = 1;
         $condition['status'] = 1;
+        $condition['is_ban'] = 1;
         $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
 
         if ($residence) $condition['residence'] = $user_info['residence'];
@@ -388,8 +390,8 @@ class RecommendService
 
         foreach ($tomorrow_recommend as $key => $value){
             $children_info = $this->getChildrenInfoByUid($value['recommendid']);
-            // 判断明日推荐用户是否有注销
-            if ($children_info['status'] == 0){
+            // 判断明日推荐用户是否有注销 是否有禁用
+            if ($children_info['status'] == 0 || $children_info['is_ban'] == 0){
                 $up_info = array();
                 $up_info['uid'] = $value['uid'];
                 $up_info['date'] = $value['date'];
@@ -637,6 +639,7 @@ class RecommendService
         $collection_where['c.is_del'] = 1;
         $collection_where['u.sex'] = $sex_new;
         $collection_where['u.status'] = 1;
+        $collection_where['u.is_ban'] = 1;
         $collection_list = Db::table('collection')->alias('c')
             ->join('children u','c.bid= u.uid')
             ->field("count(*) as count,c.bid")
@@ -655,6 +658,7 @@ class RecommendService
         $tel_where['t.is_del'] = 1;
         $tel_where['u.sex'] = $sex_new;
         $tel_where['u.status'] = 1;
+        $tel_where['u.is_ban'] = 1;
         $had_tel_list = Db::table('tel_collection')->alias('t')
             ->join('children u','t.bid= u.uid')
             ->field("count(*) as count,t.bid")

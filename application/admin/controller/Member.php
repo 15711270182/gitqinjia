@@ -32,6 +32,7 @@ class Member extends Controller
      * @var string
      */
     public $table = 'userinfo';
+    public $table2 = 'children';
     /**
      * 系统用户管理
      * @auth true
@@ -54,7 +55,7 @@ class Member extends Controller
         }
         $this->_query($this->table)
                 ->alias('u')
-                ->field('u.*,c.phone,c.sex')
+                ->field('u.*,c.id as cid,c.phone,c.sex,c.is_ban')
                 ->join('children c', 'u.id = c.uid')
                 ->equal('u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status')
                 ->timeBetween('c.create_at#create_at')
@@ -324,7 +325,7 @@ class Member extends Controller
             $this->error('系统超级账号禁止操作！');
         }
         $this->applyCsrfToken();
-        $this->_save($this->table, ['status' => '0']);
+        $this->_save($this->table2, ['is_ban' => '0']);
     }
 
     /**
@@ -336,7 +337,7 @@ class Member extends Controller
     public function resume()
     {
         $this->applyCsrfToken();
-        $this->_save($this->table, ['status' => '1']);
+        $this->_save($this->table2, ['is_ban' => '1']);
     }
 
     /**

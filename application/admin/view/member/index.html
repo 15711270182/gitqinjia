@@ -18,6 +18,7 @@
             <th class='text-center nowrap'>资料</th>
             <th class='text-center nowrap'>假用户</th>
             <th class='text-center nowrap'>会员</th>
+            <th class='text-center nowrap'>禁用</th>
             <th class='text-center nowrap'>注销</th>
             <th class='text-center nowrap'>操作</th>
         </tr>
@@ -52,6 +53,11 @@
                 {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
                 {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
             </td>
+             <td class='text-center nowrap'>
+                {if condition="$vo.is_ban eq 0"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
+            </td>
             <td class='text-center nowrap'>
                 {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
                 {else /} <span class="color-gray">否</span>
@@ -63,13 +69,17 @@
                 {eq name='vo.team_status' value='1'}
                 <a data-dbclick class="layui-btn layui-btn-sm" data-title="审核电话" data-modal='{:url("checkphone")}?id={$vo.id}'>审核电话</a>
                 {/eq}
-<!--                <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('forbid')}" data-value="id#{$vo.id};status#0" data-csrf="{:systoken('forbid')}">禁 用</a>-->
+                {if condition="$vo.is_ban eq 1"}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要禁用该用户吗？" data-action="{:url('forbid')}" data-value="id#{$vo.cid};is_ban#0" data-csrf="{:systoken('forbid')}">禁 用</a>
+                {else /}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要启用该用户吗？" data-action="{:url('resume')}" data-value="id#{$vo.cid};is_ban#0" data-csrf="{:systoken('resume')}">启 用</a>
+                {/if}
                 {if condition="$vo.status eq 0"}
                 <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要激活该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">激活</a>
                 {else /}
                 <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要注销该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">注销</a>
                 {/if}
-<!--                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该用户吗？" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+                <!--<a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该用户吗？" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
             </td>
         </tr>
         {/foreach}
