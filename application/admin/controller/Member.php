@@ -201,15 +201,27 @@ class Member extends Controller
         if (empty($params)) $this->error('缺少必要参数!');
         $id = isset($params['id']) ? $params['id'] : 0;
         if ($id == 0) $this->error('缺少必要参数!');
-        $up_data = array();
-        foreach($params as $key => $val){
-            if ($key === 'min_height' && $val == '不限') $val = 999;
-            if ($key === 'max_height' && $val == '不限') $val = 999;
-            if ($key === 'min_age' && $val === '不限') $val = 999;
-            if ($key === 'max_age' && $val === '不限') $val = 999;
-            if($key != 'id') $up_data[$key]= $val;
+        if ($params['min_height'] == '不限') $params['min_height'] = 999;
+        if ($params['min_height'] == '未填写') $params['min_height'] = 0;
+        if ($params['max_height'] == '不限') $params['max_height'] = 999;
+        if ($params['max_height'] == '未填写') $params['max_height'] = 0;
+        if ($params['min_age'] == '不限') $params['min_age'] = 999;
+        if ($params['min_age'] == '未填写') $params['min_age'] = 0;
+        if ($params['max_age'] == '不限') $params['max_age'] = 999;
+        if ($params['max_age'] == '未填写') $params['max_age'] = 0;
+        if($params['min_height'] > 0 && $params['max_height'] == 0){
+            $params['max_height'] = '999';
         }
-        $res = DB::name('children')->where(['id'=>$id])->update($up_data);
+        if($params['min_height'] == 0 && $params['max_height'] > 0){
+            $params['min_height'] = '999';
+        }
+        if($params['min_age'] > 0 && $params['max_age'] == 0){
+            $params['max_age'] = '999';
+        }
+        if($params['min_age'] == 0 && $params['max_age'] > 0){
+            $params['min_age'] = '999';
+        }
+        $res = DB::name('children')->where(['id'=>$id])->update($params);
         if ($res){
             $uid = DB::name('children')->where(['id'=>$id])->value('uid');
             cache('shareposter-'.$uid,NULL);
