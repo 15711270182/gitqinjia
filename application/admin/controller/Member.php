@@ -210,6 +210,8 @@ class Member extends Controller
         }
         $res = DB::name('children')->where(['id'=>$id])->update($up_data);
         if ($res){
+            $uid = DB::name('children')->where(['id'=>$id])->value('uid');
+            cache('shareposter-'.$uid,NULL);
             $this->success('保存成功!');
         }else{
             $this->error('保存失败!');
