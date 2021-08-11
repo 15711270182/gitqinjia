@@ -15,6 +15,7 @@
 
 namespace app\admin\controller;
 
+use app\api\service\RecommendService;
 use library\Controller;
 use library\tools\Data;
 use think\Db;
@@ -48,18 +49,41 @@ class Member extends Controller
         $this->title = '用户管理';
         $this->bid = input('bid');
         $bid = input('bid');
-        $where=[];
+        $age_min = input('age_min','');
+        $age_max = input('age_max','');
+        $this->age_min    = $age_min;
+        $this->age_max    = $age_max;
+        $where = "u.headimgurl <> ''";
         if(!empty($bid)){
             $uid = DB::name('relation')->where(['bid'=>$bid])->column('uid');
-            $where['u.id'] = $uid;
+            $where .= " and u.id = '{$uid}'";
         }
+        if(!empty($age_min) || !empty($age_max)) {
+            if (!empty($age_min) && !empty($age_max)) {
+                if($age_min == $age_max){
+                    $this->error('年龄区间重复');
+                }
+                if($age_min > $age_max){
+                    $this->error('年龄最小值不能大于最大值');
+                }
+                $e_year = date('Y') - $age_min;
+                $s_year = date('Y') - $age_max;
+                $where .= " and c.year between '{$s_year}' and '{$e_year}'";
+            }elseif(!empty($age_min)){
+                $year = date('Y') - $age_min;
+                $where .= " and c.year = '{$year}'";
+            }else{
+                $year = date('Y') - $age_max;
+                $where .= " and c.year = '{$year}'";
+            }
+        }
+        $field = "u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.count,u.status,c.id as cid,c.phone,c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status";
         $this->_query($this->table)
                 ->alias('u')
-                ->field('u.*,c.id as cid,c.phone,c.sex,c.is_ban')
+                ->field($field)
                 ->join('children c', 'u.id = c.uid')
                 ->equal('u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status')
                 ->timeBetween('c.create_at#create_at')
-                ->where("u.headimgurl <> ''")
                 ->where($where)
                 ->order('u.id desc')->page();
 //        var_dump(DB::name('userinfo')->getLastSql());die;
@@ -77,23 +101,13 @@ class Member extends Controller
             if ($vo['id'] <= 200){// 判断是否是测试用户
                 $vo['is_false']  = '是';
             }
-            //判断有没有完善孩子资料
-            $map = [];
-            $map['uid'] = $vo['id'];
-            $children = DB::name('children')->where($map)->find();
-            $vo['phone'] = $children['phone'];
             $vo['sex'] = '女';
-            if ($children['sex'] == 1){
+            if ($vo['xingbie'] == 1){
                 $vo['sex'] = '男';
             }
-            $vo['age'] = (int)date('Y') - (int)$children['year'];
-            $vo['address'] = $children['province']. '-' .$children['residence'];
-            $vo['team_status'] =  0;
-            $vo['is_children']  = '否';
-            if ($children){
-                $vo['team_status'] =  $children['team_status'];
-                $vo['is_children']  = '是';
-            }
+            $vo['age'] = (int)date('Y') - (int)$vo['year'];
+            $vo['address'] = $vo['province']. '-' .$vo['residence'];
+            $vo['is_children']  = '是';
             $relation_info = DB::name('relation')->where('uid', $vo['id'])->find();
             $vo['relation_id'] = $relation_info['bid'];
             $relation_user_info = DB::name($this->table)->where('id', $relation_info['bid'])->find();
