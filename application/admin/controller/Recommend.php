@@ -65,7 +65,7 @@ class Recommend extends Controller
     {
         foreach ($data as &$vo) {
 //            $vo['create_at'] = date('Y-m-d',$vo['addtime']);
-            $field = 'sex,year,weight_score';
+            $field = 'sex,year,weight_score,province';
             $uinfo = DB::name("children")->field($field)->where(['uid'=>$vo['uid']])->find();
             $tinfo = DB::name("children")->field($field)->where(['uid'=>$vo['recommendid']])->find();
             $u_nickname = DB::name("userinfo")->where(['id'=>$vo['uid']])->value('nickname');
