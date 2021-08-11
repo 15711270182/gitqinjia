@@ -56,7 +56,13 @@ class Member extends Controller
         $where = "u.headimgurl <> ''";
         if(!empty($bid)){
             $uid = DB::name('relation')->where(['bid'=>$bid])->column('uid');
-            $where .= " and u.id = '{$uid}'";
+            if(!empty($uid)){
+                $uid = implode(',',$uid);
+                //var_dump($uid);die;
+                $where .=" and u.id in ({$uid})";
+            }else{
+                $where .=" and u.id  = ''";
+            }
         }
         if(!empty($age_min) || !empty($age_max)) {
             if (!empty($age_min) && !empty($age_max)) {
