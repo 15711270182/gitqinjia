@@ -67,13 +67,6 @@ class User extends Base
         $count = RelationModel::relationFind(['uid'=>$uid]);
         if(!empty($source)){
             $userinfo = UserModel::userFind(['id'=>$uid]);
-            $telcount = [
-                'uid' => $source,
-                'type' => 1,
-                'count' => 1,
-                'remarks' => '推荐'.$userinfo['nickname'].'注册增加一次次数',
-                'create_at' => time()
-            ];
             if($count == 0){ //没被推荐过
                 UserModel::getuserInt(['id'=>$source],'count');
                 //添加来源 关系表 relation
@@ -83,14 +76,29 @@ class User extends Base
                     'create_at' => time()
                 ];
                 RelationModel::relationAdd($relation);
+                $telcount = [
+                    'uid' => $source,
+                    'type' => 1,
+                    'count' => 1,
+                    'remarks' => '推荐'.$userinfo['nickname'].'注册增加一次次数',
+                    'create_at' => time()
+                ];
                 TelCollection::tcountAdd($telcount);
                 ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
             }else{
                 if($count['type'] == 1){ //静默未填写资料的状态
-                    RelationModel::relationEdit(['uid'=>$uid,'bid'=>$source],['type'=>0,'update_time'=>date('Y-m-d H:i:s')]);
-                    UserModel::getuserInt(['id'=>$source],'count');
+                    $bid = $count['bid'];
+                    RelationModel::relationEdit(['uid'=>$uid],['type'=>0,'update_time'=>date('Y-m-d H:i:s')]);
+                    UserModel::getuserInt(['id'=>$bid],'count');
+                    $telcount = [
+                        'uid' => $bid,
+                        'type' => 1,
+                        'count' => 1,
+                        'remarks' => '推荐'.$userinfo['nickname'].'注册增加一次次数',
+                        'create_at' => time()
+                    ];
                     TelCollection::tcountAdd($telcount);
-                    ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
+                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分
                 }
 
             }
