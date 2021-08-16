@@ -98,7 +98,7 @@ class User extends Base
                         'create_at' => time()
                     ];
                     TelCollection::tcountAdd($telcount);
-                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分
+                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分 sdd 
                 }
 
             }
