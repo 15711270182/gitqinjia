@@ -455,14 +455,14 @@ class Member extends Controller
         $header1 = [];
         $header1['path'] = $head_img_path;
         $header1['size'] = 86;
-        $header1['locate'] = [36,104];
+        $header1['locate'] = [36,90];
         $header1['xPos'] = 'left';
-        $header2 = [];
-        $header2['path'] = $back_shi;
-        $header2['size'] = 38;
-        $header2['locate'] = [84,152];
-        $header2['xPos'] = 'left';
-        $header2['yPos'] = 'top';
+         $header2 = [];
+         $header2['path'] = $back_shi;
+         $header2['size'] = 38;
+         $header2['locate'] = [84,152];
+         $header2['xPos'] = 'left';
+         $header2['yPos'] = 'top';
         $local_path =  (new Qrcode())->generateQrCode($path, $sid, $page_path);
         $qrcode['path'] = $local_path;
         $qrcode['size'] = 90;
@@ -477,7 +477,7 @@ class Member extends Controller
         if($len<=3){
             $work = $info['work'];
         }else{
-            $work = mb_substr($info['work'], 0,3 ).'...';
+            $work = mb_substr($info['work'], 0,5).'...';
         }
         if(mb_strlen($info['realname']) == 0){
             $name = '家长';
@@ -511,7 +511,7 @@ class Member extends Controller
                 $education = '本科';
                 break;
         }
-        $remarks = '';
+        $remarks = $info['remarks'];
         if($info['remarks']){
             if(mb_strlen($info['remarks']) >= 48){
                 $remarks = mb_substr($info['remarks'], 0,48).'...';
@@ -520,25 +520,25 @@ class Member extends Controller
         //姓名
         $text_array[0]['location'] = '132,116';
         $text_array[0]['text'] = $name;
-        $text_array[0]['font_size'] = 36;
+        $text_array[0]['font_size'] = 20;
         $text_array[0]['font_color'] = '#202020';
         $text_array[1]['location'] = '132,154';
         $text_array[1]['text'] = '觉得不错欢迎聊聊,请联系我';
-        $text_array[1]['font_size'] = 24;
+        $text_array[1]['font_size'] = 16;
         $text_array[1]['font_color'] = '#909090';
         //基础信息
         $text_array[2]['location'] ='36,206';
         $text_array[2]['text'] = '年份';
-        $text_array[2]['font_size'] = 32;
+        $text_array[2]['font_size'] = 16;
         $text_array[2]['font_color'] = '#606060';
         $text_array[3]['location'] = '80,206';
         $text_array[3]['text'] =  $year;
-        $text_array[3]['font_size'] = 65;
+        $text_array[3]['font_size'] = 20;
         $text_array[3]['font_color'] = '#202020';
 
         $text_array[4]['location'] ='187,206';
         $text_array[4]['text'] = '性别';
-        $text_array[4]['font_size'] = 32;
+        $text_array[4]['font_size'] = 16;
         $text_array[4]['font_color'] = '#606060';
         $text_array[5]['location'] ='231,206';
         $text_array[5]['text'] = $sex;
@@ -547,44 +547,50 @@ class Member extends Controller
 
         $text_array[6]['location'] ='36,246';
         $text_array[6]['text'] = '地区';
-        $text_array[6]['font_size'] = 32;
+        $text_array[6]['font_size'] = 16;
         $text_array[6]['font_color'] = '#606060';
         $text_array[7]['location'] ='80,246';
         $text_array[7]['text'] = $residence;
-        $text_array[7]['font_size'] = 60;
+        $text_array[7]['font_size'] = 20;
         $text_array[7]['font_color'] = '#202020';
 
         $text_array[8]['location'] ='187,246';
         $text_array[8]['text'] = '身高';
-        $text_array[8]['font_size'] = 32;
+        $text_array[8]['font_size'] = 16;
         $text_array[8]['font_color'] = '#606060';
         $text_array[9]['location'] ='231,246';
         $text_array[9]['text'] = $height;
-        $text_array[9]['font_size'] = 61;
+        $text_array[9]['font_size'] = 20;
         $text_array[9]['font_color'] = '#202020';
 
         $text_array[10]['location'] ='36,286';
         $text_array[10]['text'] = '学历';
-        $text_array[10]['font_size'] = 32;
+        $text_array[10]['font_size'] = 16;
         $text_array[10]['font_color'] = '#606060';
         $text_array[11]['location'] ='80,286';
         $text_array[11]['text'] = $education;
-        $text_array[11]['font_size'] = 40;
+        $text_array[11]['font_size'] = 20;
         $text_array[11]['font_color'] = '#202020';
 
         $text_array[12]['location'] ='187,286';
         $text_array[12]['text'] = '职业';
-        $text_array[12]['font_size'] = 32;
+        $text_array[12]['font_size'] = 16;
         $text_array[12]['font_color'] = '#606060';
         $text_array[13]['location'] ='231,286';
         $text_array[13]['text'] = $work;
-        $text_array[13]['font_size'] = 80;
+        $text_array[13]['font_size'] = 20;
         $text_array[13]['font_color'] = '#202020';
         //说明
         $text_array[14]['location'] ='36,344';
         $text_array[14]['text'] = $remarks;
-        $text_array[14]['font_size'] = 84;
+        $text_array[14]['font_size'] = 18;
         $text_array[14]['font_color'] = '#606060';
+
+        //真图标
+        $text_array[15]['location'] ='199,123';
+        $text_array[15]['text'] = '真';
+        $text_array[15]['font_size'] = 16;
+        $text_array[15]['font_color'] = '#FFFFFF';
 
         $posterModel = new PosterModel();
         $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
