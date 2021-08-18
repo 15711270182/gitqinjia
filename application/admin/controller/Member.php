@@ -475,10 +475,9 @@ class Member extends Controller
         $qrcode['locate'] = [249,476];
         $qrcode['xPos'] = 'left';
 
-        $images[0] = $header1;
-        $images[1] = $header2;
-        $images[2] = $header3;
-        $images[3] = $qrcode;
+        $images = [
+            $header1,$header2,$header3,$qrcode
+        ];
 
         $len = mb_strlen($info['work']);
         if($len<=3){
@@ -583,6 +582,11 @@ class Member extends Controller
         $text_array[13]['font_size'] = 20;
         $text_array[13]['font_color'] = '#202020';
         //说明
+        $text1 = mb_substr($remarks, 0, 15);
+        $text_array[14]['location'] ='36,344';
+        $text_array[14]['text'] = $text1;
+        $text_array[14]['font_size'] = 18;
+        $text_array[14]['font_color'] = '#606060';
         if (mb_strlen($remarks) > 15) {
             $text2 = mb_substr($remarks, 15, 16);
             if (mb_strlen($remarks) > 48) {
@@ -592,13 +596,7 @@ class Member extends Controller
             $text_array[15]['text'] = $text2;
             $text_array[15]['font_size'] = 18;
             $text_array[15]['font_color'] = '#606060';
-        }else{
-            $text_array[14]['location'] ='36,344';
-            $text_array[14]['text'] = $remarks;
-            $text_array[14]['font_size'] = 18;
-            $text_array[14]['font_color'] = '#606060';
         }
-
         $posterModel = new PosterModel();
         $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
         $upload = new Upload();
