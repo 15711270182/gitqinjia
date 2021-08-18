@@ -452,17 +452,23 @@ class Member extends Controller
         $page_path = 'pages/details/details';
         $share_back_path = './uploads/backgroud/bj.png';
         $back_shi = './uploads/backgroud/real.png';
+        $back_zhen = './uploads/backgroud/zhen.png';
         $header1 = [];
         $header1['path'] = $head_img_path;
         $header1['size'] = 86;
         $header1['locate'] = [36,90];
         $header1['xPos'] = 'left';
-         $header2 = [];
-         $header2['path'] = $back_shi;
-         $header2['size'] = 38;
-         $header2['locate'] = [84,152];
-         $header2['xPos'] = 'left';
-         $header2['yPos'] = 'top';
+        $header2 = [];
+        $header2['path'] = $back_shi;
+        $header2['size'] = 38;
+        $header2['locate'] = [84,152];
+        $header2['xPos'] = 'left';
+        $header2['yPos'] = 'top';
+        $header3 = [];
+        $header3['path'] = $back_zhen;
+        $header3['size'] = 22;
+        $header3['locate'] = [196,123];
+        $header3['xPos'] = 'left';
         $local_path =  (new Qrcode())->generateQrCode($path, $sid, $page_path);
         $qrcode['path'] = $local_path;
         $qrcode['size'] = 90;
@@ -471,7 +477,8 @@ class Member extends Controller
 
         $images[0] = $header1;
         $images[1] = $header2;
-        $images[2] = $qrcode;
+        $images[2] = $header3;
+        $images[3] = $qrcode;
 
         $len = mb_strlen($info['work']);
         if($len<=3){
@@ -512,11 +519,6 @@ class Member extends Controller
                 break;
         }
         $remarks = $info['remarks'];
-        if($info['remarks']){
-            if(mb_strlen($info['remarks']) >= 48){
-                $remarks = mb_substr($info['remarks'], 0,48).'...';
-            }
-        }
         //姓名
         $text_array[0]['location'] = '132,116';
         $text_array[0]['text'] = $name;
@@ -581,16 +583,21 @@ class Member extends Controller
         $text_array[13]['font_size'] = 20;
         $text_array[13]['font_color'] = '#202020';
         //说明
-        $text_array[14]['location'] ='36,344';
-        $text_array[14]['text'] = $remarks;
-        $text_array[14]['font_size'] = 18;
-        $text_array[14]['font_color'] = '#606060';
-
-        //真图标
-        $text_array[15]['location'] ='199,123';
-        $text_array[15]['text'] = '真';
-        $text_array[15]['font_size'] = 16;
-        $text_array[15]['font_color'] = '#FFFFFF';
+        if (mb_strlen($remarks) > 15) {
+            $text2 = mb_substr($remarks, 15, 16);
+            if (mb_strlen($remarks) > 48) {
+                $text2 .= '...';
+            }
+            $text_array[15]['location'] ='39,344';
+            $text_array[15]['text'] = $text2;
+            $text_array[15]['font_size'] = 18;
+            $text_array[15]['font_color'] = '#606060';
+        }else{
+            $text_array[14]['location'] ='36,344';
+            $text_array[14]['text'] = $remarks;
+            $text_array[14]['font_size'] = 18;
+            $text_array[14]['font_color'] = '#606060';
+        }
 
         $posterModel = new PosterModel();
         $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
