@@ -17,6 +17,10 @@ namespace app\admin\controller;
 
 use app\api\service\RecommendService;
 use library\Controller;
+use app\api\controller\Poster;
+use app\api\service\Qrcode;
+use app\api\model\Poster as PosterModel;
+use app\api\service\Upload;
 use library\tools\Data;
 use think\Db;
 
@@ -415,4 +419,156 @@ class Member extends Controller
         }
     }
 
+    /**
+     * @Notes:获取分享海报
+     * @Interface getuserposter
+     * @author: zy
+     * @Time: 2021/08/18
+     */
+    public function getuserposter(){
+        $uid = input('id');
+        $field = 'u.nickname,u.headimgurl,u.realname,c.uid,c.year,c.sex,c.height,c.province,c.residence,c.education,c.work,c.remarks';
+        $info = Db::table('children')
+            ->alias('c')
+            ->field($field)
+            ->join('userinfo u','c.uid = u.id')
+            ->where(['c.uid'=>$uid])
+            ->find();
+//        $data['nickname'] = !empty($info['realname'])?$info['realname'].'家长':'家长';
+        $data['headimgurl'] = !empty($info['headimgurl'])?$info['headimgurl']:'https://pics.njzec.com/default.png';
+        $poster = new Poster();
+        $path = './uploads/poster/headImg';
+        if(!is_dir($path)){
+            mkdir($path,0700,true);
+        }
+        $head_name = 'img_poster'.$uid.'.png';
+        $head_img_path = $path.'/'.$head_name;
+        if (!file_exists($head_img_path)){
+            $head_path = $poster->getImage($data['headimgurl'], $path, $head_name);
+            $head_img_path = $head_path['save_path'];
+        }
+        $head_img_path = $poster->ssimg1($path.'/', $head_img_path, 80, 80);
+        $sid = $uid;
+        $path = './uploads/qrcode/';
+        $page_path = 'pages/details/details';
+        $share_back_path = './uploads/backgroud/bj.png';
+        $back_shi = './uploads/backgroud/real.png';
+        $header1 = [];
+        $header1['path'] = $head_img_path;
+        $header1['size'] = 100;
+        $header1['locate'] = [160,690];
+        $header1['xPos'] = 'left';
+        $header2 = [];
+        $header2['path'] = $back_shi;
+        $header2['size'] = 35;
+        $header2['locate'] = [90,125];
+        $header2['xPos'] = 'left';
+        $header2['yPos'] = 'top';
+        $local_path =  (new Qrcode())->generateQrCode($path, $sid, $page_path);
+        $qrcode['path'] = $local_path;
+        $qrcode['size'] = 650;
+        $qrcode['locate'] = [232,950];
+        $qrcode['xPos'] = 'left';
+//        $qrcode['yPos'] = 'top';
+
+        $images[0] = $header1;
+        $images[1] = $header2;
+        $images[2] = $qrcode;
+
+        $len = mb_strlen($info['work']);
+        if($len<=3){
+            $work = $info['work'];
+        }else{
+            $work = mb_substr($info['work'], 0,3 ).'...';
+        }
+        if(mb_strlen($info['realname']) == 0){
+            $name_location = '50,190';
+            $name = '家长';
+        }else{
+            $name_location = '30,190';
+            $name = mb_substr($info['realname'], 0,1 ).'家长';
+        }
+        $sex = $info['sex']==2?'女':'男';
+        $year = $info['year'].'年';
+        $residence = mb_substr($info['residence'], 0,3 );
+        $height = $info['height'].'CM';
+        switch ($info['education']) {
+            case '1':
+                $education = '中专';
+                break;
+            case '2':
+                $education = '高中';
+                break;
+            case '3':
+                $education = '大专';
+                break;
+            case '4':
+                $education = '本科';
+                break;
+            case '5':
+                $education = '研究生';
+                break;
+            case '6':
+                $education = '博士';
+                break;
+            default:
+                $education = '本科';
+                break;
+        }
+        $remarks = '';
+        if($info['remarks']){
+            if(mb_strlen($info['remarks']) >= 48){
+                $remarks = mb_substr($info['remarks'], 0,48).'...';
+            }
+        }
+        $text_array[0]['location'] ='160,70';
+        $text_array[0]['text'] = '年份 '.$year;
+        $text_array[0]['font_size'] = 30;
+        $text_array[0]['font_color'] = '#000';
+        $text_array[1]['text'] =  '性别 '.$sex;
+        $text_array[1]['location'] = '280,70';
+        $text_array[1]['font_size'] = 30;
+        $text_array[1]['font_color'] = '#000';
+        $text_array[2]['location'] ='160,140';
+        $text_array[2]['text'] = '地区 '.$residence;
+        $text_array[2]['font_size'] = 30;
+        $text_array[2]['font_color'] = '#000';
+        $text_array[3]['location'] ='280,140';
+        $text_array[3]['text'] = '身高 '.$height;
+        $text_array[3]['font_size'] = 30;
+        $text_array[3]['font_color'] = '#000';
+        $text_array[4]['location'] ='160,210';
+        $text_array[4]['text'] = '学历 '.$education;
+        $text_array[4]['font_size'] = 30;
+        $text_array[4]['font_color'] = '#000';
+
+        $text_array[5]['location'] ='280,210';
+        $text_array[5]['text'] = '职业 '.$work;
+        $text_array[5]['font_size'] = 30;
+        $text_array[5]['font_color'] = '#000';
+
+        $text_array[6]['location'] ='280,210';
+        $text_array[6]['text'] = $remarks;
+        $text_array[6]['font_size'] = 30;
+        $text_array[6]['font_color'] = '#000';
+
+        $text_array[7]['location'] =$name_location;
+        $text_array[7]['text'] =$name;
+        $text_array[7]['font_size'] = 30;
+        $text_array[7]['font_color'] = '#fff';
+
+        $posterModel = new PosterModel();
+        $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
+        $upload = new Upload();
+        $img_url_data = $upload->index($local_path);//获取七牛图片
+        $img_url_data = json_decode($img_url_data, 1);
+        if ($img_url_data['code'] == 200) {
+            unlink($local_path);
+            echo '<img src="' . $img_url_data['img'] . '"  width="750px" height="1200px" alt="">';
+            die;
+        } else {
+            unlink($local_path);
+            echo 'error!';die;
+        }
+    }
 }
