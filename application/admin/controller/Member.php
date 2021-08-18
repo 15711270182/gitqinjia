@@ -589,24 +589,23 @@ class Member extends Controller
         $text_array[14]['font_color'] = '#606060';
         if (mb_strlen($remarks) > 16) {
             $text2 = mb_substr($remarks, 16, 16);
+            $text_array[16]['location'] ='36,390';
+            $text_array[16]['text'] = $text2;
+            $text_array[16]['font_size'] = 18;
+            $text_array[16]['font_color'] = '#606060';
             if (mb_strlen($remarks) > 32) {
                 $text3 = mb_substr($remarks, 32, 16);
-                $text_array[15]['location'] ='36,410';
+                $text_array[15]['location'] ='36,420';
                 $text_array[15]['text'] = $text3;
                 $text_array[15]['font_size'] = 18;
                 $text_array[15]['font_color'] = '#606060';
                 if(mb_strlen($remarks) > 48){
                     $text3 .= '...';
-                    $text_array[17]['location'] ='36,430';
+                    $text_array[17]['location'] ='36,450';
                     $text_array[17]['text'] = $text3;
                     $text_array[17]['font_size'] = 18;
                     $text_array[17]['font_color'] = '#606060';
                 }
-            }else{
-                $text_array[16]['location'] ='36,390';
-                $text_array[16]['text'] = $text2;
-                $text_array[16]['font_size'] = 18;
-                $text_array[16]['font_color'] = '#606060';
             }
             
         }
