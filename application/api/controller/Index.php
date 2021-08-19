@@ -747,7 +747,7 @@ class Index extends Base
         if($user['five'] == '暂未填写'){
             $type_five = '';
         }
-        $newType = [$user['first'], $user['three'], $user['four'], $type_five, $user['six'], $user['remark']];
+        $newType = [$user['first'],$user['second'], $user['three'], $user['four'], $type_five, $user['six'], $user['remark']];
         $user['sort_type'] = count(array_filter($newType));
 
         //查询用户父母的名称

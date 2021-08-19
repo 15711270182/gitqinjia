@@ -497,7 +497,10 @@ class Member extends Controller
         }else{
             $name = mb_substr($info['realname'], 0,1 ).'家长';
         }
-        $sex = $info['sex']==2?'女':'男';
+        $sex = '女';
+        if($info['sex'] == 1){
+            $sex = '男';
+        }
         $year = $info['year'].'年';
         $residence = mb_substr($info['residence'], 0,3 );
         $height = $info['height'].'CM';
