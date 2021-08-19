@@ -643,10 +643,9 @@ class Member extends Controller
         $userinfo = UserModel::userFind(['id'=>$uid]);  //用户信息
         $binfo = UserModel::userFind(['id'=>'1001']); //邀请者信息
         $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
-        $remark = '推荐'.$userinfo['nickname'].'注册增加一次次数';
         $temp_id = 'pHehcISU9iQ_ab0z0VILENzUEQLGLK2AVcn8fo3fjwY';
         $data = array();
-        $data['first'] = array('value'=>$remark,'color'=>'#FF0000');
+        $data['first'] = array('value'=>'邀请成功,增加一次联系次数','color'=>'#FF0000');
         $data['keyword1'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
         $data['keyword2'] = array('value'=>$binfo['nickname'],'color'=>'#0000ff');
         $data['remark'] = array('value'=>'邀请成功','color'=>'#0000ff');
