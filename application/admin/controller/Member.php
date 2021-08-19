@@ -458,7 +458,7 @@ class Member extends Controller
         $path = './uploads/qrcode/';
         $page_path = 'pages/details/details';
         $share_back_path = './uploads/backgroud/bj.png';
-        $back_shi = './uploads/backgroud/real.jpg';
+        $back_shi = './share/shareshi1.png';
         $back_zhen = './uploads/backgroud/zhen.jpg';
         $header1 = [];
         $header1['path'] = $head_img_path;
