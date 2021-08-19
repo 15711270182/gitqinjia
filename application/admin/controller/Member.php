@@ -18,8 +18,10 @@ namespace app\admin\controller;
 use app\api\service\RecommendService;
 use library\Controller;
 use app\api\controller\Poster;
+use app\api\controller\Base;
 use app\api\service\Qrcode;
 use app\api\model\Poster as PosterModel;
+use app\api\model\User as UserModel;
 use app\api\service\Upload;
 use library\tools\Data;
 use think\Db;
@@ -635,5 +637,31 @@ class Member extends Controller
             unlink($local_path);
             echo 'error!';die;
         }
+    }
+    public function test(){
+        $uid = '479';
+        $userinfo = UserModel::userFind(['id'=>$uid]);  //用户信息
+        $binfo = UserModel::userFind(['id'=>'1001']); //邀请者信息
+        $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
+        $remark = '推荐'.$userinfo['nickname'].'注册增加一次次数';
+        $temp_id = 'pHehcISU9iQ_ab0z0VILENzUEQLGLK2AVcn8fo3fjwY';
+        $data = array();
+        $data['first'] = array('value'=>$remark,'color'=>'#FF0000');
+        $data['keyword1'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+        $data['keyword2'] = array('value'=>$binfo['nickname'],'color'=>'#0000ff');
+        $data['remark'] = array('value'=>'邀请成功','color'=>'#0000ff');
+        $param = [
+            'touser'=>$winfo['openid'],
+            'template_id'=>$temp_id,
+            'page'=>'pages/home/home',
+            'data'=>$data,
+            'miniprogram' => [
+                'pagepath'=>'pages/home/home',
+                'appid'=>'wx70d65d2170dbacd7',
+            ],
+        ];
+        $base = new Base();
+        $res = $base->shiwuSendMsg($param);
+        echo $res;
     }
 }
