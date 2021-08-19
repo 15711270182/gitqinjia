@@ -607,9 +607,9 @@ class Member extends Controller
                 $text_array[15]['font_size'] = 18;
                 $text_array[15]['font_color'] = '#606060';
                 if(mb_strlen($remarks) > 48){
-                    $text3 .= '...';
+                    $text4 = '...';
                     $text_array[17]['location'] ='36,450';
-                    $text_array[17]['text'] = $text3;
+                    $text_array[17]['text'] = $text4;
                     $text_array[17]['font_size'] = 18;
                     $text_array[17]['font_color'] = '#606060';
                 }
