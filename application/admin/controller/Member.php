@@ -487,7 +487,7 @@ class Member extends Controller
         ];
 
         $len = mb_strlen($info['work']);
-        if($len<=3){
+        if($len<=4){
             $work = $info['work'];
         }else{
             $work = mb_substr($info['work'], 0,5).'...';
@@ -539,7 +539,7 @@ class Member extends Controller
         $text_array[2]['text'] = '年份';
         $text_array[2]['font_size'] = 16;
         $text_array[2]['font_color'] = '#606060';
-        $text_array[3]['location'] = '80,216';
+        $text_array[3]['location'] = '80,218';
         $text_array[3]['text'] =  $year;
         $text_array[3]['font_size'] = 20;
         $text_array[3]['font_color'] = '#202020';
@@ -566,7 +566,7 @@ class Member extends Controller
         $text_array[8]['text'] = '身高';
         $text_array[8]['font_size'] = 16;
         $text_array[8]['font_color'] = '#606060';
-        $text_array[9]['location'] ='231,256';
+        $text_array[9]['location'] ='231,258';
         $text_array[9]['text'] = $height;
         $text_array[9]['font_size'] = 20;
         $text_array[9]['font_color'] = '#202020';
