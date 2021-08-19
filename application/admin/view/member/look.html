@@ -190,6 +190,12 @@
                 <input name="today_score" class="layui-input" placeholder="请输入今日推荐分" value="{$children.today_score|default='0'}">
             </label>
         </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">备注说明:</span>
+                <textarea class="layui-textarea" name="remarks_text">{$children.remarks_text|default=''}</textarea>
+            </label>
+        </div>
         <a class="layui-btn layui-btn-sm" data-title="推荐详情" href="/index.php/admin.html#/index.php/admin/recommend/index?uid={$children.uid}" target="_blank">推荐详情</a>
         <div class="layui-form-item text-center">
             {if isset($children['id'])}<input type='hidden' value='{$children.id}' name='id'>{/if}
