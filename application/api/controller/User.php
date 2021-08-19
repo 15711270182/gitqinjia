@@ -66,7 +66,8 @@ class User extends Base
         //如果来源不为空且没有被其他人推荐过 给推荐者增加次数 并添加来源relation 添加 查看手机号次数流水记录 tel_count
         $count = RelationModel::relationFind(['uid'=>$uid]);
         if(!empty($source)){
-            $userinfo = UserModel::userFind(['id'=>$uid]);
+            $userinfo = UserModel::userFind(['id'=>$uid]);  //用户信息
+            $remark = '推荐'.$userinfo['nickname'].'注册增加一次次数';
             if($count == 0){ //没被推荐过
                 UserModel::getuserInt(['id'=>$source],'count');
                 //添加来源 关系表 relation
@@ -80,11 +81,32 @@ class User extends Base
                     'uid' => $source,
                     'type' => 1,
                     'count' => 1,
-                    'remarks' => '推荐'.$userinfo['nickname'].'注册增加一次次数',
+                    'remarks' => $remark,
                     'create_at' => time()
                 ];
                 TelCollection::tcountAdd($telcount);
                 ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
+                $binfo = UserModel::userFind(['id'=>$source]); //邀请者信息
+                $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
+                if($winfo['subscribe'] == 1){ //关注公众号 发模板
+                    $temp_id = 'pHehcISU9iQ_ab0z0VILENzUEQLGLK2AVcn8fo3fjwY';
+                    $data = array();
+                    $data['first'] = array('value'=>'邀请成功,增加一次联系次数','color'=>'#FF0000');
+                    $data['keyword1'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+                    $data['keyword2'] = array('value'=>$binfo['nickname'],'color'=>'#0000ff');
+                    $data['remark'] = array('value'=>'点击小程序进入查看详情','color'=>'#0000ff');
+                    $param = [
+                        'touser'=>$winfo['openid'],
+                        'template_id'=>$temp_id,
+                        'page'=>'pages/home/home',
+                        'data'=>$data,
+                        'miniprogram' => [
+                            'pagepath'=>'pages/home/home',
+                            'appid'=>'wx70d65d2170dbacd7',
+                        ],
+                    ];
+                    $this->shiwuSendMsg($param);
+                }
             }else{
                 if($count['type'] == 1){ //静默未填写资料的状态
                     $bid = $count['bid'];
@@ -94,11 +116,32 @@ class User extends Base
                         'uid' => $bid,
                         'type' => 1,
                         'count' => 1,
-                        'remarks' => '推荐'.$userinfo['nickname'].'注册增加一次次数',
+                        'remarks' => $remark,
                         'create_at' => time()
                     ];
                     TelCollection::tcountAdd($telcount);
-                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分 sdd 
+                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分
+                    $binfo = UserModel::userFind(['id'=>$bid]); //邀请者信息
+                    $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
+                    if($winfo['subscribe'] == 1){ //关注公众号 发模板
+                        $temp_id = 'pHehcISU9iQ_ab0z0VILENzUEQLGLK2AVcn8fo3fjwY';
+                        $data = array();
+                        $data['first'] = array('value'=>'邀请成功,增加一次联系次数','color'=>'#FF0000');
+                        $data['keyword1'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+                        $data['keyword2'] = array('value'=>$binfo['nickname'],'color'=>'#0000ff');
+                        $data['remark'] = array('value'=>'点击小程序进入查看详情','color'=>'#0000ff');
+                        $param = [
+                            'touser'=>$winfo['openid'],
+                            'template_id'=>$temp_id,
+                            'page'=>'pages/home/home',
+                            'data'=>$data,
+                            'miniprogram' => [
+                                'pagepath'=>'pages/home/home',
+                                'appid'=>'wx70d65d2170dbacd7',
+                            ],
+                        ];
+                        $this->shiwuSendMsg($param);
+                    }
                 }
 
             }

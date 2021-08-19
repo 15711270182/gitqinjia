@@ -648,7 +648,7 @@ class Member extends Controller
         $data['first'] = array('value'=>'邀请成功,增加一次联系次数','color'=>'#FF0000');
         $data['keyword1'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
         $data['keyword2'] = array('value'=>$binfo['nickname'],'color'=>'#0000ff');
-        $data['remark'] = array('value'=>'邀请成功','color'=>'#0000ff');
+        $data['remark'] = array('value'=>'点击小程序进入查看详情','color'=>'#0000ff');
         $param = [
             'touser'=>$winfo['openid'],
             'template_id'=>$temp_id,
