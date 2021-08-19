@@ -251,6 +251,7 @@ class User extends Base
             $res = UserModel::userEdit(['id'=>$uid],$update);
             if($res){
                 cache('shareposter-'.$uid,NULL);
+                cache('getposter-'.$uid,NULL);
                 return $this->successReturn('','修改成功',self::errcode_ok);
             }else{
                 return $this->errorReturn(self::errcode_fail,'请勿重复修改');
@@ -264,6 +265,7 @@ class User extends Base
         $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
         if($res){
             cache('shareposter-'.$uid,NULL);
+            cache('getposter-'.$uid,NULL);
             return $this->successReturn('','修改成功',self::errcode_ok);
         }
         return $this->errorReturn(self::errcode_fail,'请勿重复修改');

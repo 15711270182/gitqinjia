@@ -79,7 +79,7 @@
                 {else /}
                 <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要注销该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">注销</a>
                 {/if}
-                <!--<a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该用户吗？" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>-->
+                <a class="layui-btn layui-btn-sm" data-type="store-config-type-params" data-modal='{:url("getuserposter")}?id={$vo.id}' class='layui-btn layui-btn-sm layui-btn-primary'>获取海报</a>
             </td>
         </tr>
         {/foreach}

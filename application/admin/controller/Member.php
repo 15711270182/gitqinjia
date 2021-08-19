@@ -249,6 +249,7 @@ class Member extends Controller
         if ($res){
             $uid = DB::name('children')->where(['id'=>$id])->value('uid');
             cache('shareposter-'.$uid,NULL);
+            cache('getposter-'.$uid,NULL);
             $this->success('保存成功!');
         }else{
             $this->error('保存失败!');
@@ -427,6 +428,12 @@ class Member extends Controller
      */
     public function getuserposter(){
         $uid = input('id');
+        $cache_url = cache('getposter-'.$uid);
+        if($cache_url){
+            $share_poster = Db::name('userinfo')->where(['id'=>$uid])->value('share_poster');
+            echo '<img src="' . $share_poster . '"  width="750px" height="1200px" alt="">';
+            die;
+        }
         $field = 'u.nickname,u.headimgurl,u.realname,c.uid,c.year,c.sex,c.height,c.province,c.residence,c.education,c.work,c.remarks';
         $info = Db::table('children')
             ->alias('c')
@@ -616,6 +623,9 @@ class Member extends Controller
         $img_url_data = json_decode($img_url_data, 1);
         if ($img_url_data['code'] == 200) {
             unlink($local_path);
+            $save['share_poster'] = $img_url_data['img'];
+            Db::name('userinfo')->where(['id'=>$uid])->update($save);
+            cache('getposter-'.$uid,$img_url_data['img']);
             echo '<img src="' . $img_url_data['img'] . '"  width="750px" height="1200px" alt="">';
             die;
         } else {
