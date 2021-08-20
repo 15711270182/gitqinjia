@@ -22,6 +22,7 @@ use app\api\controller\Base;
 use app\api\service\Qrcode;
 use app\api\model\Poster as PosterModel;
 use app\api\model\User as UserModel;
+use app\api\service\Image as Image;
 use app\api\service\Upload;
 use library\tools\Data;
 use think\Db;
@@ -653,14 +654,28 @@ class Member extends Controller
         if(!is_dir($path)){
             mkdir($path,0700,true);
         }
-//        $head_name = 'img_poster'.$uid.'.png';
-//        $head_img_path = $path.'/'.$head_name;
-//        if (!file_exists($head_img_path)){
-//            $head_path = $poster->getImage($data['headimgurl'], $path, $head_name);
-//            $head_img_path = $head_path['save_path'];
-//        }
-        $head_img_path = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
-        $head_img_path = $poster->ssimg1($path.'/', $head_img_path, 80, 80);
+        $head_img = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
+        $Image = new Image($head_img);
+        $width = $Image->getImageWidth();
+        $height = $Image->getImageHeight();
+        //判断该相片是否长宽相等
+        if($width != $height){
+            //不相等则先以最小边为长度截取图片中心部分
+            if($width > $height){
+                $x = ($width - $height) / 2;
+                $y = 0;
+                $width = $height;
+            }else{
+                $y = ($height - $width) / 2;
+                $x = 0;
+                $height = $width;
+            }
+            $Image->crop($head_img,$width,$height,$x,$y,$path);
+            $img = $path;
+        }
+        $Image->reduce($head_img,80,80,$path);
+        $head_img = $path;
+        $head_img_path = $poster->ssimg1($path.'/', $head_img, 80, 80);
         $sid = $uid;
         $path = './uploads/qrcode/';
         $page_path = 'pages/details/details';
