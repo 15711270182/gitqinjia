@@ -651,30 +651,11 @@ class Member extends Controller
         $data['headimgurl'] = !empty($info['headimgurl'])?$info['headimgurl']:'https://pics.njzec.com/default.png';
         $poster = new Poster();
         $path = './uploads/poster/headImg';
+
         if(!is_dir($path)){
             mkdir($path,0700,true);
         }
         $head_img = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
-        $Image = new Image($head_img);
-        $width = $Image->getImageWidth();
-        $height = $Image->getImageHeight();
-        //判断该相片是否长宽相等
-        if($width != $height){
-            //不相等则先以最小边为长度截取图片中心部分
-            if($width > $height){
-                $x = ($width - $height) / 2;
-                $y = 0;
-                $width = $height;
-            }else{
-                $y = ($height - $width) / 2;
-                $x = 0;
-                $height = $width;
-            }
-            $Image->crop($head_img,$width,$height,$x,$y,$path);
-            $img = $path;
-        }
-        $Image->reduce($head_img,80,80,$path);
-        $head_img = $path;
         $head_img_path = $poster->ssimg1($path.'/', $head_img, 80, 80);
         $sid = $uid;
         $path = './uploads/qrcode/';

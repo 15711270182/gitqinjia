@@ -353,7 +353,7 @@ class Poster extends Controller
         $trans_colour = imagecolorallocatealpha($target_im, 0, 0, 0, 127);
         imagefill($target_im, 0, 0, $trans_colour);
         
-        list($width, $width, $type, $attr) = getimagesize($img);
+        list($dwidth, $dheight, $type) = getimagesize($img);
         $types=array(1 => "GIF",2 => "JPEG",3 => "PNG",
                 4 => "SWF",5 => "PSD",6 => "BMP",
                 7 => "TIFF",8 => "TIFF",9 => "JPC",
@@ -362,7 +362,7 @@ class Poster extends Controller
         $dtype=strtolower($types[$type]);//原图类型
         $created="imagecreatefrom".$dtype;
         $o_image  = $created($img);
-        imagecopyresampled($target_im,$o_image, 0, 0,0, 0, $widths,$height, $width, $width);
+        imagecopyresampled($target_im,$o_image, 0, 0,0, 0, $widths,$height, $dwidth, $dheight);
         $file_head_name = 'big_192_'.time().createRandStr(7).'.jpg';
         $comp_path =$path;
         if(!is_dir($comp_path)){
