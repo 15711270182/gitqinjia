@@ -656,7 +656,33 @@ class Member extends Controller
             mkdir($path,0700,true);
         }
         $head_img = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
-        $head_img_path = $poster->ssimg1($path.'/', $head_img, 80, 80);
+        $widths = 80;
+        $height = 80;
+        $target_im = imagecreatetruecolor($widths,$height);     //创建一个新的画布（缩放后的），从左上角开始填充透明背景
+        imagesavealpha($target_im, true);
+        $trans_colour = imagecolorallocatealpha($target_im, 0, 0, 0, 127);
+        imagefill($target_im, 0, 0, $trans_colour);
+
+        list($dwidth, $dheight, $type) = getimagesize($head_img);
+        $types=array(1 => "GIF",2 => "JPEG",3 => "PNG",
+                4 => "SWF",5 => "PSD",6 => "BMP",
+                7 => "TIFF",8 => "TIFF",9 => "JPC",
+                10 => "JP2",11 => "JPX",12 => "JB2",
+                13 => "SWC",14 => "IFF",15 => "WBMP",16 => "XBM");
+        $dtype=strtolower($types[$type]);//原图类型
+        $created="imagecreatefrom".$dtype;
+        $o_image  = $created($head_img);
+        imagecopyresampled($target_im,$o_image, 0, 0,0, 0, $widths,$height, $dwidth, $dheight);
+        $file_head_name = 'big_192_'.time().createRandStr(7).'.png';
+        $comp_path =$path;
+        if(!is_dir($comp_path)){
+            mkdir($comp_path,0755,true);
+        }
+        $head_img_path = $comp_path.$file_head_name;
+        imagepng($target_im,$head_img_path,9);
+        imagedestroy($target_im);
+        var_dump($head_img_path);die;
+//        $head_img_path = $poster->ssimg1($path.'/', $head_img, 80, 80);
         $sid = $uid;
         $path = './uploads/qrcode/';
         $page_path = 'pages/details/details';
