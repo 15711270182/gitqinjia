@@ -657,13 +657,13 @@ class Member extends Controller
         }
         $head_img = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
 
-        $Image = new Image($head_img);
-        $dst_w = 100;
-        $dst_h = 100;
-        $Image->reduce($head_img,$dst_w,$dst_h,$path);
+//        $Image = new Image($head_img);
+//        $dst_w = 100;
+//        $dst_h = 100;
+//        $Image->reduce($head_img,$dst_w,$dst_h,$path);
 
-        $widths = 86;
-        $height = 86;
+        $widths = 80;
+        $height = 80;
         $target_im = imagecreatetruecolor($widths,$height);     //创建一个新的画布（缩放后的），从左上角开始填充透明背景
         imagesavealpha($target_im, true);
         $trans_colour = imagecolorallocatealpha($target_im, 0, 0, 0, 127);
@@ -687,7 +687,7 @@ class Member extends Controller
         $head_img_path = $comp_path.$file_head_name;
         imagepng($target_im,$head_img_path,9);
         imagedestroy($target_im);
-        var_dump($head_img_path);die;
+//        var_dump($head_img_path);die;
 //        $head_img_path = $poster->ssimg1($path.'/', $head_img, 80, 80);
         $sid = $uid;
         $path = './uploads/qrcode/';
