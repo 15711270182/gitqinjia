@@ -674,7 +674,7 @@ class Member extends Controller
         $o_image  = $created($head_img);
         imagecopyresampled($target_im,$o_image, 0, 0,0, 0, $widths,$height, $dwidth, $dheight);
         $file_head_name = 'big_192_'.time().createRandStr(7).'.png';
-        $comp_path =$path;
+        $comp_path =$path.'/';
         if(!is_dir($comp_path)){
             mkdir($comp_path,0755,true);
         }
