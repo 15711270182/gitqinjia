@@ -101,7 +101,7 @@ class User extends Base
                         'page'=>'pages/home/home',
                         'data'=>$data,
                         'miniprogram' => [
-                            'pagepath'=>'pages/home/home',
+                            'pagepath'=>'pages/share/share',
                             'appid'=>'wx70d65d2170dbacd7',
                         ],
                     ];
@@ -136,7 +136,7 @@ class User extends Base
                             'page'=>'pages/home/home',
                             'data'=>$data,
                             'miniprogram' => [
-                                'pagepath'=>'pages/home/home',
+                                'pagepath'=>'pages/share/share',
                                 'appid'=>'wx70d65d2170dbacd7',
                             ],
                         ];
