@@ -656,8 +656,14 @@ class Member extends Controller
             mkdir($path,0700,true);
         }
         $head_img = localWeixinAvatar($data['headimgurl'],$path,$uid,132);
-        $widths = 80;
-        $height = 80;
+
+        $Image = new Image($head_img);
+        $dst_w = 100;
+        $dst_h = 100;
+        $Image->reduce($head_img,$dst_w,$dst_h,$path);
+
+        $widths = 86;
+        $height = 86;
         $target_im = imagecreatetruecolor($widths,$height);     //创建一个新的画布（缩放后的），从左上角开始填充透明背景
         imagesavealpha($target_im, true);
         $trans_colour = imagecolorallocatealpha($target_im, 0, 0, 0, 127);
