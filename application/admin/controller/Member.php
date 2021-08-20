@@ -639,8 +639,18 @@ class Member extends Controller
         }
     }
     public function test(){
+        $poster = new Poster();
+        $path = './uploads/poster/headImg';
+        if(!is_dir($path)){
+            mkdir($path,0700,true);
+        }
+        $uid = '1001';
+        $data = UserModel::userFind(['id'=>$uid]);  //用户信息
+        $head_name = 'img_poster'.$uid.'.png';
+        $head_img_path = $poster->downloadAvatar($uid, $data['headimgurl'], $path, $head_name);
+        var_dump($head_img_path);die;
         $uid = '479';
-        $userinfo = UserModel::userFind(['id'=>$uid]);  //用户信息
+
         $binfo = UserModel::userFind(['id'=>'1001']); //邀请者信息
         $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
         $temp_id = 'pHehcISU9iQ_ab0z0VILENzUEQLGLK2AVcn8fo3fjwY';

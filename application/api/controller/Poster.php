@@ -255,7 +255,56 @@ class Poster extends Controller
         return array('file_name' => $filename, 'save_path' => $save_dir . $filename, 'error' => 0);
     }
 
+        /**
+     * 下载微信用户头像到本地
+     * @param unknown $uid
+     * @param unknown $img
+     * @param unknown $path
+     * 2018年12月26日下午8:39:48
+     * liuxin 285018762@qq.com
+     */
+    public static function downloadAvatar($uid = '',$img,$path = '',$filename,$size) {
+        $pos = strrpos($img,"/");
+       //微信头像有   0、46、64、96、132
+       //0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。
+        $img = substr($img,0,$pos)."/".$size;
 
+        $path       = $path.date("m/d")."/".($uid % 1000)."/";
+//        $filename   = $uid.'.jpg';
+        $file       = './'.$path.$filename;
+        if (file_exists($file)) {
+            return ['url'=>$file];
+        }else{
+            mkDirs($path);
+            $header = array(
+                'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:45.0) Gecko/20100101 Firefox/45.0',
+                'Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+                'Accept-Encoding: gzip, deflate',);
+            $curl = curl_init();curl_setopt($curl, CURLOPT_URL, $img);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_ENCODING, 'gzip');
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            $data = curl_exec($curl);
+            $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);curl_close($curl);
+            if ($code == 200) {//把URL格式的图片转成base64_encode格式的！
+                $imgBase64Code = "data:image/jpg;base64," . base64_encode($data);
+            }else{
+                return false;
+            }
+            $img_content = $imgBase64Code;//图片内容
+            if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $img_content, $result)){
+                $type = $result[2];//得到图片类型png?jpg?gif?
+                $new_file = $path.$uid.".".$type;
+                $a = file_put_contents($new_file, base64_decode(str_replace($result[1], '', $img_content)));
+                return ['url'=>$new_file];
+            }else{
+                return false;
+            }
+        }
+    }
     public function qiniuupload($img) 
     {
         $file = $img;
