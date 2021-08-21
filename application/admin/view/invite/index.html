@@ -12,6 +12,7 @@
             <th class='text-center nowrap'>代理UID</th>
             <th class='text-center nowrap'>代理信息</th>
             <th class='text-center nowrap'>电话</th>
+            <th class='text-center nowrap'>邀请总人数</th>
             <th class='text-center nowrap'>填写资料数</th>
             <th class='text-center nowrap'>支付订单数</th>
             <th class='text-center nowrap'>奖励总额</th>
@@ -42,6 +43,7 @@
                 </div>
             </td>
             <td class='text-center nowrap'>{$vo.phone|default=''}</td>
+            <td class='text-center nowrap'>{$vo.yq_count|default='0'}</td>
             <td class='text-center nowrap'><a data-open='{:url("info_list")}?id={$vo.uid}'>{$vo.info_count}</a></td>
             <td class='text-center nowrap'><a data-open='{:url("awards_list")}?id={$vo.uid}'>{$vo.order_count}</a></td>
             <td class='text-center nowrap'>{$vo.total_money}</td>

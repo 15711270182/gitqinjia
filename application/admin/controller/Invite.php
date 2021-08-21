@@ -61,7 +61,7 @@ class Invite extends Controller
             ->group('r.bid')
             ->order('r.create_at desc')
             ->page();
-//        var_dump(DB::name('children')->getLastSql());die;
+//        var_dump(DB::name('relation')->getLastSql());die;
     }
     protected function _index_page_filter(&$data)
     {
@@ -75,6 +75,7 @@ class Invite extends Controller
             }
             $vo['age'] = (int)date('Y') - (int)$vo['year'];
             $vo['address'] = $vo['province']. '-' .$vo['residence'];
+            $vo['yq_count'] = Db::name('relation')->where(['bid'=>$vo['uid']])->count();
             //邀请的人支付订单数
             $vo['order_count'] = Db::name('invite_awards')->where(['bid'=>$vo['uid'],'status'=>1])->count();
             $vo['balance'] = !empty($vo['balance'])?$vo['balance']/100:0;
