@@ -274,18 +274,19 @@ class Index extends Base
      */
     public function childrenDetails()
     {
-        $type = input('type'); //type类型 1未登录 2已登录
-        if(empty($type)){
-            return $this->errorReturn(self::errcode_fail,'type参数不能为空');
-        }
-        if($type == 2){
-            $session3rd = input('session3rd');
-            $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
-            $uid = $data['uid'];
-            if(empty($uid)){
-                return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
-            }
-        }
+//        $type = input('type'); //type类型 1未登录 2已登录
+//        if(empty($type)){
+//            return $this->errorReturn(self::errcode_fail,'type参数不能为空');
+//        }
+//        if($type == 2){
+//            $session3rd = input('session3rd');
+//            $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
+//            $uid = $data['uid'];
+//            if(empty($uid)){
+//                return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
+//            }
+//        }
+        $uid = $this->uid;
         $bid = input("bid"); //要查看的用户id
         if(empty($bid)){
             return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
@@ -294,6 +295,11 @@ class Index extends Base
         if(empty($children)){
             return $this->errorReturn(self::errcode_fail);
         }
+        //添加查看记录
+        $info_save['uid'] = $uid;
+        $info_save['bid'] = $bid;
+        $info_save['create_time'] = date('Y-m-d H:i:s');
+        Db::name('view_info_record')->insertGetId($info_save);
         //子女信息
         $userinfo = UserModel::userFind(['id'=>$bid]);
         $children['realname'] = $userinfo['realname'];
@@ -315,12 +321,12 @@ class Index extends Base
         $children['sh_headimg'] = $team['headimg']; //审核队员头像
         $children['sh_name'] = $team['name']; //审核队员名字
         $children['sh_time'] = rand(10,20); //审核队员时间
-        if($type == 1){ //未登录
-            $children['is_collection'] = 1;
-            $children['phone'] = '家长电话';
-            $children['is_telcollection'] = 1;
-            $children['is_me'] = 1;//不是自己
-        }else{
+//        if($type == 1){ //未登录
+//            $children['is_collection'] = 1;
+//            $children['phone'] = '家长电话';
+//            $children['is_telcollection'] = 1;
+//            $children['is_me'] = 1;//不是自己
+//        }else{
             //看看对方我是否收藏 1否 2是
             $is_collection = CollectionModel::collectionFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
             $children['is_collection'] = 2;
@@ -342,7 +348,7 @@ class Index extends Base
             $children['is_me'] = 1;//不是自己
             $is_vip = UsersService::isVip($userinfo);
             $children['is_vip'] = $is_vip;
-        }
+//        }
         return $this->successReturn($children,'成功',self::errcode_ok);
     }
     /**
