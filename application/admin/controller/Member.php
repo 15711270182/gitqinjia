@@ -595,32 +595,35 @@ class Member extends Controller
         $text_array[13]['font_size'] = 40;
         $text_array[13]['font_color'] = '#202020';
         //说明
-        $text1 = mb_substr($remarks, 0, 16);
-        $text_array[14]['location'] ='72,720';
-        $text_array[14]['text'] = $text1;
-        $text_array[14]['font_size'] = 36;
-        $text_array[14]['font_color'] = '#606060';
-        if (mb_strlen($remarks) > 16) {
-            $text2 = mb_substr($remarks, 16, 16);
-            $text_array[16]['location'] ='72,780';
-            $text_array[16]['text'] = $text2;
-            $text_array[16]['font_size'] = 36;
-            $text_array[16]['font_color'] = '#606060';
-            if (mb_strlen($remarks) > 32) {
-                $text3 = mb_substr($remarks, 32, 16);
-                $text_array[15]['location'] ='72,840';
-                $text_array[15]['text'] = $text3;
-                $text_array[15]['font_size'] = 36;
-                $text_array[15]['font_color'] = '#606060';
-                if(mb_strlen($remarks) > 48){
-                    $text4 = '...';
-                    $text_array[17]['location'] ='72,870';
-                    $text_array[17]['text'] = $text4;
-                    $text_array[17]['font_size'] = 36;
-                    $text_array[17]['font_color'] = '#606060';
+        if(!empty($remarks)){
+            $remarks = preg_replace('# #', '', $remarks);
+            $text1 = mb_substr($remarks, 0, 16);
+            $text_array[14]['location'] ='72,720';
+            $text_array[14]['text'] = $text1;
+            $text_array[14]['font_size'] = 36;
+            $text_array[14]['font_color'] = '#606060';
+            if (mb_strlen($remarks) > 16) {
+                $text2 = mb_substr($remarks, 16, 16);
+                $text_array[16]['location'] ='72,780';
+                $text_array[16]['text'] = $text2;
+                $text_array[16]['font_size'] = 36;
+                $text_array[16]['font_color'] = '#606060';
+                if (mb_strlen($remarks) > 32) {
+                    $text3 = mb_substr($remarks, 32, 16);
+                    $text_array[15]['location'] ='72,840';
+                    $text_array[15]['text'] = $text3;
+                    $text_array[15]['font_size'] = 36;
+                    $text_array[15]['font_color'] = '#606060';
+                    if(mb_strlen($remarks) > 48){
+                        $text4 = '...';
+                        $text_array[17]['location'] ='72,870';
+                        $text_array[17]['text'] = $text4;
+                        $text_array[17]['font_size'] = 36;
+                        $text_array[17]['font_color'] = '#606060';
+                    }
                 }
-            }
 
+            }
         }
         $posterModel = new PosterModel();
         $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
