@@ -596,7 +596,8 @@ class Member extends Controller
         $text_array[13]['font_color'] = '#202020';
         //说明
         if(!empty($remarks)){
-            $remarks = preg_replace('# #', '', $remarks);
+            $str = str_replace(array("/r/n", "/r", "/n"), '', $remarks);
+            $remarks = preg_replace('# #', '', $str);
             $text1 = mb_substr($remarks, 0, 16);
             $text_array[14]['location'] ='72,720';
             $text_array[14]['text'] = $text1;
