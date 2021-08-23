@@ -1,0 +1,35 @@
+<fieldset>
+
+    <legend>条件搜索</legend>
+
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">查看时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_time" value="{$Think.get.create_time|default=''}" placeholder="日期" class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">查看方uid</label>
+            <div class="layui-input-inline">
+                <input name="uid" id='uid' value="{$Think.get.uid|default=''}" placeholder="查看方uid" class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">被查看方uid</label>
+            <div class="layui-input-inline">
+                <input name="bid" id='bid' value="{$Think.get.bid|default=''}" placeholder="被查看方uid" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+
+    </form>
+
+</fieldset>
+
+<script>
+//     window.laydate.render({range: false, elem: '#create_time'});
+     window.form.render();
+</script>

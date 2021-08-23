@@ -1,0 +1,48 @@
+{extend name="admin@main"}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='member/info_list_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>查看时间</th>
+            <th class='text-center nowrap'>查看方UID</th>
+            <th class='text-center nowrap'>昵称</th>
+            <th class='text-center nowrap'>性别</th>
+
+            <th class='text-center nowrap'>年龄</th>
+            <th class='text-center nowrap'>被查看方UID</th>
+            <th class='text-center nowrap'>昵称</th>
+
+            <th class='text-center nowrap'>年龄</th>
+            <th class='text-center nowrap'>性别</th>
+
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$v}
+        <tr>
+            <td class='text-center  nowrap'>{$v['create_time']}</td>
+            <td class='text-center  nowrap'>{$v['uid']}</td>
+            <td class='text-center  nowrap'>{$v['u_nickname']}</td>
+            <td class='text-center  nowrap'>{if $v.u_sex == 1}男{elseif $v.u_sex == 2 /}女{else/}未知{/if}</td>
+
+            <td class='text-center  nowrap'>{$v['u_age']}</td>
+            <td class='text-center  nowrap'>{$v['bid']}</td>
+            <td class='text-center  nowrap'>{$v['t_nickname']}</td>
+            <td class='text-center  nowrap'>{$v['t_age']}</td>
+            <td class='text-center  nowrap'>{if $v.t_sex == 1}男{elseif $v.t_sex == 2 /}女{else/}未知{/if}</td>
+
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+
+{/block}

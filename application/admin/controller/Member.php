@@ -41,6 +41,7 @@ class Member extends Controller
      */
     public $table = 'userinfo';
     public $table2 = 'children';
+    public $table3 = 'view_info_record';
     /**
      * 系统用户管理
      * @auth true
@@ -125,6 +126,11 @@ class Member extends Controller
             $vo['relation_id'] = $relation_info['bid'];
             $relation_user_info = DB::name($this->table)->where('id', $relation_info['bid'])->find();
             $vo['relation_name'] = emojiDecode($relation_user_info['nickname']);
+
+            //被查看数
+            $vo['blook_count'] = DB::name('view_info_record')->where(['bid'=>$vo['id']])->group('uid')->count();
+            //查看数
+            $vo['look_count'] = DB::name('view_info_record')->where(['uid'=>$vo['id']])->group('bid')->count();
         }
     }
 
@@ -641,6 +647,39 @@ class Member extends Controller
         } else {
             unlink($local_path);
             echo 'error!';die;
+        }
+    }
+
+    /**
+     * @Notes: 查看记录列表
+     * @Interface infoList
+     * @author: zy
+     * @Time: 2021/08/23
+     */
+    public function infoList(){
+        $this->title = '查看列表';
+        $query = $this->_query($this->table3);
+        $query->equal("uid,bid")->dateBetween('create_time')->order('create_time desc')->page();
+    }
+    protected function _infoList_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $field = 'sex,year,weight_score,province';
+            $uinfo = DB::name("children")->field($field)->where(['uid'=>$vo['uid']])->find();
+            $tinfo = DB::name("children")->field($field)->where(['uid'=>$vo['bid']])->find();
+            $u_nickname = DB::name("userinfo")->where(['id'=>$vo['uid']])->value('nickname');
+            $t_nickname = DB::name("userinfo")->where(['id'=>$vo['bid']])->value('nickname');
+            //接受方
+            $vo['u_nickname'] = emoji_decode($u_nickname);
+            $vo['u_sex'] = $uinfo['sex'];
+            $vo['u_age'] = getage($uinfo['year']);
+            $vo['u_weight_score'] = $uinfo['weight_score'];
+            //推荐方
+            $vo['t_nickname'] = emoji_decode($t_nickname);
+            $vo['t_sex'] = $tinfo['sex'];
+            $vo['t_age'] = getage($tinfo['year']);
+            $vo['t_weight_score'] = $tinfo['weight_score'];
+
         }
     }
 }

@@ -15,8 +15,8 @@
             <th class='text-center nowrap'>剩余次数</th>
             <th class='text-center nowrap'>邀请人ID</th>
             <th class='text-center nowrap'>邀请人</th>
-            <!--<th class='text-center nowrap'>资料</th>-->
-            <!--<th class='text-center nowrap'>假用户</th>-->
+            <th class='text-center nowrap'>被查看数</th>
+            <th class='text-center nowrap'>查看数</th>
             <th class='text-center nowrap'>会员</th>
             <th class='text-center nowrap'>禁用</th>
             <th class='text-center nowrap'>注销</th>
@@ -47,8 +47,8 @@
             <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
             <td class='text-center nowrap'>{$vo.relation_id}</td>
             <td class='text-center nowrap'>{$vo.relation_name}</td>
-            <!--<td class='text-center nowrap'>{$vo.is_children|default=0}</td>-->
-            <!--<td class='text-center nowrap'>{$vo.is_false|default=0}</td>-->
+            <td class='text-center nowrap' title="被查看数" style="cursor: pointer;color: #00a0e9;" data-title="被查看数" data-open='{:url("infoList")}?bid={$vo.id}'>{$vo.blook_count|default=0}</td>
+            <td class='text-center nowrap' title="查看数" style="cursor: pointer;color: #00a0e9;" data-title="查看数" data-open='{:url("infoList")}?uid={$vo.id}'>{$vo.look_count|default=0}</td>
             <td class='text-center nowrap'>
                 {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
                 {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
