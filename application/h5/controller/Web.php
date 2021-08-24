@@ -27,6 +27,9 @@ class Web extends Controller
         }else{
             $name = $realname.'家长';
         }
+        if(empty($sex)){
+            $sex = 1;
+        }
         $field = 'id,title,type,num,price,create_at,discount,old_price';
         $product = ProductModel::productSelect(['type'=>$paytype,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         // 折算到每天是多少钱
