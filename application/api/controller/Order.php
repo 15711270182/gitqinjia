@@ -146,8 +146,8 @@ class Order extends Base
      */
     public function makeorderh5()
     {
-        $type = input("paytype", '', 'htmlspecialchars_decode') ?: '';
-        if (empty($type)) return $this->errorReturn(self::errcode_fail,'paytype参数错误');
+        $goods_id = input("goods_id", '', 'htmlspecialchars_decode') ?: '';
+        if (empty($goods_id)) return $this->errorReturn(self::errcode_fail,'goods_id参数错误');
         $uid = input('uid');
         if (empty($uid)) return $this->errorReturn(self::errcode_fail,'uid参数错误');
         $openid = input('openid', '', 'htmlspecialchars_decode');//公众号的openid
@@ -158,14 +158,14 @@ class Order extends Base
         if($lockInfo == false){
             return $this->errorReturn(self::errcode_fail,'正在支付中,请勿频繁操作');
         }
-        $map['id'] = $type;
+        $map['id'] = $goods_id;
         $product = ProductModel::productFind($map);
         if(!$product){
             return $this->errorReturn(self::errcode_fail,'商品不存在!');
         }
         $data['order_number'] = $order_num;
         $data['uid'] = $uid;
-        $data['goods_id'] = $type;
+        $data['goods_id'] = $goods_id;
         $data['payment'] = $product['price'];
         $data['create_at'] = time();
         $data['pay_time'] = time();
