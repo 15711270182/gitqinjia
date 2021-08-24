@@ -69,6 +69,7 @@
             <th class='text-center nowrap'>新增用户数</th>
             <th class='text-center nowrap'>填写资料数</th>
             <th class='text-center nowrap'>查看号码数</th>
+            <th class='text-center nowrap'>拉取推荐人数</th>
         </tr>
         </thead>
         {/notempty}
@@ -80,6 +81,7 @@
             <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增用户列表" data-modal='{:url("newUser")}?date={$vo.date}'>{$vo.user_count}</td>
             <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="填写资料列表" data-modal='{:url("newChildren")}?date={$vo.date}'>{$vo.children_count}</td>
             <td class='text-center nowrap' title="查看列表" style="cursor: pointer;color: #00a0e9" data-title="查看号码记录" data-modal='{:url("lookTel")}?date={$vo.date}'>{$vo.tel_count}</td>
+            <td class='text-center nowrap'>{$vo.tj_count}</td>
         </tr>
         {/foreach}
         </tbody>

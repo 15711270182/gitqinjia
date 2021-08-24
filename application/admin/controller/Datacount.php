@@ -46,6 +46,8 @@ class Datacount extends Controller
             $search_list[$key]['user_count'] = count($this->getNewUserList($start, $end));
             $search_list[$key]['children_count'] = count($this->getChildrenList($start, $end));
             $search_list[$key]['tel_count'] = count($this->getTelList($start, $end));
+            $search_list[$key]['tj_count'] = count($this->getTjList($start, $end));
+
         }
         cache('statistical_data', $search_list);
         $this->assign('today', $today);
@@ -115,7 +117,21 @@ class Datacount extends Controller
     {
         return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->order('create_at desc')->select();
     }
-
+    /**
+     * 根据时间范围获取拉取推荐人数
+     * @param $start
+     * @param $end
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getTjList($start, $end)
+    {
+        $start = date('Ymd',$start);
+        $end = date('Ymd',$end);
+        return Db::table('recommend_record')->where('date', 'between',[$start, $end])->group('uid')->order('date desc')->select();
+    }
 
     /**
      * 新增用户列表
