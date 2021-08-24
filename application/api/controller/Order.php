@@ -137,7 +137,62 @@ class Order extends Base
             return $this->errorReturn(self::errcode_fail,'生成订单失败');
         }
     }
+    /**
+     * @Notes:生成订单 h5
+     * @Interface makeorderh5
+     * @return string
+     * @author: zy
+     * @Time: 2021/08/24
+     */
+    public function makeorderh5()
+    {
+        $type = input("paytype", '', 'htmlspecialchars_decode') ?: '';
+        if (empty($type)) return $this->errorReturn(self::errcode_fail,'paytype参数错误');
+        $uid = input('uid');
+        if (empty($uid)) return $this->errorReturn(self::errcode_fail,'uid参数错误');
+        $openid = input('openid', '', 'htmlspecialchars_decode');//公众号的openid
+        if (empty($openid)) return $this->errorReturn(self::errcode_fail,'openid参数错误');
 
+        $order_num = 'xthl_' . time() . createRandStr(8);
+        $lockInfo = lock('orderpay_'.$uid);
+        if($lockInfo == false){
+            return $this->errorReturn(self::errcode_fail,'正在支付中,请勿频繁操作');
+        }
+        $map['id'] = $type;
+        $product = ProductModel::productFind($map);
+        if(!$product){
+            return $this->errorReturn(self::errcode_fail,'商品不存在!');
+        }
+        $data['order_number'] = $order_num;
+        $data['uid'] = $uid;
+        $data['goods_id'] = $type;
+        $data['payment'] = $product['price'];
+        $data['create_at'] = time();
+        $data['pay_time'] = time();
+        $data['source'] = 1;
+        $orderres = OrderModel::orderAdd($data);
+        if(!$orderres){
+            return $this->errorReturn(self::errcode_fail,'订单生成失败!');
+        }
+        $notify_url = 'https://testqin.njzec.com/api/order/orderNotify';
+        //微信支付数据  请求统一下单接口
+        $options = [
+            'body' => '充值',
+            'out_trade_no' => $order_num,
+            'total_fee' => $data['payment'],
+            'openid' => $openid,
+            'trade_type' => 'JSAPI',
+            'notify_url' =>  $notify_url,
+            'spbill_create_ip' => request()->ip(),
+        ];
+        $pay = WechatService::WePayOrder(config('wechat.wechat'));
+        // 生成预支付码
+        $result = $pay->create($options);
+        // 创建JSAPI参数签名
+        $options = $pay->jsapiParams($result['prepay_id']);
+
+        return $this->successReturn($options,'成功',self::errcode_ok);
+    }
     /**
      * @Notes:订单支付回调方法
      * @Interface orderNotify

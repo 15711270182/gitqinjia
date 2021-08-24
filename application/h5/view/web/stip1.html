@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="divport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>铂金之恋</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script type="text/javascript" src="/static/website/js/autosize.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+
+    <script>
+        /*
+         * 注意：
+         * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+         * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+         * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+         *
+         * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+         * 邮箱地址：weixin-open@qq.com
+         * 邮件主题：【微信JS-SDK反馈】具体问题
+         * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+         */
+
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: "{$dat['appId']}",
+            timestamp: "{$dat['timestamp']}",
+            nonceStr: "{$dat['nonceStr']}",
+            signature: "{$dat['signature']}",
+            jsApiList: [
+                // 所有要调用的 API 都要加到这个列表中
+                'getLocation',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage'
+            ],
+            openTagList: [
+                'wx-open-launch-weapp'
+            ]
+        });
+
+    </script>
+
+</head>
+<body>
+<div id="contenter">
+    <!--支付弹窗提示-->
+    <center>
+        <div id="tip_pay" style="margin-top: 5rem">
+            <div class="header">
+                <div class="icon">
+                    <img src="https://rs.kami5.com/Fi_QdEUkXeS2X4-tlpKqGczNWz0P"/>
+                </div>
+
+            </div>
+            <div class="confirm_btn">
+                <wx-open-launch-weapp id="launch-btn" username="{$dat['username']}" path="{$dat['link']}" style="min-width:10.5rem;display:flex;justify-content:center;">
+                    <script type="text/wxtag-template">
+                        <style>.btn{background-color:#3A3937;color:#EFD9A8;line-height:2.7rem;font-size:1.1rem;height:2.7rem;border-radius:1.5rem;text-align:center;width:11rem;margin:2rem auto}</style>
+                        <div class="btn">点击进入小程序</div>
+                    </script>
+                </wx-open-launch-weapp>
+            </div>
+        </div>
+    </center>
+
+</div>
+
+<script>
+    var btn = document.getElementById('launch-btn');
+    btn.addEventListener('launch', function (e) {
+        console.log('success');
+    });
+    btn.addEventListener('error', function (e) {
+        console.log('fail', e.detail);
+    });
+
+</script>
+</body>

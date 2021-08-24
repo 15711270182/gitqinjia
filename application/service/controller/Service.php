@@ -90,13 +90,26 @@ class Service
                 custom_log('Answerkefu', '发送文字消息==' . '您好，我是客服小新，有什么能帮助你?');
                 $fromUsername = $postArr['FromUserName']; // 发送者openid
                 $context = $postArr['Content'];
-//                $string = $context;
+                $string = $context;
                 //指定的字符串
-//                $arr = ['金币','会员', '充值', '买','获取'];
-//
-//                preg_match_all('#('.implode('|', $arr).')#', $string, $wordsFound);
-//                //获取匹配到的字符串，array_unique()函数去重。如需获取总共出现次数，则不需要去重
-//                $wordsFound = array_unique($wordsFound[0]);
+                $arr = ['会员', '充值', '买','获取'];
+
+                preg_match_all('#('.implode('|', $arr).')#', $string, $wordsFound);
+                //获取匹配到的字符串，array_unique()函数去重。如需获取总共出现次数，则不需要去重
+                $wordsFound = array_unique($wordsFound[0]);
+                if($wordsFound){
+                    $data = array(
+                        "touser" => $fromUsername,
+                        "msgtype" => "text",
+                        "text" => array(
+                            "content" => "<a href=\"https://testqin.njzec.com/web/web/index\" >苹果用户充值入口>></a>"
+                        )
+                    );
+                    if(isset($data)){
+                        $this->sendKfMessage($data);
+                    }
+                    die;
+                }
                 switch ($context) {
                     case '1':
                         $data = array(
