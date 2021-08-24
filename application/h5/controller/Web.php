@@ -17,6 +17,14 @@ class Web extends Controller
     public function openVip(){
         $uid = input('uid');
         $paytype = Db::name('userinfo')->where(['id' => $uid])->value('paytype');
+        $realname = Db::name('userinfo')->where(['id' => $uid])->value('realname');
+        $headimgurl = Db::name('userinfo')->where(['id' => $uid])->value('headimgurl');
+        $headimgurl = !empty($headimgurl)?$headimgurl:'https://pics.njzec.com/default.png';
+        if (empty($realname)) {
+            $name = '家长';
+        }else{
+            $name = $realname.'家长';
+        }
         $field = 'id,title,type,num,price,create_at,discount,old_price';
         $product = ProductModel::productSelect(['type'=>$paytype,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         // 折算到每天是多少钱
@@ -26,13 +34,13 @@ class Web extends Controller
                 $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
             }
         }
+        $this->assign('paytype',$paytype);
+        $this->assign('realname',$name);
+        $this->assign('headimgurl',$headimgurl);
+        $this->assign('list',$product);
         if($paytype == 1){ //会员
-            $this->assign('list',$product);
-            $this->assign('paytype',$paytype);
             return $this->fetch('openVip');
         }
-        $this->assign('paytype',$paytype);
-        $this->assign('list',$product);
         return $this->fetch('openCount');
     }
     public function stip(){
