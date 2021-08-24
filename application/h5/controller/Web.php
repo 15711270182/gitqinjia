@@ -16,10 +16,12 @@ class Web extends Controller
 {
     public function openVip(){
         $uid = input('uid');
-        $paytype = Db::name('userinfo')->where(['id' => $uid])->value('paytype');
-        $realname = Db::name('userinfo')->where(['id' => $uid])->value('realname');
-        $headimgurl = Db::name('userinfo')->where(['id' => $uid])->value('headimgurl');
+        $userinfo = Db::name('userinfo')->where(['id' => $uid])->find();
+        $paytype = $userinfo['paytype'];
+        $realname = $userinfo['realname'];
+        $headimgurl = $userinfo['headimgurl'];
         $headimgurl = !empty($headimgurl)?$headimgurl:'https://pics.njzec.com/default.png';
+        $sex = Db::name('children')->where(['uid' => $uid])->value('sex');
         if (empty($realname)) {
             $name = '家长';
         }else{
@@ -34,6 +36,7 @@ class Web extends Controller
                 $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
             }
         }
+        $this->assign('sex',$sex);
         $this->assign('paytype',$paytype);
         $this->assign('realname',$name);
         $this->assign('headimgurl',$headimgurl);
