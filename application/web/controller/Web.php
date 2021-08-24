@@ -22,11 +22,11 @@ class Web extends Controller
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
             if ($uid) {
-                $url = 'https://' . $_SERVER['HTTP_HOST']  . '/h5/web/openVip?uid=' . $uid . '&openid=' . $map['openid'];
+                $url = 'https://testqin.njzec.com/h5/web/openVip?uid=' . $uid . '&openid=' . $map['openid'];
                 header("Location:" . $url);
                 die;
             }else{
-                $url = config('recommend.domain') . '/h5/web/stip';
+                $url = 'https://testqin.njzec.com/h5/web/stip';
                 header("Location:" . $url);
                 die;
             }
@@ -72,7 +72,7 @@ class Web extends Controller
         $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
         if ($uid) {
 
-            $url = 'https://' . $_SERVER['HTTP_HOST'] . '/h5/web/openVip?uid=' . $uid . '&openid=' . $openid;
+            $url = 'https://testqin.njzec.com/h5/web/openVip?uid=' . $uid . '&openid=' . $openid;
             header("Location:" . $url);
             die;
         } else {
