@@ -97,7 +97,7 @@ class Order extends Base
         $order_num = 'xthl_' . time() . createRandStr(8);
         $lockInfo = lock('orderpay_'.$uid);
         if($lockInfo == false){
-            return $this->errorReturn(self::errcode_fail,'正在支付中,请勿频繁操作');
+            return $this->errorReturn(self::errcode_fail,'操作过于频繁,请稍后重试!');
         }
         $map['id'] = $type;
         $product = ProductModel::productFind($map);
@@ -156,7 +156,7 @@ class Order extends Base
         $order_num = 'xthl_' . time() . createRandStr(8);
         $lockInfo = lock('orderpay_'.$uid.'_'.$goods_id);
         if($lockInfo == false){
-            return $this->errorReturn(self::errcode_fail,'正在支付中,请勿频繁操作');
+            return $this->errorReturn(self::errcode_fail,'操作过于频繁,请稍后重试!');
         }
         $map['id'] = $goods_id;
         $product = ProductModel::productFind($map);
