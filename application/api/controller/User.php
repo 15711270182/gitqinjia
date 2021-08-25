@@ -713,10 +713,10 @@ class User extends Base
         $where['uid'] = $uid;
         $where['is_read'] = 0;
         $count = TelModel::telCount($where);
-        if($count){
-            return $this->successReturn($count,'成功',self::errcode_ok);
+        if(!empty($count)){
+            return $this->successReturn(['count'=>$count],'成功',self::errcode_ok);
         }
-        return $this->successReturn(0,'成功',self::errcode_ok);
+        return $this->successReturn(['count'=>0],'成功',self::errcode_ok);
     }
     /**
      * 用户数据转化成前端需要的样式
