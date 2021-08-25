@@ -356,10 +356,12 @@ class User extends Base
             $where .= " and uid = '{$uid}'";
         }
         $table = 'Collection';
+        $order = 'create_at desc';
         if($type == 3){
            $table = 'TelCollection';
+            $order = 'is_read asc,create_at desc';
         }
-        $list = Db::name($table)->where($where)->order('create_at desc')->select();
+        $list = Db::name($table)->where($where)->order($order)->select();
         if(empty($list)){
             return $this->errorReturn(self::errcode_fail);
         }
@@ -392,6 +394,12 @@ class User extends Base
                 $list[$key]['is_collection'] = 2;
             }
             $list[$key]['id'] = $value['id'];
+            if(isset($value['is_read'])){
+                 $list[$key]['is_read'] = $value['is_read'];
+            }
+            if(isset($value['type'])){
+                 $list[$key]['type'] = $value['type']; //1查看者  2 被查看者
+            }
         }
         return $this->successReturn($list,'成功',self::errcode_ok);
     }
