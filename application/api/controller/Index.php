@@ -364,6 +364,7 @@ class Index extends Base
             $data['count'] = 1;
             return $this->successReturn($data,'成功',self::errcode_ok);
         }
+        $children = ChildrenModel::childrenFind(['uid'=>$bid]);
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $is_vip = UsersService::isVip($userinfo);
         //查看是不是会员
@@ -386,6 +387,37 @@ class Index extends Base
                 $add['is_read'] = 0; //未读
                 $add['create_at'] = time();
                 TelModel::telAdd($add);
+                //给被查看方发送来访模板消息
+                $unionid = UserModel::userValue(['id'=>$bid],'unionid');
+                $where_x['unionid'] = $unionid;
+                $where_x['subscribe'] = 1;
+                $mini_user = UserModel::wxFind($where_x);
+                if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                    $openid = $mini_user['openid'];
+                    $time = date('Y-m-d H:i');
+                    $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
+                    $name =  $userinfo['realname'].'家长';
+                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $children['phone']);
+                    $remark = '帮孩子找对象，首选完美亲家';
+                    $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
+                    $arr = array();
+                    $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                    $arr['keyword1'] = array('value'=>$name,'color'=>'#0000ff');
+                    $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+                    $arr['keyword3'] = array('value'=>$time,'color'=>'#0000ff');
+                    $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                    $param = [
+                        'touser'=>$openid,
+                        'template_id'=>$temp_id,
+                        'page'=>'pages/message/message?type=2',
+                        'data'=>$arr,
+                        'miniprogram' => [
+                            'pagepath'=>'pages/message/message?type=2',
+                            'appid'=>'wx70d65d2170dbacd7',
+                        ],
+                    ];
+                    $this->shiwuSendMsg($param);
+                }
             }
             $data = $this->TelChange($bid,1);
             $data['status'] = 1;
