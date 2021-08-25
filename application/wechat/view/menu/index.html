@@ -1,6 +1,141 @@
 {extend name="admin@main"}
 
 {block name='content'}
+<style>
+    .mobile-preview {
+        width: 317px;
+        height: 580px;
+        position: relative;
+        background: url(https://testqin.njzec.com/static/theme/img/wechat/mobile_head.png) no-repeat 0 0;
+    }
+    .mobile-preview .mobile-header {
+        color: #fff;
+        width: auto;
+        margin: 0 30px;
+        overflow: hidden;
+        font-size: 15px;
+        padding-top: 30px;
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-wrap: normal;
+        user-select: none;
+        pointer-events: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -webkit-pointer-events: none;
+    }
+    .mobile-preview .mobile-body {
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        border: 1px solid #ccc;
+        background: #f5f5f5;
+    }
+    .mobile-preview .mobile-footer {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        position: absolute;
+        padding-left: 43px;
+        border: 1px solid #ccc;
+        list-style-type: none;
+        background: url(https://testqin.njzec.com/static/theme/img/wechat/mobile_foot.png) no-repeat 0 0;
+    }
+    .mobile-preview .mobile-footer li {
+        float: left;
+        width: 33.33%;
+        position: relative;
+        text-align: center;
+        line-height: 50px;
+    }
+    .mobile-preview .mobile-footer li a.active {
+        border: 1px solid #44b549 !important;
+        box-shadow: 0 0 1px #44b549;
+    }
+    .mobile-preview .mobile-footer .sub-menu {
+        width: 100%;
+        bottom: 60px;
+        margin: -1px;
+        display: block;
+        position: absolute;
+        border: 1px solid #d0d0d0;
+        background-color: #fafafa;
+    }
+    .mobile-preview .mobile-footer .sub-menu ul, .mobile-preview .mobile-footer .sub-menu ul li {
+        float: none;
+        padding: 0;
+        z-index: 11;
+        display: block;
+        width: 100%;
+    }
+    .mobile-preview .mobile-footer .sub-menu ul li a {
+        padding: 0 5px;
+        border: 1px solid hsla(0,0%,100%,0);
+    }
+    .mobile-preview .mobile-footer li a {
+        width: auto;
+        display: block;
+        overflow: hidden;
+        border: 1px solid hsla(0,0%,100%,0);
+        border-left: 1px solid #e7e7eb;
+        margin-top: -1px;
+        margin-bottom: -1px;
+        color: #616161;
+        white-space: nowrap;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        word-wrap: normal;
+    }
+    body a {
+        color: #06C;
+        cursor: pointer;
+    }
+    li {
+        list-style: none;
+    }
+    .mobile-preview .mobile-footer li a span:before {
+        width: 1px;
+        height: 1px;
+        content: '';
+        display: inline-block;
+    }
+    .mobile-preview .mobile-footer li>.close {
+        top: 1px;
+        right: 1px;
+        width: 18px;
+        height: 18px;
+        display: none;
+        cursor: pointer;
+        position: absolute;
+        text-align: center;
+        line-height: 18px;
+    }
+    .layui-bg-gray {
+        background-color: #eee!important;
+        color: #666!important;
+    }
+    .layui-icon {
+        font-family: layui-icon!important;
+        font-size: 16px;
+        font-style: normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .mobile-preview .mobile-footer .icon-add, .mobile-preview .mobile-footer .icon-sub {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .mobile-preview .mobile-footer .icon-add {
+        width: 14px;
+        height: 14px;
+        border-bottom: none !important;
+        background: url(https://testqin.njzec.com/static/theme/img/wechat/index.png) 0 0 no-repeat;
+    }
+</style>
 <div id="MenuEditor" class="layui-hide think-box-shadow" style="width:910px">
     <div class='mobile-preview inline-block'>
         <div class='mobile-header'>公众号</div>
