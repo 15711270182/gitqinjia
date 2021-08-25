@@ -370,8 +370,20 @@ class Index extends Base
         if($is_vip == 1){
             //如果没有就添加记录
             if(empty($TelCollection)){
+                $add = [];
                 $add['uid'] = $uid;
                 $add['bid'] = $bid;
+                $add['create_at'] = time();
+                TelModel::telAdd($add);
+            }
+             //被查看者
+            $telInfo = TelModel::telFind(['uid'=>$bid,'bid'=>$uid,'is_show'=>0]);
+            if(empty($telInfo)) {
+                $add = [];
+                $add['uid'] = $bid;
+                $add['bid'] = $uid;
+                $add['type'] = 2;  //被查看者
+                $add['is_read'] = 0; //未读
                 $add['create_at'] = time();
                 TelModel::telAdd($add);
             }
