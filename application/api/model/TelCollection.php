@@ -148,16 +148,25 @@ class TelCollection extends Model
             $res3 = self::telAdd($add);
 
             //被查看者
-            $add = [];
-            $add['uid'] = $bid;
-            $add['bid'] = $uid;
-            $add['type'] = 2;  //被查看者
-            $add['is_read'] = 0; //未读
-            $add['create_at'] = time();
-            $res4 = self::telAdd($add);
+            $telInfo = self::telFind(['uid'=>$bid,'bid'=>$uid]);
+            if(empty($telInfo)){
+                $add = [];
+                $add['uid'] = $bid;
+                $add['bid'] = $uid;
+                $add['type'] = 2;  //被查看者
+                $add['is_read'] = 0; //未读
+                $add['create_at'] = time();
+                $res4 = self::telAdd($add);
+                // 提交事务
+                Db::commit();
+                if(!empty($res1) && !empty($res2) && !empty($res3) && !empty($res4)){
+
+                }
+                return true;
+            }
             // 提交事务
             Db::commit();
-            if(!empty($res1) && !empty($res2) && !empty($res3) && !empty($res4)){
+            if(!empty($res1) && !empty($res2) && !empty($res3)){
 
             }
             return true;
