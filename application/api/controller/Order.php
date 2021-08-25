@@ -154,7 +154,7 @@ class Order extends Base
         if (empty($openid)) return $this->errorReturn(self::errcode_fail,'openid参数错误');
 
         $order_num = 'xthl_' . time() . createRandStr(8);
-        $lockInfo = lock('orderpay_'.$uid);
+        $lockInfo = lock('orderpay_'.$uid.'_'.$goods_id);
         if($lockInfo == false){
             return $this->errorReturn(self::errcode_fail,'正在支付中,请勿频繁操作');
         }
