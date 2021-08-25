@@ -393,11 +393,12 @@ class Index extends Base
                 $where_x['subscribe'] = 1;
                 $mini_user = UserModel::wxFind($where_x);
                 if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                    $u_phone = ChildrenModel::getchildrenField(['uid'=>$uid],'phone');
                     $openid = $mini_user['openid'];
                     $time = date('Y-m-d H:i');
                     $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
                     $name =  $userinfo['realname'].'家长';
-                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $children['phone']);
+                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $u_phone);
                     $remark = '帮孩子找对象，首选完美亲家';
                     $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
                     $arr = array();
@@ -481,10 +482,10 @@ class Index extends Base
     {
         $uid = $this->uid;
         $bid = input("bid"); //被查看者的id
-//        $lockInfo = lock('seetelnew_'.$uid);
-//        if($lockInfo == false){
-//            return $this->errorReturn(self::errcode_fail,'正在提交中,请勿频繁操作');
-//        }
+        $lockInfo = lock('seetelnew_'.$uid);
+        if($lockInfo == false){
+            return $this->errorReturn(self::errcode_fail,'正在提交中,请勿频繁操作');
+        }
         if(empty($bid)){
             return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
         }
@@ -528,11 +529,12 @@ class Index extends Base
                 $where_x['subscribe'] = 1;
                 $mini_user = UserModel::wxFind($where_x);
                 if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                    $u_phone = ChildrenModel::getchildrenField(['uid'=>$uid],'phone');
                     $openid = $mini_user['openid'];
                     $time = date('Y-m-d H:i');
                     $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
                     $name =  $userinfo['realname'].'家长';
-                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $children['phone']);
+                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $u_phone);
                     $remark = '帮孩子找对象，首选完美亲家';
                     $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
                     $arr = array();
