@@ -127,4 +127,43 @@ class TelCollection extends Model
         }
 
     }
+    public static function shiwuDataNew($bid,$uid){
+        try {
+            $biduser = UserModel::userFind(['id'=>$bid]);
+            $res1 = UserModel::getuserDec(['id'=>$uid],'count',1);
+            //记录次数
+            $params = [
+                'uid' => $uid,
+                'type' => 2,
+                'count' => 1,
+                'remarks' => '查看'.$biduser['nickname'].'手机号消耗一次次数',
+                'create_at' => time()
+            ];
+            $res2 = self::tcountAdd($params);
+            //查看者
+            $add = [];
+            $add['uid'] = $uid;
+            $add['bid'] = $bid;
+            $add['create_at'] = time();
+            $res3 = self::telAdd($add);
+
+            //被查看者
+            $add = [];
+            $add['uid'] = $bid;
+            $add['bid'] = $uid;
+            $add['type'] = 2;  //被查看者
+            $add['is_read'] = 0; //未读
+            $add['create_at'] = time();
+            $res4 = self::telAdd($add);
+            // 提交事务
+            Db::commit();
+            if(!empty($res1) && !empty($res2) && !empty($res3) && !empty($res4)){
+
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+    }
 }

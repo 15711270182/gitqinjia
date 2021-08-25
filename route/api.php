@@ -20,6 +20,7 @@ Route::group('api/index',function(){
     Route::any('childrenDetails', 'api/index/childrenDetails'); //获取资料详情页
 
     Route::any('SeeTel', 'api/index/SeeTel'); //查看号码
+    Route::any('SeeTelNew', 'api/index/SeeTelNew'); //查看号码
     Route::any('OnclickTel', 'api/index/OnclickTel'); //查看号码前的信息
     Route::any('CheckTel', 'api/index/CheckTel'); //添加手机号发送验证码
     Route::any('CheckCode', 'api/index/CheckCode'); //验证码校验

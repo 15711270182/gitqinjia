@@ -274,18 +274,6 @@ class Index extends Base
      */
     public function childrenDetails()
     {
-//        $type = input('type'); //type类型 1未登录 2已登录
-//        if(empty($type)){
-//            return $this->errorReturn(self::errcode_fail,'type参数不能为空');
-//        }
-//        if($type == 2){
-//            $session3rd = input('session3rd');
-//            $data = cache(config('wechat.miniapp.appid') . '_SESSION__'. $session3rd);
-//            $uid = $data['uid'];
-//            if(empty($uid)){
-//                return $this->errorReturn(self::errcode_fail,'session3rd参数不能为空');
-//            }
-//        }
         $uid = $this->uid;
         $bid = input("bid"); //要查看的用户id
         if(empty($bid)){
@@ -296,10 +284,20 @@ class Index extends Base
             return $this->errorReturn(self::errcode_fail);
         }
         //添加查看记录
-        $info_save['uid'] = $uid;
-        $info_save['bid'] = $bid;
-        $info_save['create_time'] = date('Y-m-d H:i:s');
-        Db::name('view_info_record')->insertGetId($info_save);
+        if($uid != $bid){
+            $info_save['uid'] = $uid;
+            $info_save['bid'] = $bid;
+            $info_save['create_time'] = date('Y-m-d H:i:s');
+            Db::name('view_info_record')->insertGetId($info_save);
+        }
+        $where_t['uid'] = $uid;
+        $where_t['bid'] = $bid;
+        $where_t['type'] = 2;
+        $where_t['is_read'] = 0;
+        $tInfo = TelModel::telFind($where_t);
+        if(!empty($tInfo)){
+            TelModel::telEdit(['uid'=>$uid,'bid'=>$bid],['is_read'=>1]);
+        }
         //子女信息
         $userinfo = UserModel::userFind(['id'=>$bid]);
         $children['realname'] = $userinfo['realname'];
@@ -321,34 +319,27 @@ class Index extends Base
         $children['sh_headimg'] = $team['headimg']; //审核队员头像
         $children['sh_name'] = $team['name']; //审核队员名字
         $children['sh_time'] = rand(10,20); //审核队员时间
-//        if($type == 1){ //未登录
-//            $children['is_collection'] = 1;
-//            $children['phone'] = '家长电话';
-//            $children['is_telcollection'] = 1;
-//            $children['is_me'] = 1;//不是自己
-//        }else{
-            //看看对方我是否收藏 1否 2是
-            $is_collection = CollectionModel::collectionFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
-            $children['is_collection'] = 2;
-            if(empty($is_collection)){
-                $children['is_collection'] = 1;
-            }
-            if($uid == $bid){
-                $children['is_telcollection'] = 2;
-                $children['is_me'] = 2;
-                return $this->successReturn($children,'成功',self::errcode_ok);
-            }
-            //判断用户是否查看过手机号 1否 2是
-            $is_telcollection = TelModel::telFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
+        //看看对方我是否收藏 1否 2是
+        $is_collection = CollectionModel::collectionFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
+        $children['is_collection'] = 2;
+        if(empty($is_collection)){
+            $children['is_collection'] = 1;
+        }
+        if($uid == $bid){
             $children['is_telcollection'] = 2;
-            if(empty($is_telcollection)){
-                $children['phone'] = '家长电话';
-                $children['is_telcollection'] = 1;
-            }
-            $children['is_me'] = 1;//不是自己
-            $is_vip = UsersService::isVip($userinfo);
-            $children['is_vip'] = $is_vip;
-//        }
+            $children['is_me'] = 2;
+            return $this->successReturn($children,'成功',self::errcode_ok);
+        }
+        //判断用户是否查看过手机号 1否 2是
+        $is_telcollection = TelModel::telFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
+        $children['is_telcollection'] = 2;
+        if(empty($is_telcollection)){
+            $children['phone'] = '家长电话';
+            $children['is_telcollection'] = 1;
+        }
+        $children['is_me'] = 1;//不是自己
+        $is_vip = UsersService::isVip($userinfo);
+        $children['is_vip'] = $is_vip;
         return $this->successReturn($children,'成功',self::errcode_ok);
     }
     /**
@@ -427,6 +418,96 @@ class Index extends Base
                 $data['status'] = 1;//1是可以看
                 ScoreService::instance()->weightScoreInc($bid,26,$uid);//被查看的人增加权重分
                 ScoreService::instance()->weightScoreInc($uid,27,$bid);//查看的人增加权重分
+                return $this->successReturn(['data'=>$data,'count'=>0],'成功',self::errcode_ok);
+            }
+            return $this->errorReturn(self::errcode_fail,'查看失败');
+        }
+        return $this->errorReturn(self::errcode_fail,'次数已经用光啦');
+    }
+
+    /**
+     * @Notes:查看手机号 查看者/被查看者添加记录
+     * @Interface seeTelNew
+     * @return string
+     * @throws \think\Exception
+     * @author: zy
+     * @Time: 2021/08/25
+     */
+    public function seeTelNew()
+    {
+        $uid = $this->uid;
+        $bid = input("bid"); //被查看者的id
+//        $lockInfo = lock('seetelnew_'.$uid);
+//        if($lockInfo == false){
+//            return $this->errorReturn(self::errcode_fail,'正在提交中,请勿频繁操作');
+//        }
+        if(empty($bid)){
+            return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
+        }
+        $children = ChildrenModel::childrenFind(['uid'=>$bid]);
+        if(empty($children)){
+            return $this->errorReturn(self::errcode_fail,'无资料信息');
+        }
+        //判断是否是被查看者身份 是 可直接返回手机号
+        $where_t['uid'] = $uid;
+        $where_t['bid'] = $bid;
+        $where_t['type'] = 2;
+        $find = TelModel::telFind($where_t);
+        if(!empty($find)){
+            $biduser = UserModel::userFind(['id'=>$bid]);
+            //添加查看记录
+            $params = [
+                'uid' => $uid,
+                'type' => 2,
+                'count' => 0,
+                'remarks' => '对方查看你,免费获得查看'.$biduser['nickname'].'手机号',
+                'create_at' => time()
+            ];
+            TelModel::tcountAdd($params);
+            $data['three'] = substr($children['phone'],0,3).' '.substr($children['phone'],3,4).' '.substr($children['phone'],7,4);
+            $data['status'] = 1;//1是可以看
+            return $this->successReturn(['data'=>$data,'count'=>0],'成功',self::errcode_ok);
+        }
+        //查看者是否有次数
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        if($userinfo['count'] > 0){
+            $result = TelModel::shiwuDataNew($bid,$uid);
+            if($result == true){
+                $data['three'] = substr($children['phone'],0,3).' '.substr($children['phone'],3,4).' '.substr($children['phone'],7,4);
+                $data['status'] = 1;//1是可以看
+                ScoreService::instance()->weightScoreInc($bid,26,$uid);//被查看的人增加权重分
+                ScoreService::instance()->weightScoreInc($uid,27,$bid);//查看的人增加权重分
+                //给被查看方发送来访模板消息
+                $unionid = UserModel::userValue(['id'=>$bid],'unionid');
+                $where_x['unionid'] = $unionid;
+                $where_x['subscribe'] = 1;
+                $mini_user = UserModel::wxFind($where_x);
+                if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                    $openid = $mini_user['openid'];
+                    $time = date('Y-m-d H:i');
+                    $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
+                    $name =  $userinfo['realname'].'家长';
+                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $children['phone']);
+                    $remark = '帮孩子找对象，首选完美亲家';
+                    $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
+                    $arr = array();
+                    $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                    $arr['keyword1'] = array('value'=>$name,'color'=>'#0000ff');
+                    $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+                    $arr['keyword3'] = array('value'=>$time,'color'=>'#0000ff');
+                    $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                    $param = [
+                        'touser'=>$openid,
+                        'template_id'=>$temp_id,
+                        'page'=>'pages/message/message?type=3',
+                        'data'=>$arr,
+                        'miniprogram' => [
+                            'pagepath'=>'pages/message/message?type=3',
+                            'appid'=>'wx70d65d2170dbacd7',
+                        ],
+                    ];
+                    $this->shiwuSendMsg($param);
+                }
                 return $this->successReturn(['data'=>$data,'count'=>0],'成功',self::errcode_ok);
             }
             return $this->errorReturn(self::errcode_fail,'查看失败');

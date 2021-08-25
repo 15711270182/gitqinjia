@@ -163,6 +163,9 @@ class User extends Base
         if(empty($children)){
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
+        $unionid = UserModel::userValue(['id'=>$uid],'unionid');
+        $subscribe = Db::name('wechat_fans')->where(['unionid'=>$unionid])->value('subscribe');
+        $subscribe = !empty($subscribe)?1:0;
         //数据转化
         $data = $this->userchange($children);
         $userinfo = UserModel::userFind(['id'=>$uid]);
@@ -186,6 +189,7 @@ class User extends Base
             cache('paytypeuid-'.$userinfo['paytype'],$paytype,3*24*3600);
         }
         $list = [
+            'subscribe'=>$subscribe,
             'operate_uid'=>$uid, //新增 操作者uid
             'paytype'=>$paytype, //用户支付类型 1月卡 2次卡
             'balance'=>!empty($children['balance'])?$children['balance']/100:'',
