@@ -148,7 +148,7 @@ class TelCollection extends Model
             $res3 = self::telAdd($add);
 
             //被查看者
-            $telInfo = self::telFind(['uid'=>$bid,'bid'=>$uid]);
+            $telInfo = self::telFind(['uid'=>$bid,'bid'=>$uid,'is_show'=>0]);
             if(empty($telInfo)){
                 $add = [];
                 $add['uid'] = $bid;

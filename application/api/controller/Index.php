@@ -451,6 +451,7 @@ class Index extends Base
         //判断是否是被查看者身份 是 可直接返回手机号
         $where_t['uid'] = $uid;
         $where_t['bid'] = $bid;
+        $where_t['is_show'] = 0;
         $where_t['type'] = 2;
         $find = TelModel::telFind($where_t);
         if(!empty($find)){
