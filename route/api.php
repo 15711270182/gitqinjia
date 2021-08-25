@@ -49,6 +49,7 @@ Route::group('api/user',function(){
     Route::any('report', 'api/user/report');//举报
 
     Route::any('shareDetails', 'api/user/shareDetails');//代理列表详细
+    Route::any('msgCount', 'api/user/msgCount');//未读消息数
 
 });
 //订单模块

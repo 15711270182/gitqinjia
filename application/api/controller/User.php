@@ -23,6 +23,7 @@ use app\api\model\Collection as CollectionModel;
 use app\api\model\Relation as RelationModel;
 use app\api\model\Order as OrderModel;
 use app\api\model\Team as TeamModel;
+use app\api\model\TelCollection as TelModel;
 use think\Db;
 use think\Queue;
 
@@ -699,6 +700,23 @@ class User extends Base
         }
         $count = count($list);
         return $this->successReturn(['count'=>$count,'list'=>$list],'成功',self::errcode_ok);
+    }
+
+    /**
+     * @Notes:未读消息数
+     * @Interface msgCount
+     * @author: zy
+     * @Time: 2021/08/25   15:20
+     */
+    public function msgCount(){
+        $uid = $this->uid;
+        $where['uid'] = $uid;
+        $where['is_read'] = 0;
+        $count = TelModel::telCount($where);
+        if($count){
+            return $this->successReturn($count,'成功',self::errcode_ok);
+        }
+        return $this->successReturn(0,'成功',self::errcode_ok);
     }
     /**
      * 用户数据转化成前端需要的样式
