@@ -115,7 +115,7 @@ class Datacount extends Controller
      */
     public function getTelList($start, $end)
     {
-        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->order('create_at desc')->select();
+        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1])->order('create_at desc')->select();
     }
     /**
      * 根据时间范围获取拉取推荐人数

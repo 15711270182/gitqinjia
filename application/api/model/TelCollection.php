@@ -155,6 +155,7 @@ class TelCollection extends Model
                 $add['bid'] = $uid;
                 $add['type'] = 2;  //被查看者
                 $add['is_read'] = 0; //未读
+                $add['status'] = 0; //未查看
                 $add['create_at'] = time();
                 $res4 = self::telAdd($add);
                 // 提交事务

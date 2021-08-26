@@ -359,6 +359,19 @@ class Index extends Base
         //看看有没有以前有没有看过
         $TelCollection = TelModel::telFind(['uid'=>$uid,'bid'=>$bid]);
         if(!empty($TelCollection)){
+            if($TelCollection['type'] == 2 && $TelCollection['status'] == 0){
+                TelModel::telEdit(['uid'=>$uid,'bid'=>$bid],['status'=>1]);
+                $biduser = UserModel::userFind(['id'=>$bid]);
+                //添加查看记录
+                $params = [
+                    'uid' => $uid,
+                    'type' => 2,
+                    'count' => 0,
+                    'remarks' => '对方查看你,免费获得查看'.$biduser['nickname'].'手机号',
+                    'create_at' => time()
+                ];
+                TelModel::tcountAdd($params);
+            }
             $data = $this->TelChange($bid,1);
             $data['status'] = 1;
             $data['count'] = 1;
@@ -385,6 +398,7 @@ class Index extends Base
                 $add['bid'] = $uid;
                 $add['type'] = 2;  //被查看者
                 $add['is_read'] = 0; //未读
+                $add['status'] = 0; //未查看
                 $add['create_at'] = time();
                 TelModel::telAdd($add);
                 //给被查看方发送来访模板消息
@@ -500,6 +514,9 @@ class Index extends Base
         $where_t['type'] = 2;
         $find = TelModel::telFind($where_t);
         if(!empty($find)){
+             if($find['type'] == 2 && $find['status'] == 0){
+                TelModel::telEdit(['uid'=>$uid,'bid'=>$bid],['status'=>1]);
+             }
             $biduser = UserModel::userFind(['id'=>$bid]);
             //添加查看记录
             $params = [
