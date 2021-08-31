@@ -334,6 +334,7 @@ class Member extends Controller
         $uid = DB::name('children')->where(['id'=>$id])->value('uid');
         $res1 = DB::name('userinfo')->where(['id'=>$uid])->update(['realname'=>$realname,'update_time'=>date('Y-m-d H:i::s')]);
         unset($params['realname']);
+        $params['update_time'] = date('Y-m-d H:i:s');
         $res2 = DB::name('children')->where(['id'=>$id])->update($params);
         if ($res1 && $res2){
             cache('shareposter-'.$uid,NULL);
@@ -711,6 +712,15 @@ class Member extends Controller
 
             }
         }
+        $rand=range(0,9);
+        shuffle($rand);
+        $randId = $rand[0].$rand[1].$rand[2];
+        $num = $randId.$info['uid'];
+        $text_array[18]['location'] ='10,27';
+        $text_array[18]['text'] = '#'.$num;
+        $text_array[18]['font_size'] = 36;
+        $text_array[18]['font_color'] = '#ffffff';
+
         $posterModel = new PosterModel();
         $local_path = $posterModel->creates($uid,$share_back_path,$images,$text_array);
         $upload = new Upload();

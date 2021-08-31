@@ -410,6 +410,7 @@ class Index extends Base
                 $newData[$k]['headimgurl'] = isset($headimgurl[$v['uid']])?$headimgurl[$v['uid']]:'https://pics.njzec.com/default.png';
                 $newData[$k]['sex'] = $v['sex']==1?'男':'女';
                 $newData[$k]['year'] = substr($v['year'], 2,2).'年';
+                $newData[$k]['shuxiang'] = getShuXiang($v['year']);
                 $newData[$k]['height'] = $v['height'].'cm';
                 $newData[$k]['education'] = UsersService::education($v['education']);
                 $newData[$k]['income'] = UsersService::income_new($v['income']);
