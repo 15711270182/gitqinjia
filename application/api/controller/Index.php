@@ -343,6 +343,128 @@ class Index extends Base
         return $this->successReturn($children,'成功',self::errcode_ok);
     }
     /**
+     * @Notes:相亲资料详情页  -  新版加入推荐数据
+     * @Interface childrenDetailsNew
+     * @return string
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function childrenDetailsNew()
+    {
+        $uid = $this->uid;
+        $bid = input("bid"); //要查看的用户id
+        if(empty($bid)){
+            return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
+        }
+        $children = ChildrenModel::childrenFind(['uid'=>$bid]);
+        if(empty($children)){
+            return $this->errorReturn(self::errcode_fail);
+        }
+        //添加查看记录
+        if($uid != $bid){
+            $info_save['uid'] = $uid;
+            $info_save['bid'] = $bid;
+            $info_save['create_time'] = date('Y-m-d H:i:s');
+            Db::name('view_info_record')->insertGetId($info_save);
+        }
+        $where_t['uid'] = $uid;
+        $where_t['bid'] = $bid;
+        $where_t['type'] = 2;
+        $where_t['is_read'] = 0;
+        $tInfo = TelModel::telFind($where_t);
+        if(!empty($tInfo)){
+            TelModel::telEdit(['uid'=>$uid,'bid'=>$bid],['is_read'=>1]);
+        }
+        //判断自己有没有完善资料  没有展示8位
+        $newData = [];
+        $find = ChildrenModel::childrenFind(['uid'=>$uid]);
+        if(empty($find)){
+            $start_year = $children['year'] - 2;
+            $end_year = $children['year'] + 3;
+            $where_j = "sex = {$children['sex']} and year between '{$start_year}' and '{$end_year}'";
+            if($children['education'] <= 3){
+                $where_j .= " and education >= 3";
+            }else{
+                $where_j .= " and education >= 4";
+            }
+            $field = "uid,sex,year,education,province,residence,height,income";
+            $arr1 = ChildrenModel::childrenSelectPage($where_j,$field,'year desc',0,15);
+            $count = count($arr1);
+            $more_count = 8;
+            $arr2 = [];
+            if($count < $more_count){
+                $last_count = $more_count - $count;
+                $s_year = $children['year'] - 4;
+                $e_year = $children['year'] + 3;
+                $where_jn = "sex = {$children['sex']} and year between '{$s_year}' and '{$e_year}'";
+                $arr2 = ChildrenModel::childrenSelectPage($where_jn,$field,'year desc',0,$last_count);
+            }
+            $newData = array_merge($arr1, $arr2);
+            shuffle($newData);
+            $uidData = array_column($newData,'uid');
+            $where_u['id'] = $uidData;
+            $realname = UserModel::getuserColumn($where_u,'id,realname');
+            $headimgurl = UserModel::getuserColumn($where_u,'id,headimgurl');
+            foreach($newData as $k=>$v){
+                $newData[$k]['realname'] = isset($realname[$v['uid']])?mb_substr($realname[$v['uid']], 0,1 ).'家长':'家长';
+                $newData[$k]['headimgurl'] = isset($headimgurl[$v['uid']])?$headimgurl[$v['uid']]:'https://pics.njzec.com/default.png';
+                $newData[$k]['sex'] = $v['sex']==1?'男':'女';
+                $newData[$k]['year'] = substr($v['year'], 2,2).'年';
+                $newData[$k]['height'] = $v['height'].'cm';
+                $newData[$k]['education'] = UsersService::education($v['education']);
+                $newData[$k]['income'] = UsersService::income_new($v['income']);
+                $province = str_replace(['省','市'],'',$v['province']);
+                $residence = str_replace(['省','市'],'',$v['residence']);
+                $newData[$k]['residence'] = $province.' '.$residence;
+                unset($newData[$k]['province']);
+            }
+        }
+        //子女信息
+        $userinfo = UserModel::userFind(['id'=>$bid]);
+        $children['realname'] = $userinfo['realname'];
+        $children['headimgurl'] = $userinfo['headimgurl'];
+        $children['sui'] = date('Y') - $children['year'];
+        $children['shuxiang'] = getShuXiang($children['year']);
+        $children['year'] = substr($children['year'],-2).'年';
+        $children['user_status'] = $userinfo['status'];
+        $children['education'] = UsersService::education($children['education']);
+        $children['expect_education'] = UsersService::expect_education($children['expect_education']);
+        $children['income'] = UsersService::income($children['income']);
+        $children['house'] = UsersService::house($children['house']);
+        $children['cart'] = UsersService::cart($children['cart']);
+        $children['parents_test'] = UsersService::parents($children['parents']);
+        $children['bro_test'] = UsersService::bro($children['bro']);
+        //审核团队信息
+        $team = TeamModel::teamFind(['id'=>$children['team_id']]);
+        $children['sh_id'] = $team['id']; //审核队员几号
+        $children['sh_headimg'] = $team['headimg']; //审核队员头像
+        $children['sh_name'] = $team['name']; //审核队员名字
+        $children['sh_time'] = rand(10,20); //审核队员时间
+        //看看对方我是否收藏 1否 2是
+        $is_collection = CollectionModel::collectionFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
+        $children['is_collection'] = 2;
+        if(empty($is_collection)){
+            $children['is_collection'] = 1;
+        }
+        if($uid == $bid){
+            $children['is_telcollection'] = 2;
+            $children['is_me'] = 2;
+            return $this->successReturn($children,'成功',self::errcode_ok);
+        }
+        //判断用户是否查看过手机号 1否 2是
+        $is_telcollection = TelModel::telFind(['uid'=>$uid,'bid'=>$bid,'is_del'=>'1']);
+        $children['is_telcollection'] = 2;
+        if(empty($is_telcollection)){
+            $children['phone'] = '家长电话';
+            $children['is_telcollection'] = 1;
+        }
+        $children['is_me'] = 1;//不是自己
+        $is_vip = UsersService::isVip($userinfo);
+        $children['is_vip'] = $is_vip;
+        $children['list'] = $newData;
+        return $this->successReturn($children,'成功',self::errcode_ok);
+    }
+    /**
      * @Notes:点击{查看手机号}前的大概信息
      * @Interface onclickTel
      * @return string

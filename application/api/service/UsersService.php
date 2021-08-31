@@ -175,6 +175,14 @@ class UsersService
         }
         return $income;
     }
+    public static function income_new($value){
+        $income = '';
+        $incomeArr = ['0' => '暂未填写', '1' => '5千以下', '2' => '5千-8千', '3' => '8千-1万2', '4' => '1万2-2万','5'=>'2万-3万','6'=>'3万以上'];
+        if($value){
+            $income = $incomeArr[$value];
+        }
+        return $income;
+    }
     public static function house($value){
         $house = '';
         $houseArr = ['0' => '暂未填写', '1' => '已购房', '2' => '父母同住', '3' => '租房'];

@@ -18,6 +18,7 @@ Route::group('api/index',function(){
 
 //    Route::any('childrenDetailsNologin', 'api/index/childrenDetailsNologin'); //获取资料详情页(未登录)
     Route::any('childrenDetails', 'api/index/childrenDetails'); //获取资料详情页
+    Route::any('childrenDetailsNew', 'api/index/childrenDetailsNew'); //获取资料详情页 - 新版
 
     Route::any('SeeTel', 'api/index/SeeTel'); //查看号码
     Route::any('SeeTelNew', 'api/index/SeeTelNew'); //查看号码
