@@ -395,8 +395,8 @@ class Index extends Base
             if($count < $more_count){
                 $last_count = $more_count - $count;
                 if($last_count > 0){
-                    $s_year = $children['year'] - 4;
-                    $e_year = $children['year'] + 3;
+                    $s_year = $children['year'] - 5;
+                    $e_year = $children['year'] + 5;
                     $where_jn = "sex = {$children['sex']} and year between '{$s_year}' and '{$e_year}'";
                     $arr2 = ChildrenModel::childrenSelectPage($where_jn,$field,'year desc',0,$last_count);
                 }
