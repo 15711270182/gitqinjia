@@ -4,33 +4,49 @@
          <div class="layui-form-item layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input data-date-range name="create_at" value="{$Think.get.create_at|default=''}" placeholder="请选择创建时间" class="layui-input">
+                <input data-date-range name="add_time" value="{$Think.get.add_time|default=''}" placeholder="请选择创建时间" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">用户id</label>
+            <label class="layui-form-label">出生年份</label>
             <div class="layui-input-inline">
-                <input name="id" value="{$Think.get.id|default=''}" placeholder="请输入用户id" class="layui-input">
+                <input data-date-range name="year" id="year" value="{$Think.get.year|default=''}" placeholder="请选择年份" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">用户昵称</label>
+            <label class="layui-form-label">内容</label>
             <div class="layui-input-inline">
-                <input name="nickname" value="{$Think.get.nickname|default=''}" placeholder="请输入用户昵称" class="layui-input">
+                <select name = "content" class="content">
+                    <option value="" selected>请选择</option>
+                    {if $content == 1}
+                    <option value="1" selected>用户id</option>
+                    {else/}
+                    <option value="1" >用户id</option>
+                    {/if}
+                    {if $content == 2}
+                    <option value="2" selected="">用户昵称</option>
+                    {else/}
+                    <option value="2">用户昵称</option>
+                    {/if}
+                    {if $content == 3}
+                    <option value="3" selected="">用户手机号</option>
+                    {else/}
+                    <option value="3">用户手机号</option>
+                    {/if}
+                    {if $content == 4}
+                    <option value="4" selected="">邀请人id</option>
+                    {else/}
+                    <option value="4">邀请人id</option>
+                    {/if}
+                </select>
+            </div>
+            <div class="layui-form-item layui-inline">
+                <div class="layui-input-inline">
+                    <input name="type_c" value="{$Think.get.type_c|default=''}" placeholder="输入下拉框内容" class="layui-input">
+                </div>
             </div>
         </div>
-         <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">邀请人uid</label>
-            <div class="layui-input-inline">
-                <input name="bid" value="{$Think.get.bid|default=''}" placeholder="请输入邀请人id" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">联系方式</label>
-            <div class="layui-input-inline">
-                <input name="phone" value="{$Think.get.phone|default=''}" placeholder="请输入电话" class="layui-input">
-            </div>
-        </div>
+
         <div class="layui-form-item layui-inline">
             <label class="layui-form-label">子女性别</label>
             <div class="layui-input-inline">
@@ -46,11 +62,83 @@
             </div>
         </div>
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">车产</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="cart">
+                    {foreach [''=>'-- 不限 --','1'=>'已购车','2'=>'近期购车','3'=>'无车'] as $k=>$v}
+                    {eq name='Think.get.cart' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">房产</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="house">
+                    {foreach [''=>'-- 不限 --','1'=>'已购房','2'=>'父母同住','3'=>'租房'] as $k=>$v}
+                    {eq name='Think.get.house' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">学历</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="education">
+                    {foreach [''=>'-- 不限 --','1'=>'中专及以下','2'=>'高中','3'=>'大专以上','4'=>'本科以上','5'=>'研究生以上','6'=>'博士'] as $k=>$v}
+                    {eq name='Think.get.education' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">居住地</label>
+            <!--<div class="color-blue" style="line-height:38px;">{$Think.get.province|default='--'} {$Think.get.residence|default=''}</div>-->
+            <!--<div class="layui-row">-->
+                <div class="layui-input-inline">
+                    <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
+
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="layui-select block full-width residence" lay-ignore name="residence" lay-filter="residence">
+
+                    </select>
+                </div>
+              <!--</div>-->
+        </div>
+        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">会员</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="is_vip">
                     {foreach [''=>'-- 不限 --','1'=>'是','0'=>'否'] as $k=>$v}
                     {eq name='Think.get.is_vip' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">电话审核</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="team_status">
+                    {foreach [''=>'-- 不限 --','2'=>'是','1'=>'否'] as $k=>$v}
+                    {eq name='Think.get.team_status' value='$k.""'}
                     <option selected value="{$k}">{$v}</option>
                     {else}
                     <option value="{$k}">{$v}</option>
@@ -82,7 +170,15 @@
                 <input name="age_max" value="{$age_max|default=''}" placeholder="年龄结束" class="layui-input">
             </div>
         </div>
-
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">身高</label>
+            <div class="layui-input-inline">
+                <input name="height_min" value="{$height_min|default=''}" placeholder="身高开始" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input name="height_max" value="{$height_max|default=''}" placeholder="身高结束" class="layui-input">
+            </div>
+        </div>
 
         <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
@@ -91,4 +187,33 @@
 
 </fieldset>
 
-<script>form.render()</script>
+<script>form.render()
+ //年选择器
+  laydate.render({
+    elem: '#year'
+    ,type: 'year'
+  });
+  require(['pcasunzips'], function () {
+    new PCAS("province", "residence", '{$Think.get.province|default=""}', '{$Think.get.residence|default=""}');
+    window.form.render();
+
+    var count = $(".province option").length;
+    for ( var i = 0; i < count; i++) {
+        if ($(".province").get(0).options[i].value == '{$Think.get.province|default=""}') {
+            $(".province").get(0).options[i].selected = true;
+            $(".province").change();
+            break;
+        }
+    }
+    window.form.render();
+    var count = $(".residence option").length;
+    for ( var i = 0; i < count; i++) {
+        console.log($(".residence").get(0).options[i].value);
+        console.log('{$Think.get.residence|default=""}');
+        if ($(".residence").get(0).options[i].value === '{$Think.get.residence|default=""}') {
+            $(".residence").get(0).options[i].selected = true;
+            break;
+        }
+    }
+});
+</script>

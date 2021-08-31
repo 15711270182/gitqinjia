@@ -3,11 +3,6 @@
 {block name="content"}
 <div class="think-box-shadow">
     {include file='member/info_list_search'}
-    <div>
-        {if !empty($ckCount)}<span style="color: red">浏览了{$ckCount}人</span>{else/}{/if}
-        {if !empty($bckCount)}<span style="color: red">被{$bckCount}人浏览</span>{else/}{/if}
-    </div>
-
     <table class="layui-table margin-top-10" lay-skin="line">
         {notempty name='list'}
         <thead>
@@ -30,7 +25,7 @@
         <tbody>
         {foreach $list as $key=>$v}
         <tr>
-            <td class='text-center  nowrap'>{$v['create_time']}</td>
+            <td class='text-center  nowrap'>{$v['create_at']}</td>
             <td class='text-center  nowrap'>{$v['uid']}</td>
             <td class='text-center  nowrap'>{$v['u_nickname']}</td>
             <td class='text-center  nowrap'>{if $v.u_sex == 1}男{elseif $v.u_sex == 2 /}女{else/}未知{/if}</td>

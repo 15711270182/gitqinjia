@@ -11,14 +11,22 @@
             <th class='text-center nowrap'>创建时间</th>
             <th class='text-center nowrap'>用户ID</th>
             <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>备注</th>
             <th class='text-center nowrap'>电话</th>
             <th class='text-center nowrap'>剩余次数</th>
-            <th class='text-center nowrap'>邀请人ID</th>
-            <th class='text-center nowrap'>邀请人</th>
-            <th class='text-center nowrap'>被查看数</th>
-            <th class='text-center nowrap'>查看数</th>
+            <th class='text-center nowrap'>邀请人(ID)</th>
+            <th class='text-center nowrap'>被访问记录</th>
+            <th class='text-center nowrap'>浏览记录</th>
+            <th class='text-center nowrap'>被查看号码数
+                <span class="layui-table-sort layui-inline">
+                    <i class="layui-edge layui-table-sort-asc" title="升序"  data-dbclick="" data-load="{$url}&search_tel=asc"></i>
+                    <i class="layui-edge layui-table-sort-desc" title="降序"  data-dbclick="" data-load="{$url}&search_tel=desc"></i>
+                </span>
+            </th>
+            <th class='text-center nowrap'>是否完善资料</th>
             <th class='text-center nowrap'>会员</th>
-            <th class='text-center nowrap'>禁用</th>
+            <th class='text-center nowrap'>权重分</th>
+            <!--<th class='text-center nowrap'>禁用</th>-->
             <th class='text-center nowrap'>注销</th>
             <th class='text-center nowrap'>操作</th>
         </tr>
@@ -43,21 +51,29 @@
 
                 </div>
             </td>
+            <td class='text-center nowrap'>{$vo.remarks_text}</td>
             <td class='text-center nowrap'>{$vo.phone|default=''}</td>
             <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
-            <td class='text-center nowrap'>{$vo.relation_id}</td>
-            <td class='text-center nowrap'>{$vo.relation_name}</td>
-            <td class='text-center nowrap' title="被查看数" style="cursor: pointer;color: #00a0e9;" data-title="被查看数" data-open='{:url("infoList")}?bid={$vo.id}'>{$vo.blook_count|default=0}</td>
-            <td class='text-center nowrap' title="查看数" style="cursor: pointer;color: #00a0e9;" data-title="查看数" data-open='{:url("infoList")}?uid={$vo.id}'>{$vo.look_count|default=0}</td>
+            <!--<td class='text-center nowrap'>{$vo.relation_id}</td>-->
+            <td class='text-center nowrap'>{if !empty($vo.relation_id)}{$vo.relation_name}({$vo.relation_id}){else/}{/if}</td>
+            <td class='text-center nowrap' title="被访问记录" style="cursor: pointer;color: #00a0e9;" data-title="被访问记录" data-open='{:url("infoList")}?bid={$vo.id}'>{$vo.blook_count|default=0}</td>
+            <td class='text-center nowrap' title="浏览记录" style="cursor: pointer;color: #00a0e9;" data-title="浏览记录" data-open='{:url("infoList")}?uid={$vo.id}'>{$vo.look_count|default=0}</td>
+            <td class='text-center nowrap' title="被查看号码数" style="cursor: pointer;color: #00a0e9;" data-title="被查看号码数" data-open='{:url("looktelList")}?bid={$vo.id}'>{$vo.look_tel}</td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.info_status eq 1"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
+            </td>
             <td class='text-center nowrap'>
                 {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
                 {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
             </td>
-            <td class='text-center nowrap'>
-                {if condition="$vo.is_ban eq 0"}<span class="color-gray" style="color:red">是</span>
-                {else /} <span class="color-gray">否</span>
-                {/if}
-            </td>
+            <td class='text-center nowrap'>{$vo.weight_score}</td>
+            <!--<td class='text-center nowrap'>-->
+                <!--{if condition="$vo.is_ban eq 0"}<span class="color-gray" style="color:red">是</span>-->
+                <!--{else /} <span class="color-gray">否</span>-->
+                <!--{/if}-->
+            <!--</td>-->
             <td class='text-center nowrap'>
                 {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
                 {else /} <span class="color-gray">否</span>

@@ -55,18 +55,65 @@ class Member extends Controller
     public function index()
     {
         $this->title = '用户管理';
-        $this->bid = input('bid');
+        $search_tel = input('search_tel');
+        if($search_tel == 'asc'){
+            $order = "look_tel asc";
+        }
+        if($search_tel == 'desc'){
+           $order = "look_tel desc";
+        }
+        if(empty($order)){
+            $order = 'u.id desc';
+        }
+        $content = input('content','');
+        $type_c = input('type_c','');
         $bid = input('bid');
         $age_min = input('age_min','');
         $age_max = input('age_max','');
+        $height_min = input('height_min','');
+        $height_max = input('height_max','');
+        $province = input('province','');
+        $residence = input('residence','');
+
+        $this->url = urldecode($_SERVER['REQUEST_URI']);
+        $this->url = str_replace("&search_tel=asc", '', $this->url);
+        $this->url = str_replace("&search_tel=desc", '', $this->url);
+        $this->content    = $content;
+        $this->type_c     = $type_c;
+        $this->bid = input('bid');
         $this->age_min    = $age_min;
         $this->age_max    = $age_max;
-        $where = "u.headimgurl <> ''";
+        $this->height_min    = $height_min;
+        $this->height_max    = $height_max;
+        $where = "u.unionid <> ''";
+        if($type_c){
+            switch ($content) { //内容筛选
+                case '1':$where .= " and u.id = {$type_c}";break;
+                case '2':$where .= " and u.nickname like '%{$type_c}%'";break;
+                case '3':$where .= " and c.phone = {$type_c}";break;
+                case '4':
+                    $uid = DB::name('relation')->where(['bid'=>$type_c])->column('uid');
+                    if(!empty($uid)){
+                        $uid = implode(',',$uid);
+                        $where .=" and u.id in ({$uid})";
+                    }else{
+                        $where .=" and u.id  = ''";
+                    }
+                    break;
+                default:break;
+            }
+        }
+        //现居地筛选
+        if(!empty($province) && !empty($residence)){
+            if($residence != '请选择'){
+                $residence =  str_replace(['市'],'',$residence);
+                $where .= " and residence like '%{$residence}%'";
+            }
+        }
         if(!empty($bid)){
             $uid = DB::name('relation')->where(['bid'=>$bid])->column('uid');
             if(!empty($uid)){
                 $uid = implode(',',$uid);
-                //var_dump($uid);die;
                 $where .=" and u.id in ({$uid})";
             }else{
                 $where .=" and u.id  = ''";
@@ -91,15 +138,33 @@ class Member extends Controller
                 $where .= " and c.year = '{$year}'";
             }
         }
-        $field = "u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.count,u.status,c.id as cid,c.phone,c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status";
+        if(!empty($height_min) || !empty($height_max)) {
+            if (!empty($height_min) && !empty($height_max)) {
+                if($height_min == $height_max){
+                    $this->error('身高区间重复');
+                }
+                if($height_min > $height_max){
+                    $this->error('身高最小值不能大于最大值');
+                }
+                $where .= " and c.height between '{$height_min}' and '{$height_max}'";
+            }elseif(!empty($height_min)){
+                $where .= " and c.height = '{$height_min}'";
+            }else{
+                $where .= " and c.height = '{$height_max}'";
+            }
+        }
+
+        $field = "u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
+        c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status,c.weight_score,c.remarks_text,(select count(*) from tel_collection t where t.bid = c.uid and t.status=1) as look_tel";
+        $equal = 'u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house';
         $this->_query($this->table)
                 ->alias('u')
                 ->field($field)
                 ->join('children c', 'u.id = c.uid')
-                ->equal('u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status')
-                ->timeBetween('c.create_at#create_at')
+                ->equal($equal)
+                ->timeBetween('u.add_time#add_time')
                 ->where($where)
-                ->order('u.id desc')->page();
+                ->order($order)->page();
 //        var_dump(DB::name('userinfo')->getLastSql());die;
     }
     /**
@@ -127,10 +192,19 @@ class Member extends Controller
             $relation_user_info = DB::name($this->table)->where('id', $relation_info['bid'])->find();
             $vo['relation_name'] = emojiDecode($relation_user_info['nickname']);
 
-            //被查看数
+            //被访问数
             $vo['blook_count'] = DB::name('view_info_record')->where(['bid'=>$vo['id']])->group('uid')->count();
-            //查看数
+            //浏览记录
             $vo['look_count'] = DB::name('view_info_record')->where(['uid'=>$vo['id']])->group('bid')->count();
+
+            //被查看号码数   倒叙排
+//            $vo['look_tel'] = DB::name('tel_collection')->where(['bid'=>$vo['id'],'status'=>1])->count();
+            //是否完善资料   择偶三项填完
+            $vo['info_status'] = 0; //未完善
+            if(!empty($vo['expect_education']) && !empty($vo['min_age']) && !empty($vo['min_height'])){
+                $vo['info_status'] = 1; //已完善
+            }
+
         }
     }
 
@@ -157,6 +231,7 @@ class Member extends Controller
     {
         $id = input("id", '', 'htmlspecialchars_decode');
         $map = ['uid' => $id];
+        $realname = Db::name('userinfo')->where(['id'=>$id])->value('realname');
         $Children = Db::name('Children')->where($map)->find();
         if ($Children['sex'] == 1){
             $Children['sex_name'] = '男';
@@ -218,6 +293,7 @@ class Member extends Controller
             '2' => '近期购车',
             '3' => '无车'
         );
+        $this->realname = $realname;
         $this->sex_list = $sex_list;
         $this->children = $Children;
         $this->car_list = $car_list;
@@ -254,9 +330,12 @@ class Member extends Controller
         if($params['min_age'] == 0 && $params['max_age'] > 0){
             $params['min_age'] = '999';
         }
-        $res = DB::name('children')->where(['id'=>$id])->update($params);
-        if ($res){
-            $uid = DB::name('children')->where(['id'=>$id])->value('uid');
+        $realname = $params['realname'];
+        $uid = DB::name('children')->where(['id'=>$id])->value('uid');
+        $res1 = DB::name('userinfo')->where(['id'=>$uid])->update(['realname'=>$realname,'update_time'=>date('Y-m-d H:i::s')]);
+        unset($params['realname']);
+        $res2 = DB::name('children')->where(['id'=>$id])->update($params);
+        if ($res1 && $res2){
             cache('shareposter-'.$uid,NULL);
             cache('getposter-'.$uid,NULL);
             $this->success('保存成功!');
@@ -651,13 +730,25 @@ class Member extends Controller
     }
 
     /**
-     * @Notes: 查看记录列表
+     * @Notes: 浏览记录列表
      * @Interface infoList
      * @author: zy
      * @Time: 2021/08/23
      */
     public function infoList(){
         $this->title = '查看列表';
+        $uid = input('uid');
+        $bid = input('bid');
+        $ckCount = 0;
+        $bckCount = 0;
+        if($uid){
+            $ckCount = DB::name("view_info_record")->where(['uid'=>$uid])->group('bid')->count();
+        }
+        if($bid){
+            $bckCount = DB::name("view_info_record")->where(['bid'=>$bid])->group('uid')->count();
+        }
+        $this->ckCount = $ckCount;
+        $this->bckCount = $bckCount;
         $query = $this->_query($this->table3);
         $query->equal("uid,bid")->dateBetween('create_time')->order('create_time desc')->page();
     }
@@ -680,6 +771,36 @@ class Member extends Controller
             $vo['t_age'] = getage($tinfo['year']);
             $vo['t_weight_score'] = $tinfo['weight_score'];
 
+        }
+    }
+    /**
+     * @Notes: 被查看记录列表
+     * @Interface infoList
+     * @author: zy
+     * @Time: 2021/08/23
+     */
+    public function looktelList(){
+        $this->title = '被查看记录列表';
+        $query = $this->_query('tel_collection');
+        $query->equal("uid,bid")->timeBetween('create_at')->where(['status'=>1])->order('create_at desc')->page();
+    }
+    protected function _looktelList_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $vo['create_at'] = date('Y-m-d H:i:s',$vo['create_at']);
+            $field = 'sex,year,weight_score,province';
+            $uinfo = DB::name("children")->field($field)->where(['uid'=>$vo['uid']])->find();
+            $tinfo = DB::name("children")->field($field)->where(['uid'=>$vo['bid']])->find();
+            $u_nickname = DB::name("userinfo")->where(['id'=>$vo['uid']])->value('nickname');
+            $t_nickname = DB::name("userinfo")->where(['id'=>$vo['bid']])->value('nickname');
+            //查看方
+            $vo['u_nickname'] = emoji_decode($u_nickname);
+            $vo['u_sex'] = $uinfo['sex'];
+            $vo['u_age'] = getage($uinfo['year']);
+            //被查看方
+            $vo['t_nickname'] = emoji_decode($t_nickname);
+            $vo['t_sex'] = $tinfo['sex'];
+            $vo['t_age'] = getage($tinfo['year']);
         }
     }
 }

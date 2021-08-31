@@ -5,6 +5,10 @@
         </fieldset>
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs3 relative">
+                <span class="color-green">真实姓名:</span>
+                <input name="realname" class="layui-input" placeholder="请输入真实姓名" value="{$realname|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
                 <span class="color-green">性别:</span>
                 <select class="layui-select" required name="sex" lay-search>
                     {foreach $sex_list as $key => $sex}
@@ -16,11 +20,11 @@
                     {/foreach}
                 </select>
             </label>
-            <label class="layui-col-xs4 relative">
+            <label class="layui-col-xs3 relative">
                 <span class="color-green">身高(cm):</span>
                 <input name="height" required class="layui-input" placeholder="请输入身高" value="{$children.height|default=''}">
             </label>
-            <label class="layui-col-xs4 relative">
+            <label class="layui-col-xs3 relative">
                 <span class="color-green">出生年份:</span>
                 <input name="year" required class="layui-input" placeholder="请输入身高" value="{$children.year|default=''}">
             </label>
