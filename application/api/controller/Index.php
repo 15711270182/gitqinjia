@@ -388,16 +388,18 @@ class Index extends Base
                 $where_j .= " and education >= 4";
             }
             $field = "uid,sex,year,education,province,residence,height,income";
-            $arr1 = ChildrenModel::childrenSelectPage($where_j,$field,'year desc',0,15);
+            $arr1 = ChildrenModel::childrenSelectPage($where_j,$field,'year desc',0,8);
             $count = count($arr1);
             $more_count = 8;
             $arr2 = [];
             if($count < $more_count){
                 $last_count = $more_count - $count;
-                $s_year = $children['year'] - 4;
-                $e_year = $children['year'] + 3;
-                $where_jn = "sex = {$children['sex']} and year between '{$s_year}' and '{$e_year}'";
-                $arr2 = ChildrenModel::childrenSelectPage($where_jn,$field,'year desc',0,$last_count);
+                if($last_count > 0){
+                    $s_year = $children['year'] - 4;
+                    $e_year = $children['year'] + 3;
+                    $where_jn = "sex = {$children['sex']} and year between '{$s_year}' and '{$e_year}'";
+                    $arr2 = ChildrenModel::childrenSelectPage($where_jn,$field,'year desc',0,$last_count);
+                }
             }
             $newData = array_merge($arr1, $arr2);
             shuffle($newData);
