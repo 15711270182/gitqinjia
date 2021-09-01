@@ -27,6 +27,7 @@ class Datacount extends Controller
         $today['user_count'] = count($this->getNewUserList($start, $end));
         $today['children_count'] = count($this->getChildrenList($start, $end));
         $today['tel_count'] = count($this->getTelList($start, $end));
+        $today['info_count'] = count($this->getInfoList($start, $end)); // 完善资料数
 
         // 根据日期范围,统计数据
         $date = input('date');
@@ -47,6 +48,7 @@ class Datacount extends Controller
             $search_list[$key]['children_count'] = count($this->getChildrenList($start, $end));
             $search_list[$key]['tel_count'] = count($this->getTelList($start, $end));
             $search_list[$key]['tj_count'] = count($this->getTjList($start, $end));
+            $search_list[$key]['info_count'] = count($this->getInfoList($start, $end));
 
         }
         cache('statistical_data', $search_list);
@@ -103,6 +105,19 @@ class Datacount extends Controller
     {
         return Db::table('children')->where('create_at','between',[$start, $end])->order('create_at desc')->select();
     }
+    /**
+     * 根据时间范围获取完善资料数
+     * @param $start
+     * @param $end
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getChildrenPerList($start, $end)
+    {
+        return Db::table('children')->where('create_at','between',[$start, $end])->order('create_at desc')->select();
+    }
 
     /**
      * 根据时间范围获取查看号码数
@@ -115,7 +130,27 @@ class Datacount extends Controller
      */
     public function getTelList($start, $end)
     {
-        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1])->order('create_at desc')->select();
+//        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1])->order('create_at desc')->select();
+
+        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
+            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
+//        var_dump(DB::name("tel_collection")->getLastSql());die;
+    }
+
+    /**
+     * 根据时间范围获取完善资料数
+     * @param $start
+     * @param $end
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getInfoList($start, $end)
+    {
+        $start = date('Y-m-d H:i:s',$start);
+        $end = date('Y-m-d H:i:s',$end);
+        return Db::table('children')->where('info_check_time', 'between',[$start, $end])->order('create_at desc')->select();
     }
     /**
      * 根据时间范围获取拉取推荐人数
@@ -178,6 +213,32 @@ class Datacount extends Controller
             $end = strtotime(date('Ymd').'235959');
         }
         $list = $this->getChildrenList($start, $end);
+        foreach ($list as $key => $value){
+            $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
+            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);
+        }
+        $this->assign('list', $list);
+        return $this->fetch();
+    }
+
+    /**
+     * 完善资料列表
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function infoChildren()
+    {
+        $date = input('date');
+        if ($date){
+            $start = strtotime($date .'000000');
+            $end = strtotime($date.'235959');
+        }else{
+            $start = strtotime(date('Ymd').'000000');
+            $end = strtotime(date('Ymd').'235959');
+        }
+        $list = $this->getInfoList($start, $end);
         foreach ($list as $key => $value){
             $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
             $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);

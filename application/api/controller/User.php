@@ -310,8 +310,16 @@ class User extends Base
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
         ScoreService::instance()->editScoreInc($uid,$field,$value);
+
         $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
         if($res){
+            //填写完择偶标准  完善资料时间
+            if($field == 'ask_age' || $field == 'ask_height' || $field == 'expect_education'){
+                $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
+                if(empty($cInfo['info_check_time']) && $cInfo['expect_education'] && $cInfo['min_age'] && $cInfo['min_height']){
+                    ChildrenModel::childrenEdit(['uid'=>$uid],['info_check_time'=>date('Y-m-d H:i:s')]);
+                }
+            }
             cache('shareposter-'.$uid,NULL);
             cache('getposter-'.$uid,NULL);
             return $this->successReturn('','修改成功',self::errcode_ok);
