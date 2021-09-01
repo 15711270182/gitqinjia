@@ -150,7 +150,7 @@ class Datacount extends Controller
     {
         $start = date('Y-m-d H:i:s',$start);
         $end = date('Y-m-d H:i:s',$end);
-        return Db::table('children')->where('info_check_time', 'between',[$start, $end])->order('create_at desc')->select();
+        return Db::table('children')->where('info_check_time', 'between',[$start, $end])->order('info_check_time desc')->select();
     }
     /**
      * 根据时间范围获取拉取推荐人数
@@ -241,7 +241,7 @@ class Datacount extends Controller
         $list = $this->getInfoList($start, $end);
         foreach ($list as $key => $value){
             $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
-            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['info_check_time']);
+            $list[$key]['create_at'] = $value['info_check_time'];
         }
         $this->assign('list', $list);
         return $this->fetch();
