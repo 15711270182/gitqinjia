@@ -241,7 +241,7 @@ class Datacount extends Controller
         $list = $this->getInfoList($start, $end);
         foreach ($list as $key => $value){
             $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
-            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);
+            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['info_check_time']);
         }
         $this->assign('list', $list);
         return $this->fetch();
