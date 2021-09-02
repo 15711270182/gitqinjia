@@ -8,15 +8,26 @@
 namespace app\admin\controller;
 
 
-use think\Controller;
+use library\Controller;
 use think\Db;
 
 class Datacount extends Controller
 {
+
     /**
+     * 指定当前数据表
+     * @var string
+     */
+    public $table = 'statistical_report';
+    /**
+     * 推荐列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function index()
     {
@@ -167,7 +178,19 @@ class Datacount extends Controller
         $end = date('Ymd',$end);
         return Db::table('recommend_record')->where('date', 'between',[$start, $end])->group('uid')->order('date desc')->select();
     }
-
+    /**
+     * 根据时间范围获取被推荐人数
+     * @param $start
+     * @param $end
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getBTjList($date,$field)
+    {
+        return $this->_query('recommend_record')->field($field)->where(['date'=>$date])->group('recommendid')->page();
+    }
     /**
      * 新增用户列表
      * @return array
@@ -283,6 +306,35 @@ class Datacount extends Controller
         return $this->fetch();
     }
 
+    /**
+     * 查看推荐列表
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function lookTj()
+    {
+        $date = input('date');
+        $date = date('Ymd',strtotime($date));
+        $this->getBTjList($date,'date,recommendid,count(*) as tj_count');
+    }
+    protected function _lookTj_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $looked_condition = array();
+            $looked_condition['id'] = $vo['recommendid'];
+            $looked_info = $this->getUserInfo($looked_condition);
+            $vo['nickname'] = emojiDecode($looked_info['nickname']);
+            $vo['headimgurl'] = $looked_info['headimgurl'];
+            $cinfo = DB::name('children')->where(['uid'=>$vo['recommendid']])->field('sex,year,province,residence,weight_score')->find();
+            $vo['sex'] = $cinfo['sex']==1?'男':'女';
+            $vo['age'] = (int)date('Y') - (int)$cinfo['year'];
+            $vo['address'] = $cinfo['province']. '-' .$cinfo['residence'];
+            $vo['weight_score'] = $cinfo['weight_score'];
+            $vo['create_at'] = $vo['date'];
+        }
+    }
     /**
      * @param array $condition 查询条件
      * @return array|\PDOStatement|string|\think\Model|null

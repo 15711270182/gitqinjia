@@ -17,6 +17,7 @@ namespace app\admin\controller;
 
 use library\Controller;
 use library\tools\Data;
+use app\admin\controller\Datacount;
 use think\Db;
 
 /**
@@ -32,7 +33,7 @@ class Recommend extends Controller
      * @var string
      */
     public $table = 'recommend_record';
-
+    public $table2 = 'statistical_report';
     /**
      * 推荐列表
      * @auth true
@@ -82,5 +83,56 @@ class Recommend extends Controller
             $vo['t_weight_score'] = $tinfo['weight_score'];
 
         }
+    }
+
+    /**
+     * @Notes: 推荐日报列表
+     * @auth true
+     * @menu true
+     * @throws \think\Ex
+     * @Interface tjReport
+     * @author: zy
+     * @Time: 2021/09/01
+     */
+    public function tjReport(){
+        //报表
+        $rq = date('Y-m-d');
+        $this->rq = $rq;
+        //查询数据
+        $date = input('date');
+        //如果时间大于当天
+        if(strtotime($date) > strtotime(date('Y-m-d'))){
+            $this->error('请选择有效时间');
+        }
+        //今日被推荐人数   今日查看号码人数
+        $today_date = date('Y-m-d');
+        if($date){
+            if($today_date >= $date){
+                $start = strtotime($date.'000000');
+                $end = strtotime($date.'235959');
+                $find = DB::table('statistical_report')->where(['date'=>$date])->find();
+                if(empty($find)){ //没有数据 添加数据
+                    $rdate = date('Ymd',strtotime($date));
+                    $rcount = Db::table('recommend_record')->where(['date'=>$rdate])->group('recommendid')->count();
+                    $tcount = $this->getTelList($start,$end);
+                    $data = [
+                        'rcount'=>$rcount,
+                        'tcount'=>count($tcount),
+                        'date'=>$date,
+                        'create_time'=>date('Y-m-d H:i:s')
+                    ];
+                    DB::table('statistical_report')->insertGetId($data);
+                    $this->_query($this->table2)->where(['date'=>$date])->page();
+                }
+            }
+        }
+        $this->_query($this->table2)->equal('date')->order('date desc')->page();
+    }
+
+    public function getTelList($start, $end)
+    {
+//        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1])->order('create_at desc')->select();
+        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
+            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
     }
 }

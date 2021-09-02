@@ -1,0 +1,30 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='recommend/report_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>日期</th>
+            <th class='text-center nowrap'>推荐的人数</th>
+            <th class='text-center nowrap'>查看的人数</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.date}</td>
+            <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookTj")}?date={$vo.date}'>{$vo.rcount}</td>
+            <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookTel")}?date={$vo.date}'>{$vo.tcount}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}
