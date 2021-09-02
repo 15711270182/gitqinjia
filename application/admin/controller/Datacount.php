@@ -19,6 +19,7 @@ class Datacount extends Controller
      * @var string
      */
     public $table = 'statistical_report';
+    public $table2 = 'tel_collection';
     /**
      * 推荐列表
      * @auth true
@@ -141,7 +142,7 @@ class Datacount extends Controller
      */
     public function getTelList($start, $end)
     {
-        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1,'type'=>1])->order('create_at desc')->select();
+        return DB::name('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1,'type'=>1])->order('create_at desc')->select();
 
 //        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
 //            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
@@ -208,16 +209,16 @@ class Datacount extends Controller
             $start = strtotime(date('Ymd').'000000');
             $end = strtotime(date('Ymd').'235959');
         }
-        $list = $this->getNewUserList($start, $end);
-        foreach ($list as $key => $value){
-            $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
-            $list[$key]['nickname'] = emojiDecode($value['nickname']);
-            $list[$key]['add_time'] = date('Y-m-d H:i:m', $value['add_time']);
-        }
-        $this->assign('list', $list);
-        return $this->fetch();
+        $this->_query('userinfo')->where('add_time','between',[$start, $end])->order('add_time desc')->page();
     }
-
+    protected function _newUser_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $vo['sex'] = $vo['sex'] == 1 ? '男':'女';
+            $vo['nickname'] = emojiDecode($vo['nickname']);
+            $vo['add_time'] = date('Y-m-d H:i:m', $vo['add_time']);
+        }
+    }
     /**
      * 填写资料列表
      * @return array
@@ -235,15 +236,14 @@ class Datacount extends Controller
             $start = strtotime(date('Ymd').'000000');
             $end = strtotime(date('Ymd').'235959');
         }
-        $list = $this->getChildrenList($start, $end);
-        foreach ($list as $key => $value){
-            $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
-            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);
-        }
-        $this->assign('list', $list);
-        return $this->fetch();
+        $this->_query('children')->where('create_at','between',[$start, $end])->order('create_at desc')->page();
     }
-
+    protected function _newChildren_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $vo['create_at'] = date('Y-m-d H:i:m', $vo['create_at']);
+        }
+    }
     /**
      * 完善资料列表
      * @return array
@@ -261,13 +261,9 @@ class Datacount extends Controller
             $start = strtotime(date('Ymd').'000000');
             $end = strtotime(date('Ymd').'235959');
         }
-        $list = $this->getInfoList($start, $end);
-        foreach ($list as $key => $value){
-            $list[$key]['sex'] = $value['sex'] == 1 ? '男':'女';
-            $list[$key]['create_at'] = $value['info_check_time'];
-        }
-        $this->assign('list', $list);
-        return $this->fetch();
+        $start = date('Y-m-d H:i:s',$start);
+        $end = date('Y-m-d H:i:s',$end);
+        $this->_query('children')->where('info_check_time', 'between',[$start, $end])->order('info_check_time desc')->page();
     }
 
     /**
@@ -287,30 +283,30 @@ class Datacount extends Controller
             $start = strtotime(date('Ymd').'000000');
             $end = strtotime(date('Ymd').'235959');
         }
-
-        $list = $this->getTelList($start, $end);
-        foreach ($list as $key => $value){
+        $this->_query($this->table2)->where('create_at', 'between',[$start, $end])->where(['status'=>1,'type'=>1])->order('create_at desc')->page();
+    }
+    protected function _lookTel_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
             // 用户信息
             $user_condition = array();
-            $user_condition['id'] = $value['uid'];
+            $user_condition['id'] = $vo['uid'];
             $user_info = $this->getUserInfo($user_condition);
             // 被查看者信息
             $looked_condition = array();
-            $looked_condition['id'] = $value['bid'];
+            $looked_condition['id'] = $vo['bid'];
             $looked_info = $this->getUserInfo($looked_condition);
-            $list[$key]['name'] = emojiDecode($user_info['nickname']);
-            $list[$key]['look_name'] = emojiDecode($looked_info['nickname']);
-            $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);
+            $vo['name'] = emojiDecode($user_info['nickname']);
+            $vo['look_name'] = emojiDecode($looked_info['nickname']);
+            $vo['create_at'] = date('Y-m-d H:i:m', $vo['create_at']);
 
             //被查看者是否查看
-            $list[$key]['status'] = 0; //对方未查看
-            $status = DB::name('tel_collection')->where(['uid'=>$value['bid'],'bid'=>$value['uid'],'type'=>2,'is_read'=>1])->count();
+            $vo['status'] = 0; //对方未查看
+            $status = DB::name('tel_collection')->where(['uid'=>$vo['bid'],'bid'=>$vo['uid'],'type'=>2,'is_read'=>1])->count();
             if(!empty($status)){
-                 $list[$key]['status'] = 1;
+                 $vo['status'] = 1;
             }
         }
-        $this->assign('list', $list);
-        return $this->fetch();
     }
 
     /**

@@ -1,6 +1,5 @@
 <div class="think-box-shadow">
     <table class="layui-table margin-top-10" lay-skin="line">
-        <?php if(count($list)){?>
         {notempty name='list'}
         <thead>
         <tr>
@@ -21,16 +20,14 @@
             <td class='text-center nowrap'>{$key + 1}</td>
             <td class='text-center nowrap'>{$vo.id}</td>
             <td class='text-center nowrap'>{$vo.uid}</td>
-            <td class='text-center nowrap'>{$vo.sex}</td>
+            <td class='text-center nowrap'>{if $vo.sex == 1}男{elseif $vo.sex == 2 /}女{else/}未知{/if}</td>
             <td class='text-center nowrap'>{$vo.phone}</td>
             <td class='text-center nowrap'>{$vo.year}</td>
             <td class='text-center nowrap'>{$vo.residence}</td>
-            <td class='text-center nowrap'>{$vo.create_at}</td>
+            <td class='text-center nowrap'>{$vo.info_check_time}</td>
         </tr>
         {/foreach}
-        <?php }else{;?>
-        <div class="margin-bottom-15"><h2>暂无记录</h2></div>
-        <?php };?>
         </tbody>
     </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
 </div>

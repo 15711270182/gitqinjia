@@ -38,28 +38,28 @@
     <div class="margin-bottom-15"><h2>今日统计</h2></div>
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm6 layui-col-md3">
-            <div class="store-total-item nowrap" data-modal='{:url("newUser")}' style="background:linear-gradient(-125deg,#57bdbf,#2f9de2)">
+            <div class="store-total-item nowrap" data-open='{:url("newUser")}' style="background:linear-gradient(-125deg,#57bdbf,#2f9de2)">
                 <div>新增用户数</div>
                 <div>{$today.user_count|default = 0}</div>
             </div>
             <i class="store-total-icon layui-icon layui-icon-user"></i>
         </div>
         <div class="layui-col-sm6 layui-col-md3">
-            <div class="store-total-item nowrap" data-modal='{:url("newChildren")}' style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+            <div class="store-total-item nowrap" data-open='{:url("newChildren")}' style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
                 <div>填写资料数</div>
                 <div>{$today.children_count|default = 0}</div>
             </div>
             <i class="store-total-icon layui-icon layui-icon-user"></i>
         </div>
         <div class="layui-col-sm6 layui-col-md3">
-            <div class="store-total-item nowrap" data-modal='{:url("infoChildren")}' style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+            <div class="store-total-item nowrap" data-open='{:url("infoChildren")}' style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
                 <div>完善资料数</div>
                 <div>{$today.info_count|default = 0}</div>
             </div>
             <i class="store-total-icon layui-icon layui-icon-user"></i>
         </div>
         <div class="layui-col-sm6 layui-col-md3">
-            <div class="store-total-item nowrap" data-modal='{:url("lookTel")}' style="background:linear-gradient(-125deg,#c543d8,#925cc3)">
+            <div class="store-total-item nowrap" data-open='{:url("lookTel")}' style="background:linear-gradient(-125deg,#c543d8,#925cc3)">
                 <div>查看号码数</div>
                 <div>{$today.tel_count|default = 0}</div>
             </div>
@@ -88,10 +88,10 @@
         <tr>
             <td class='text-center nowrap'>{$key + 1}</td>
             <td class='text-center nowrap'>{$vo.date_name}</td>
-            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增用户列表" data-modal='{:url("newUser")}?date={$vo.date}'>{$vo.user_count}</td>
-            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="填写资料列表" data-modal='{:url("newChildren")}?date={$vo.date}'>{$vo.children_count}</td>
-            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增完善用户列表" data-modal='{:url("infoChildren")}?date={$vo.date}'>{$vo.info_count}</td>
-            <td class='text-center nowrap' title="查看列表" style="cursor: pointer;color: #00a0e9" data-title="查看号码记录" data-modal='{:url("lookTel")}?date={$vo.date}'>{$vo.tel_count}</td>
+            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增用户列表" data-open='{:url("newUser")}?date={$vo.date}'>{$vo.user_count}</td>
+            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="填写资料列表" data-open='{:url("newChildren")}?date={$vo.date}'>{$vo.children_count}</td>
+            <td class='text-center nowrap' title="查看详情" style="cursor: pointer;color: #00a0e9" data-title="新增完善用户列表" data-open='{:url("infoChildren")}?date={$vo.date}'>{$vo.info_count}</td>
+            <td class='text-center nowrap' title="查看列表" style="cursor: pointer;color: #00a0e9"  data-title="查看号码记录" data-open='{:url("lookTel")}?date={$vo.date}'>{$vo.tel_count}</td>
             <td class='text-center nowrap'>{$vo.tj_count}</td>
         </tr>
         {/foreach}
