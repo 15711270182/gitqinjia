@@ -9,6 +9,7 @@
             <th class='text-center nowrap'>昵称</th>
             <th class='text-center nowrap'>被查看用户ID</th>
             <th class='text-center nowrap'>被查看用户昵称</th>
+            <th class='text-center nowrap'>对方是否查看</th>
             <th class='text-center nowrap'>查看时间</th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@
             <td class='text-center nowrap'>{$vo.name}</td>
             <td class='text-center nowrap'>{$vo.bid}</td>
             <td class='text-center nowrap'>{$vo.look_name}</td>
+            <td class='text-center nowrap'>{if !empty($vo.status)}<span style="color:red">是</span>{else/}否{/if}</td>
             <td class='text-center nowrap'>{$vo.create_at}</td>
         </tr>
         {/foreach}

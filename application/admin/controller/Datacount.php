@@ -141,10 +141,10 @@ class Datacount extends Controller
      */
     public function getTelList($start, $end)
     {
-//        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1])->order('create_at desc')->select();
+        return Db::table('tel_collection')->where('create_at', 'between',[$start, $end])->where(['status'=>1,'type'=>1])->order('create_at desc')->select();
 
-        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
-            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
+//        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
+//            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
 //        var_dump(DB::name("tel_collection")->getLastSql());die;
     }
 
@@ -301,6 +301,13 @@ class Datacount extends Controller
             $list[$key]['name'] = emojiDecode($user_info['nickname']);
             $list[$key]['look_name'] = emojiDecode($looked_info['nickname']);
             $list[$key]['create_at'] = date('Y-m-d H:i:m', $value['create_at']);
+
+            //被查看者是否查看
+            $list[$key]['status'] = 0; //对方未查看
+            $status = DB::name('tel_collection')->where(['uid'=>$value['bid'],'bid'=>$value['uid'],'type'=>2,'is_read'=>1])->count();
+            if(!empty($status)){
+                 $list[$key]['status'] = 1;
+            }
         }
         $this->assign('list', $list);
         return $this->fetch();
