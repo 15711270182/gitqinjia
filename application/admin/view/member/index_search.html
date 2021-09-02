@@ -1,19 +1,15 @@
 <fieldset>
     <legend>条件搜索</legend>
     <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
-         <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">创建时间</label>
-            <div class="layui-input-inline">
-                <input data-date-range name="add_time" value="{$Think.get.add_time|default=''}" placeholder="请选择创建时间" class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间:</label>
+            <div class="layui-input-inline margin-right-0" style="width:200px">
+                 <input data-date-range name="add_time" value="{$Think.get.add_time|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
             <label class="layui-form-label">出生年份</label>
             <div class="layui-input-inline">
                 <input data-date-range name="year" id="year" value="{$Think.get.year|default=''}" placeholder="请选择年份" class="layui-input">
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">内容</label>
             <div class="layui-input-inline">
                 <select name = "content" class="content">
@@ -40,14 +36,9 @@
                     {/if}
                 </select>
             </div>
-            <div class="layui-form-item layui-inline">
-                <div class="layui-input-inline">
-                    <input name="type_c" value="{$Think.get.type_c|default=''}" placeholder="输入下拉框内容" class="layui-input">
-                </div>
+            <div class="layui-input-inline">
+                <input name="type_c" value="{$Think.get.type_c|default=''}" placeholder="输入下拉框内容" class="layui-input">
             </div>
-        </div>
-
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">子女性别</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="sex">
@@ -60,8 +51,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">学历</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="education">
@@ -74,8 +63,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">车产</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="cart">
@@ -89,7 +76,8 @@
                 </select>
             </div>
         </div>
-        <div class="layui-form-item layui-inline">
+
+         <div class="layui-form-item layui-inline">
             <label class="layui-form-label">房产</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="house">
@@ -102,21 +90,31 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
+
             <label class="layui-form-label">居住地</label>
-                <div class="layui-input-inline">
-                    <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
+            <div class="layui-input-inline">
+                <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
 
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select class="layui-select block full-width residence" lay-ignore name="residence" lay-filter="residence">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select class="layui-select block full-width residence" lay-ignore name="residence" lay-filter="residence">
 
-                    </select>
-                </div>
-        </div>
-        <div class="layui-form-item layui-inline">
+                </select>
+            </div>
+            <label class="layui-form-label">家乡</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="hometown" lay-filter ="hometown" id="hometown" lay-search>
+                        <option value="">请选择</option>
+                       {foreach $provinces as $k=>$v}
+                        {if isset($hometown) and $hometown eq $v}
+                        <option selected value="{$v}">{$v}</option>
+                        {else}
+                        <option value="{$v}">{$v}</option>
+                        {/if}
+                        {/foreach}
+                 </select>
+            </div>
             <label class="layui-form-label">电话审核</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="team_status">
@@ -129,8 +127,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">会员</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="is_vip">
@@ -143,8 +139,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">注销</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="status">
@@ -157,17 +151,17 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">年龄</label>
+
+         </div>
+         <div class="layui-form-item layui-inline">
+             <label class="layui-form-label">年龄</label>
             <div class="layui-input-inline">
                 <input name="age_min" value="{$age_min|default=''}" placeholder="年龄开始" class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <input name="age_max" value="{$age_max|default=''}" placeholder="年龄结束" class="layui-input">
             </div>
-        </div>
-        <div class="layui-form-item layui-inline">
+
             <label class="layui-form-label">身高</label>
             <div class="layui-input-inline">
                 <input name="height_min" value="{$height_min|default=''}" placeholder="身高开始" class="layui-input">
@@ -175,7 +169,7 @@
             <div class="layui-input-inline">
                 <input name="height_max" value="{$height_max|default=''}" placeholder="身高结束" class="layui-input">
             </div>
-        </div>
+         </div>
 
         <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
@@ -184,7 +178,8 @@
 
 </fieldset>
 
-<script>form.render()
+<script>
+    form.render()
  //年选择器
   laydate.render({
     elem: '#year'
@@ -213,4 +208,5 @@
         }
     }
 });
+
 </script>
