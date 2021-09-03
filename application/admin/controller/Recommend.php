@@ -96,7 +96,7 @@ class Recommend extends Controller
      */
     public function tjReport(){
         //报表
-        $rq = date('Y-m-d');
+        $rq = date('Y-m-d',strtotime('-1 days'));
         $this->rq = $rq;
         //查询数据
         $date = input('date');
