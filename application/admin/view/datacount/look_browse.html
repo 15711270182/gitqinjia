@@ -1,0 +1,39 @@
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>用户id</th>
+            <th class='text-center nowrap'>昵称</th>
+            <th class='text-center nowrap'>头像</th>
+            <th class='text-center nowrap'>性别</th>
+            <th class='text-center nowrap'>年龄</th>
+            <th class='text-center nowrap'>地区</th>
+            <th class='text-center nowrap'>
+                {if $type == 1}
+                 浏览次数
+                {else/}
+                被浏览次数
+                {/if}
+            </th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.id}</td>
+            <td class='text-center nowrap'>{$vo.nickname|default='-'}</td>
+            <td class='text-center nowrap'><img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" ></td>
+
+            <td class='text-center nowrap'>{$vo.sex}</td>
+            <td class='text-center nowrap'>{$vo.age}</td>
+            <td class='text-center nowrap'>{$vo.address}</td>
+
+            <td class='text-center nowrap'>{$vo.browse_num}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>

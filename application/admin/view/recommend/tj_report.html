@@ -11,6 +11,8 @@
             <th class='text-center nowrap'>日期</th>
             <th class='text-center nowrap'>推荐的人数</th>
             <th class='text-center nowrap'>查看的人数</th>
+            <th class='text-center nowrap'>浏览的人数</th>
+            <th class='text-center nowrap'>被浏览的人数</th>
         </tr>
         </thead>
         {/notempty}
@@ -20,6 +22,8 @@
             <td class='text-center nowrap'>{$vo.date}</td>
             <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookTj")}?date={$vo.date}'>{$vo.rcount}</td>
             <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookTel")}?date={$vo.date}'>{$vo.tcount}</td>
+            <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookBrowse")}?date={$vo.date}&type=1'>{$vo.browse_num}</td>
+            <td class='text-center nowrap'  style="cursor: pointer;color: #00a0e9" data-open='{:url("datacount/lookBrowse")}?date={$vo.date}&type=2'>{$vo.browsed_num}</td>
         </tr>
         {/foreach}
         </tbody>

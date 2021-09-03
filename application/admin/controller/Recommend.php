@@ -104,7 +104,7 @@ class Recommend extends Controller
         if(strtotime($date) > strtotime(date('Y-m-d'))){
             $this->error('请选择有效时间');
         }
-        //今日被推荐人数   今日查看号码人数
+        //今日被推荐人数   今日查看号码人数    今日浏览人数
         $today_date = date('Y-m-d');
         if($date){
             if($today_date >= $date){
@@ -112,12 +112,18 @@ class Recommend extends Controller
                 $end = strtotime($date.'235959');
                 $find = DB::table('statistical_report')->where(['date'=>$date])->find();
                 if(empty($find)){ //没有数据 添加数据
+                    $start_time = date('Y-m-d 00:00:00',strtotime($date));
+                    $end_time = date('Y-m-d 23:59:59',strtotime($date));
                     $rdate = date('Ymd',strtotime($date));
-                    $rcount = Db::table('recommend_record')->where(['date'=>$rdate])->group('recommendid')->count();
+                    $rcount = Db::table('recommend_record')->where(['date'=>$rdate])->group('recommendid')->count(); //今日推荐人数
+                    $browse_num = Db::table('view_info_record')->where('create_time', 'between',[$start_time, $end_time])->group('uid')->count(); //今日浏览人数
+                    $browsed_num = Db::table('view_info_record')->where('create_time', 'between',[$start_time, $end_time])->group('bid')->count(); //今日被浏览人数
                     $tcount = $this->getTelList($start,$end);
                     $data = [
                         'rcount'=>$rcount,
                         'tcount'=>count($tcount),
+                        'browse_num'=>$browse_num,
+                        'browsed_num'=>$browsed_num,
                         'date'=>$date,
                         'create_time'=>date('Y-m-d H:i:s')
                     ];

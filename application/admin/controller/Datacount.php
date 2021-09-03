@@ -320,7 +320,8 @@ class Datacount extends Controller
     {
         $date = input('date');
         $date = date('Ymd',strtotime($date));
-        $this->getBTjList($date,'date,recommendid,count(*) as tj_count');
+        $field = 'date,recommendid,count(*) as tj_count';
+        $this->_query('recommend_record')->field($field)->where(['date'=>$date])->group('recommendid')->order('tj_count desc')->page();
     }
     protected function _lookTj_page_filter(&$data)
     {
@@ -336,6 +337,42 @@ class Datacount extends Controller
             $vo['address'] = $cinfo['province']. '-' .$cinfo['residence'];
             $vo['weight_score'] = $cinfo['weight_score'];
             $vo['create_at'] = $vo['date'];
+        }
+    }
+
+     /**
+     * 查看浏览（被）列表
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function lookBrowse()
+    {
+        $date = input('date');
+        $type = input('type');
+        $this->type = $type;
+        $start_time = date('Y-m-d 00:00:00',strtotime($date));
+        $end_time = date('Y-m-d 23:59:59',strtotime($date));
+        if($type == 1){ //浏览
+            $field = 'uid as id,count(*) as browse_num';
+            $group = 'uid';
+        }else{ //被浏览
+            $field = 'bid as id,count(*) as browse_num';
+            $group = 'bid';
+        }
+        $this->_query('view_info_record')->field($field)->where('create_time', 'between',[$start_time, $end_time])->group($group)->order('browse_num desc')->page();
+    }
+    protected function _lookBrowse_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $uinfo = Db::table('userinfo')->where(['id'=>$vo['id']])->find();
+            $cinfo = DB::name('children')->where(['uid'=>$vo['id']])->field('sex,year,province,residence,weight_score')->find();
+            $vo['nickname'] = emojiDecode($uinfo['nickname']);
+            $vo['headimgurl'] = $uinfo['headimgurl'];
+            $vo['sex'] = $cinfo['sex']==1?'男':'女';
+            $vo['age'] = (int)date('Y') - (int)$cinfo['year'];
+            $vo['address'] = $cinfo['province']. '-' .$cinfo['residence'];
         }
     }
     /**
