@@ -60,4 +60,8 @@ class Web extends Controller
         $jssdk = WechatService::getWebJssdkSign();
         return json_encode($jssdk);
     }
+
+    public function send(){
+         return $this->fetch('send');
+    }
 }
