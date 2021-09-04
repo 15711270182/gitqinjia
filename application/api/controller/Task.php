@@ -54,4 +54,98 @@ class Task extends Base
 //        return DB::name("tel_collection")->alias('t')->join('tel_collection telB','t.uid = telB.bid and t.bid = telB.uid')
 //            ->where('t.create_at', 'between',[$start, $end])->where(['t.status'=>1,'telB.status'=>1])->order('t.create_at desc')->select();
     }
+
+   public function send(){
+       /*****************
+         * 非加密请求 示例代码
+         ******************/
+        //appid参数 appkey参数在     短信-创建/管理AppID中获取
+        //手机号支持单个
+        //短信内容：签名+正文    详细规则查看短信-模板管理
+        $appid = '67062';                                                               //appid参数
+        $appkey = 'ecdfa8e0597260657535c24bb18b1cb9';                                   //appkey参数
+        $to = '15711270182';                                                            //收信人 手机号码
+        $content = '【SUBMAIL】尊敬的用户,我是SUBMAIL';                                     //内容
+//        【完美亲家】@var(realname)家长对您孩子很感兴趣，解锁了您的号码，点击链接查看@var(url)，退订回N
+
+//        $content['realname'] = '张';
+//        $content['url'] = 'https:://wwww.baidu.com';
+
+        $post_data = array(
+            "appid"     => $appid,
+            "signature" => $appkey,
+            "to"        => $to,
+            "content"   => $content,
+        );
+
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL            => 'https://api.mysubmail.com/message/send.json',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST           => 1,
+            CURLOPT_POSTFIELDS     => $post_data
+        ));
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        echo json_encode($output);die;
+
+
+        /*****************
+         * 加密请求 示例代码
+         ******************/
+        //appid参数 appkey参数在     短信-创建/管理AppID中获取
+        //手机号支持单个
+        //短信内容：签名+正文    详细规则查看短信-模板管理
+        $appid = '6***3';                                                               //appid参数
+        $appkey = '5d****************************58';                                   //appkey参数
+        $to = '150********';                                                            //收信人 手机号码
+        $content = '【SUBMAIL】尊敬的用户,我是SUBMAIL';                                     //内容
+
+        //通过接口获取时间戳
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL            => 'https://api.mysubmail.com/service/timestamp.json',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST           => 0,
+        ));
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $output = json_decode($output, true);
+        $timestamp = $output['timestamp'];
+
+        $post_data = array(
+            "appid"         => $appid,
+            "to"            => $to,
+            "timestamp"     => $timestamp,
+            "sign_type"     => 'md5',
+            "sign_version"  => 2,
+            "content"       => $content,
+        );
+        //整理生成签名所需参数
+        $temp = $post_data;
+        unset($temp['content']);
+        ksort($temp);
+        reset($temp);
+        $tempStr = "";
+        foreach ($temp as $key => $value) {
+            $tempStr .= $key . "=" . $value . "&";
+        }
+        $tempStr = substr($tempStr, 0, -1);
+        //生成签名
+        $post_data['signature'] = md5($appid . $appkey . $tempStr . $appid . $appkey);
+
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL            => 'https://api.mysubmail.com/message/send.json',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST           => 1,
+            CURLOPT_POSTFIELDS     => $post_data,
+        ));
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        echo json_encode($output);die;
+   }
+
 }
