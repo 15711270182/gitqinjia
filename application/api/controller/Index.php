@@ -653,7 +653,7 @@ class Index extends Base
      */
     public function sendMessage($uid,$bid){
         $userinfo = UserModel::userFind(['id'=>$uid]);
-        $realname = !empty($userinfo['realname'])?$userinfo['realname'].'家长':'家长';
+        $realname = !empty($userinfo['realname'])?$userinfo['realname']:'家长';
         //发送短信
         $b_phone = ChildrenModel::getchildrenField(['uid'=>$bid],'phone'); //收信人 手机号码
         $project_id = 'pjjUb4';//模板ID
