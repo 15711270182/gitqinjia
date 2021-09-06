@@ -375,6 +375,38 @@ class Datacount extends Controller
             $vo['address'] = $cinfo['province']. '-' .$cinfo['residence'];
         }
     }
+
+    /**
+     * @Notes:短信发送列表
+     * @Interface sendList
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function sendList(){
+        $this->title = '发送短信列表';
+        $this->_query('send_message_record')->dateBetween('create_time')->equal('bid')->order('create_time desc')->page();
+    }
+    protected function _sendList_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $uinfo = $this->getUserInfo(['id'=>$vo['bid']]);
+            $binfo = $this->getUserInfo(['id'=>$vo['uid']]);
+            $cinfo = DB::name('children')->where(['uid'=>$vo['bid']])->field('sex,year,province,residence,weight_score')->find();
+            $cbinfo = DB::name('children')->where(['uid'=>$vo['uid']])->field('sex,year,province,residence,weight_score')->find();
+            $vo['nickname'] = emojiDecode($uinfo['nickname']);
+            $vo['headimgurl'] = $uinfo['headimgurl'];
+            $vo['sex'] = $cinfo['sex']==1?'男':'女';
+            $vo['age'] = (int)date('Y') - (int)$cinfo['year'];
+            $vo['address'] = $cinfo['province']. '-' .$cinfo['residence'];
+
+            $vo['b_nickname'] = emojiDecode($binfo['nickname']);
+            $vo['b_headimgurl'] = $binfo['headimgurl'];
+            $vo['b_sex'] = $cbinfo['sex']==1?'男':'女';
+            $vo['b_age'] = (int)date('Y') - (int)$cbinfo['year'];
+            $vo['b_address'] = $cbinfo['province']. '-' .$cbinfo['residence'];
+        }
+    }
+
     /**
      * @param array $condition 查询条件
      * @return array|\PDOStatement|string|\think\Model|null

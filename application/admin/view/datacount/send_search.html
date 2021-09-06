@@ -1,0 +1,27 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">发送日期</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选日期" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">接收方uid</label>
+            <div class="layui-input-inline">
+                <input name="bid" value="{$Think.get.bid|default=''}" placeholder="接收方uid" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon search_btn">&#xe615;</i> 查 询</button>
+        </div>
+    </form>
+</fieldset>
+
+<script>
+    form.render();
+    function getReportForms(){
+
+    }
+</script>
