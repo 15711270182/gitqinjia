@@ -5,10 +5,10 @@
         <thead>
         <tr>
             <th class='text-center nowrap'>发送时间</th>
+            <th class='text-center nowrap'>发起方ID</th>
+            <th class='text-center nowrap'>发起方信息</th>
             <th class='text-center nowrap'>接收方ID</th>
             <th class='text-center nowrap'>接收方信息</th>
-            <th class='text-center nowrap'>查看方ID</th>
-            <th class='text-center nowrap'>查看方信息</th>
             <th class='text-center nowrap'>短信是否已读</th>
         </tr>
         </thead>
@@ -17,21 +17,6 @@
         {foreach $list as $key=>$vo}
         <tr>
             <td class='text-center nowrap'>{$vo.create_time}</td>
-            <td class='text-center nowrap'>{$vo.bid}</td>
-            <td class="text-center nowrap">
-            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
-
-                <div class="inline-block">
-                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
-                    <div>性别：<span>{$vo.sex}</span>，
-                         年龄：<span>{$vo.age|default='-'}</span>
-                    </div>
-                    <div>
-                         地区：<span>{$vo.address|default='-'}</span>
-                    </div>
-
-                </div>
-            </td>
             <td class='text-center nowrap'>{$vo.uid}</td>
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.b_headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
@@ -43,6 +28,21 @@
                     </div>
                     <div>
                          地区：<span>{$vo.b_address|default='-'}</span>
+                    </div>
+
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.bid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
                     </div>
 
                 </div>
