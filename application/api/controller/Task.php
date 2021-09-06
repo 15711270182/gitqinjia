@@ -6,6 +6,9 @@ namespace app\api\controller;
 use think\Db;
 use app\api\controller\Base;
 use app\api\service\Send as SendService;
+
+use app\api\model\Children as ChildrenModel;
+use app\api\model\User as UserModel;
 /**
  * Class Task
  */
@@ -57,15 +60,30 @@ class Task extends Base
     }
 
    public function send(){
-        $to = '15711270182';                                                            //收信人 手机号码
-        $project_id = 'pjjUb4';                                                           //模板ID
-        $vars = json_encode([                                                  //模板对应变量
-            'realname' => '张',
+       $uid = '479';
+       $bid = '1001';
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        $realname = !empty($userinfo['realname'])?$userinfo['realname'].'家长':'家长';
+        //发送短信
+        $b_phone = ChildrenModel::getchildrenField(['uid'=>$bid],'phone'); //收信人 手机号码
+        $project_id = 'pjjUb4';//模板ID
+        $vars = json_encode([
+            'realname' => $realname,
             'url' => 'v1kj.cn'
         ]);
         $send = new SendService();
-        $res = $send->sendMsg($to,$project_id,$vars);
-        var_dump($res);
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        custom_log('短信接收返回json',print_r($msgJson,true));
+        $msgJson = json_decode($msgJson,true);
+        if($msgJson['status'] == 'success'){
+            //添加发送记录
+            $arrMsg['uid'] = $uid;
+            $arrMsg['bid'] = $bid;
+            $arrMsg['remark'] = '用户'.$uid.'查看用户'.$bid.',给它发送短信';
+            $arrMsg['create_time'] = date('Y-m-d H:i:s');
+            DB::name('send_message_record')->insertGetId($arrMsg);
+        }
+        var_dump($msgJson);die;
    }
 
 }
