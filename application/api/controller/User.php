@@ -358,6 +358,8 @@ class User extends Base
     public function msgList(){
         $uid = $this->uid;
         $type = input('type') ? : 1;
+        $sms = input('sms');
+        $send_cache = cache('sendmsg-'.$uid);
         $where = "is_del = 1 and is_show = 0";
         if($type == 2){
             $where .= " and bid = '{$uid}'";
@@ -373,6 +375,15 @@ class User extends Base
         $list = Db::name($table)->where($where)->order($order)->select();
         if(empty($list)){
             return $this->errorReturn(self::errcode_fail);
+        }
+        //如果是从短信点过来  修改短信为已读
+        if($sms == 1 && $send_cache){
+            $sInfo = DB::name('send_message_record')->where(['uid'=>$send_cache,'bid'=>$uid,'is_read'=>1])->find();
+            if(empty($sInfo)){
+                $upSend['is_read'] = 1;
+                $upSend['update_time'] = date('Y-m-d H:i:s');
+                DB::name('send_message_record')->where(['uid'=>$send_cache,'bid'=>$uid])->update($upSend);
+            }
         }
         $field = 'id,uid,sex,year,height,residence,native_place,hometown,education,work,income,remarks,house,cart,school,parents,bro';
         foreach ($list as $key => $value) {

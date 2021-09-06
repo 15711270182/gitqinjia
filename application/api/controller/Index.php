@@ -19,6 +19,7 @@ use app\api\model\WeightScore;
 use app\api\service\ScoreService;
 use app\api\service\UsersService;
 use app\api\service\RecommendService;
+use app\api\service\Send as SendService;
 use app\api\service\Qrcode;
 use app\api\service\Upload;
 use app\api\model\Children as ChildrenModel;
@@ -526,38 +527,8 @@ class Index extends Base
                 $add['status'] = 0; //未查看
                 $add['create_at'] = time();
                 TelModel::telAdd($add);
-                //给被查看方发送来访模板消息
-                $unionid = UserModel::userValue(['id'=>$bid],'unionid');
-                $where_x['unionid'] = $unionid;
-                $where_x['subscribe'] = 1;
-                $mini_user = UserModel::wxFind($where_x);
-                if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
-                    $u_phone = ChildrenModel::getchildrenField(['uid'=>$uid],'phone');
-                    $openid = $mini_user['openid'];
-                    $time = date('Y-m-d H:i');
-                    $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
-                    $name =  $userinfo['realname'].'家长';
-                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $u_phone);
-                    $remark = '帮孩子找对象，首选完美亲家';
-                    $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
-                    $arr = array();
-                    $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
-                    $arr['keyword1'] = array('value'=>$name,'color'=>'#0000ff');
-                    $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
-                    $arr['keyword3'] = array('value'=>$time,'color'=>'#0000ff');
-                    $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-                    $param = [
-                        'touser'=>$openid,
-                        'template_id'=>$temp_id,
-                        'page'=>'pages/message/message?type=2',
-                        'data'=>$arr,
-                        'miniprogram' => [
-                            'pagepath'=>'pages/message/message?type=2',
-                            'appid'=>'wx70d65d2170dbacd7',
-                        ],
-                    ];
-                    $this->shiwuSendMsg($param);
-                }
+                //给被查看方发送短信通知  来访模板消息
+                $this->sendMessage($uid,$bid);
             }
             $data = $this->TelChange($bid,1);
             $data['status'] = 1;
@@ -665,43 +636,76 @@ class Index extends Base
                 $data['status'] = 1;//1是可以看
                 ScoreService::instance()->weightScoreInc($bid,26,$uid);//被查看的人增加权重分
                 ScoreService::instance()->weightScoreInc($uid,27,$bid);//查看的人增加权重分
-                //给被查看方发送来访模板消息
-                $unionid = UserModel::userValue(['id'=>$bid],'unionid');
-                $where_x['unionid'] = $unionid;
-                $where_x['subscribe'] = 1;
-                $mini_user = UserModel::wxFind($where_x);
-                if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
-                    $u_phone = ChildrenModel::getchildrenField(['uid'=>$uid],'phone');
-                    $openid = $mini_user['openid'];
-                    $time = date('Y-m-d H:i');
-                    $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
-                    $name =  $userinfo['realname'].'家长';
-                    $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $u_phone);
-                    $remark = '帮孩子找对象，首选完美亲家';
-                    $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
-                    $arr = array();
-                    $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
-                    $arr['keyword1'] = array('value'=>$name,'color'=>'#0000ff');
-                    $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
-                    $arr['keyword3'] = array('value'=>$time,'color'=>'#0000ff');
-                    $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-                    $param = [
-                        'touser'=>$openid,
-                        'template_id'=>$temp_id,
-                        'page'=>'pages/message/message?type=2',
-                        'data'=>$arr,
-                        'miniprogram' => [
-                            'pagepath'=>'pages/message/message?type=2',
-                            'appid'=>'wx70d65d2170dbacd7',
-                        ],
-                    ];
-                    $this->shiwuSendMsg($param);
-                }
+                //给被查看方发送短信通知  来访模板消息
+                $this->sendMessage($uid,$bid);
                 return $this->successReturn(['data'=>$data,'count'=>0],'成功',self::errcode_ok);
             }
             return $this->errorReturn(self::errcode_fail,'查看失败');
         }
         return $this->errorReturn(self::errcode_fail,'次数已经用光啦');
+    }
+
+    /**
+     * @Notes: 给被查看方发送短信通知  发送模板消息
+     * @Interface sendMsg
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function sendMessage($uid,$bid){
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        $realname = !empty($userinfo['realname'])?$userinfo['realname'].'家长':'家长';
+        //发送短信
+        $b_phone = ChildrenModel::getchildrenField(['uid'=>$bid],'phone'); //收信人 手机号码
+        $project_id = 'pjjUb4';//模板ID
+        $vars = json_encode([
+            'realname' => $realname,
+            'url' => 'v1kj.cn'
+        ]);
+        $send = new SendService();
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        custom_log('短信接收返回json',print_r($msgJson,true));
+        $msgJson = json_decode($msgJson,true);
+        if($msgJson['status'] == 'success'){
+            //添加发送记录
+            $arrMsg['uid'] = $uid;
+            $arrMsg['bid'] = $bid;
+            $arrMsg['remark'] = '用户'.$uid.'查看用户'.$bid.',给它发送短信成功';
+            $arrMsg['create_time'] = date('Y-m-d H:i:s');
+            cache('sendmsg-'.$bid,$uid);
+            DB::name('send_message_record')->insertGetId($arrMsg);
+        }
+        //发送模板消息
+        $unionid = UserModel::userValue(['id'=>$bid],'unionid');
+        $where_x['unionid'] = $unionid;
+        $where_x['subscribe'] = 1;
+        $mini_user = UserModel::wxFind($where_x);
+        if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+            $u_phone = ChildrenModel::getchildrenField(['uid'=>$uid],'phone');
+            $openid = $mini_user['openid'];
+            $time = date('Y-m-d H:i');
+            $tip = '有位家长付费解锁了您的联系方式，您可以免费查看对方';
+            $name =  $userinfo['realname'].'家长';
+            $phone = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $u_phone);
+            $remark = '帮孩子找对象，首选完美亲家';
+            $temp_id = 'aGiyIGwKmygDgnNWl9XGyIFNjSAOvau8Tr5RNjLlkkM';
+            $arr = array();
+            $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+            $arr['keyword1'] = array('value'=>$name,'color'=>'#0000ff');
+            $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+            $arr['keyword3'] = array('value'=>$time,'color'=>'#0000ff');
+            $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+            $param = [
+                'touser'=>$openid,
+                'template_id'=>$temp_id,
+                'page'=>'pages/message/message?type=2',
+                'data'=>$arr,
+                'miniprogram' => [
+                    'pagepath'=>'pages/message/message?type=2',
+                    'appid'=>'wx70d65d2170dbacd7',
+                ],
+            ];
+            $this->shiwuSendMsg($param);
+        }
     }
     /**
      * @Notes:添加手机号发送验证码
