@@ -1,0 +1,82 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='qxapply/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>发送申请时间</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>嘉宾id</th>
+            <th class='text-center nowrap'>嘉宾资料信息</th>
+            <th class='text-center nowrap'>牵线状态</th>
+            <th class='text-center nowrap'>备注</th>
+            <th class='text-center nowrap'>申请通过时间</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.bj_uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.cover|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>
+                         性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>，
+                         身高：<span>{$vo.height|default='-'}</span>
+
+                    </div>
+                    <div>
+                        学历：<span>{$vo.education|default='-'}</span>，
+                        生肖：<span>{$vo.animals|default='-'}</span>，
+                        年薪：<span>{$vo.salary|default='-'}</span>
+
+                    </div>
+                    <div>
+                        行业：<span>{$vo.industry|default='-'}</span>，
+                        居住地：<span>{$vo.current_province|default='-'}-{$vo.current_city|default='-'}</span>，
+                    </div>
+                </div>
+            </td>
+            <td class='text-center nowrap'>
+                {foreach ['0'=>'申请中','1'=>'牵线中','2'=>'已同意','3'=>'已拒绝'] as $k=>$v}
+                {eq name='vo.apply_status' value='$k.""'}
+                {$v}
+                {else}
+                {/eq}
+                {/foreach}
+            </td>
+            <td class='text-center nowrap'>{$vo.remark|default='-'}</td>
+            <td class='text-center nowrap'>{$vo.apply_pass_time|default='-'}</td>
+            <td class='text-center nowrap'>
+                <a class="layui-btn layui-btn-sm" data-type="store-config-type-params" data-modal='{:url("getuserposter")}?id={$vo.id}' class='layui-btn layui-btn-sm layui-btn-primary'>获取海报</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

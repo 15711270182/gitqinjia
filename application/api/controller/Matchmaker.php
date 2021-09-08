@@ -99,13 +99,16 @@ class Matchmaker extends Base
             'salary'=>$salary
         ];
         $queryData = $service->doRequest('apinew/v1/query/lists?page='.$page,$json); // 发起接口请求
-        $data = $queryData['data'];
-        if(empty($data)){
-            return $this->errorReturn(self::errcode_fail);
+        if(empty($queryData)){
+             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
+        $data = $queryData['data'];
         foreach($data as $k=>$v){
             $data[$k]['title'] = $v['sex'].'·'.$v['year'].'('.$v['animals'].')'.'·'.$v['education'];
-            unset($data[$k]['sex']);
+            $data[$k]['sex'] = 2;
+            if($v['sex'] == '男'){
+                $data[$k]['sex'] = 1;
+            }
             unset($data[$k]['year']);
             unset($data[$k]['animals']);
             unset($data[$k]['education']);

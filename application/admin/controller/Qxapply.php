@@ -48,16 +48,24 @@ class Qxapply extends Controller
         $this->title = '牵线列表';
         $this->_query($this->table)
             ->equal('uid,apply_status')
-            ->timeBetween('create_time')
+            ->dateBetween('create_time')
             ->order('id desc')
             ->page();
     }
     protected function _index_page_filter(&$data)
     {
         foreach ($data as &$vo) {
-            $userinfo = DB::name('userinfo')->where(['id'=>$vo['uid']])->find();
-            $vo['headimgurl'] = $userinfo['headimgurl'];
-            $vo['nickname'] = emoji_decode($userinfo['nickname']);
+            $headimgurl = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('headimgurl');
+            $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
+            $vo['headimgurl'] = $headimgurl;
+            $vo['nickname'] = emoji_decode($nickname);
+            $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
+            $vo['sex'] = '女';
+            if ($Children['sex'] == 1){
+                $vo['sex'] = '男';
+            }
+            $vo['age'] = (int)date('Y') - (int)$Children['year'];
+            $vo['address'] = $Children['province']. '-' .$Children['residence'];
         }
     }
 }

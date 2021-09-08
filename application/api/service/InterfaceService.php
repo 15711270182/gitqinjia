@@ -249,8 +249,8 @@ class InterfaceService extends Service
     {
 
         $result = json_decode(Http::post($this->baseurl . $uri, $this->_buildSign($data)), true);
-        if (empty($result)) throw new Exception(lang('think_library_response_failed'));
-        if (empty($result['code'])) throw new Exception($result['info']);
+//        var_dump($result);die;
+//        if (empty($result['code'])) throw new Exception($result['info']);
         return $result['data']? $result['data']:[];
     }
 
