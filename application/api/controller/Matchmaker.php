@@ -54,8 +54,8 @@ class Matchmaker extends Base
      * @Time: ${DATE}   ${TIME}
      */
     public function getWxcode(){
-        $data['activity_price'] = 3999;
-        $data['img_url'] = '';
+        $data['activity_price'] = '3999';
+        $data['img_url'] = 'https://pics.njzec.com/wxewm.png';
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
