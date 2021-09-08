@@ -189,7 +189,11 @@ class User extends Base
             $paytype = $userinfo['paytype'];
             cache('paytypeuid-'.$userinfo['paytype'],$paytype,3*24*3600);
         }
+        $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid])->count();
+        $sy_num = 15 - $qx_num;
         $list = [
+            'qx_num'=>$qx_num,
+            'sy_num'=>$sy_num,
             'subscribe'=>$subscribe,
             'operate_uid'=>$uid, //新增 操作者uid
             'paytype'=>$paytype, //用户支付类型 1月卡 2次卡
