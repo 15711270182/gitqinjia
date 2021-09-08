@@ -66,6 +66,73 @@ class Qxapply extends Controller
             }
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
+
+            $vo['remark_sub'] = $this->subtext($vo['remark'],15);
         }
+    }
+    public function subtext($text, $length)
+    {
+        if(mb_strlen($text, 'utf8') > $length) {
+            return mb_substr($text, 0, $length, 'utf8').'...';
+        } else {
+            return $text;
+        }
+
+    }
+     /**
+     * 通过审核申请
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function pass()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        $this->applyCsrfToken();
+        $this->_save($this->table, ['apply_status' => '1','apply_pass_time'=>date('Y-m-d H:i:s')]);
+    }
+    /**
+     * 同意牵线
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function agreeApply()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        $this->applyCsrfToken();
+        $this->_save($this->table, ['apply_status' => '2','update_time'=>date('Y-m-d H:i:s')]);
+    }
+    /**
+     * 拒绝牵线页面
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function refuseApply()
+    {
+       $id = input('id');
+       $this->assign('id',$id);
+       $this->fetch();
+    }
+    /**
+     * 拒绝牵线
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function refuseApplySave()
+    {
+        $remark = $this->request->post('remark');
+        $id = $this->request->post('id');
+        $res = DB::name('qx_apply_user')->where(['id'=>$id])->update(['remark'=>$remark,'apply_status'=>3,'update_time'=>date('Y-m-d H:i:s')]);
+        if($res){
+            $this->success('保存成功!');
+        }
+        $this->error('保存失败');
     }
 }

@@ -14,7 +14,7 @@
             <th class='text-center nowrap'>嘉宾id</th>
             <th class='text-center nowrap'>嘉宾资料信息</th>
             <th class='text-center nowrap'>牵线状态</th>
-            <th class='text-center nowrap'>备注</th>
+            <th class='text-center nowrap'>拒绝原因</th>
             <th class='text-center nowrap'>申请通过时间</th>
             <th class='text-center nowrap'>操作</th>
         </tr>
@@ -60,17 +60,25 @@
                 </div>
             </td>
             <td class='text-center nowrap'>
-                {foreach ['0'=>'申请中','1'=>'牵线中','2'=>'已同意','3'=>'已拒绝'] as $k=>$v}
-                {eq name='vo.apply_status' value='$k.""'}
-                {$v}
-                {else}
-                {/eq}
-                {/foreach}
+                {if $vo.apply_status eq 0}申请中{/if}
+                {if $vo.apply_status eq 1}<span class="color-green">牵线中</span>{/if}
+                {if $vo.apply_status eq 2}<span class="color-blue" >已同意</span>{/if}
+                {if $vo.apply_status eq 3}<span class="color-red"  title="{$vo.remark}">已拒绝</span>{/if}
             </td>
-            <td class='text-center nowrap'>{$vo.remark|default='-'}</td>
+            <td class='text-center nowrap' title="{$vo.remark}">{$vo.remark_sub|default='-'}</td>
             <td class='text-center nowrap'>{$vo.apply_pass_time|default='-'}</td>
             <td class='text-center nowrap'>
-                <a class="layui-btn layui-btn-sm" data-type="store-config-type-params" data-modal='{:url("getuserposter")}?id={$vo.id}' class='layui-btn layui-btn-sm layui-btn-primary'>获取海报</a>
+                {if $vo.apply_status eq 0}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
+                {/if}
+                {if $vo.apply_status eq 1}
+                <a data-dbclick class="layui-btn layui-bg-blue" data-confirm="确定牵线成功？" data-action='{:url("agreeApply")}'
+                   data-csrf="{:systoken('agreeApply')}" data-value="id#{$vo.id}">同意</a>
+                <a data-dbclick class="layui-btn layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
+                   data-csrf="{:systoken('refuseApply')}" data-value="id#{$vo.id}">拒绝</a>
+                {else/}
+                无
+                {/if}
             </td>
         </tr>
         {/foreach}
