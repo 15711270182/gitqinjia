@@ -141,6 +141,11 @@ class Matchmaker extends Base
         if(empty($queryData)){
             return $this->errorReturn(self::errcode_fail,'接口返回错误');
         }
+        $qxInfo = DB::name('qx_apply_user')->where(['uid'=>$uid,'bj_uid'=>$bj_uid])->find();
+        $queryData['apply_status'] = '';
+        if($qxInfo){
+            $queryData['apply_status'] = $qxInfo['apply_status'];
+        }
         return $this->successReturn($queryData,'成功',self::errcode_ok);
     }
      /**
