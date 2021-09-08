@@ -111,6 +111,7 @@ class Matchmaker extends Base
             unset($data[$k]['education']);
         }
         $list = [
+            'is_vip_qx'=>1,//牵线是否是会员  0否  1是
             'totalCount'=>$queryData['total'], //总条数
             'current_page'=>$queryData['current_page'], //当前页数
             'totalPage'=>$queryData['last_page'], //总页数
