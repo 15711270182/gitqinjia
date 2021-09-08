@@ -60,4 +60,14 @@ Route::group('api/order',function(){
     Route::any('makeorder', 'api/order/makeorder'); //生成订单
 });
 
+//红娘牵线模块
+Route::group('api/Matchmaker',function(){
+    Route::any('getNum', 'api/Matchmaker/getNum'); //静态页数据
+    Route::any('getWxcode', 'api/Matchmaker/getWxcode'); //获取客服微信二维码图片
+    Route::any('getUserList', 'api/Matchmaker/getUserList'); //筛选 获取嘉宾信息列表
+    Route::any('getUserDetail', 'api/Matchmaker/getUserDetail'); //获取嘉宾详情信息
+    Route::any('clickMatch', 'api/Matchmaker/clickMatch'); //点击牵线
+    Route::any('matchRecord', 'api/Matchmaker/matchRecord'); //牵线记录列表
+});
+
 
