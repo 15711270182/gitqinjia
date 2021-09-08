@@ -69,15 +69,16 @@
             <td class='text-center nowrap'>{$vo.apply_pass_time|default='-'}</td>
             <td class='text-center nowrap'>
                 {if $vo.apply_status eq 0}
-                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
-                {/if}
-                {if $vo.apply_status eq 1}
-                <a data-dbclick class="layui-btn layui-bg-blue" data-confirm="确定牵线成功？" data-action='{:url("agreeApply")}'
-                   data-csrf="{:systoken('agreeApply')}" data-value="id#{$vo.id}">同意</a>
-                <a data-dbclick class="layui-btn layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
-                   data-csrf="{:systoken('refuseApply')}" data-value="id#{$vo.id}">拒绝</a>
+                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
                 {else/}
-                无
+                    {if $vo.apply_status eq 1}
+                        <a data-dbclick class="layui-btn layui-bg-blue" data-confirm="确定牵线成功？" data-action='{:url("agreeApply")}'
+                           data-csrf="{:systoken('agreeApply')}" data-value="id#{$vo.id}">同意</a>
+                        <a data-dbclick class="layui-btn layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
+                           data-csrf="{:systoken('refuseApply')}" data-value="id#{$vo.id}">拒绝</a>
+                    {else/}
+                        暂无操作
+                    {/if}
                 {/if}
             </td>
         </tr>
