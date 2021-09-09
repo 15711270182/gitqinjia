@@ -64,4 +64,8 @@ class Web extends Controller
     public function send(){
          return $this->fetch('send');
     }
+
+    public function msg(){
+         return $this->fetch('msg');
+    }
 }
