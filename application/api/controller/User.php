@@ -172,15 +172,9 @@ class User extends Base
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $data['is_vip'] = 0;
         $data['endtime'] = '';
-        $data['is_pair_vip'] = 0;
-        $data['pair_vip_time'] = '';
         if($userinfo['is_vip'] == 1 && $userinfo['endtime'] >= time()){
             $data['is_vip'] = 1;
             $data['endtime'] = date('Y-m-d',$userinfo['endtime']);
-        }
-         if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= time()){ //牵线会员
-            $data['is_pair_vip'] = 1;
-            $data['pair_vip_time'] = date('Y-m-d',strtotime($userinfo['pair_vip_time']));
         }
         $last_num = $userinfo['count']?$userinfo['count']:0;
         $map['uid'] = $uid;
@@ -195,11 +189,19 @@ class User extends Base
             $paytype = $userinfo['paytype'];
             cache('paytypeuid-'.$userinfo['paytype'],$paytype,3*24*3600);
         }
+        $is_pair_vip = 0;
+        $pair_vip_time = '';
         $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid,'apply_status'=>2])->count();
         $sy_num = 15 - $qx_num;
+        if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= time()){ //牵线会员
+            $is_pair_vip = 1;
+            $pair_vip_time = date('Y-m-d',strtotime($userinfo['pair_vip_time']));
+        }
         $list = [
             'qx_num'=>$qx_num,
             'sy_num'=>$sy_num,
+            'is_pair_vip' =>$is_pair_vip,
+            'pair_vip_time' =>$pair_vip_time,
             'subscribe'=>$subscribe,
             'operate_uid'=>$uid, //新增 操作者uid
             'paytype'=>$paytype, //用户支付类型 1月卡 2次卡
