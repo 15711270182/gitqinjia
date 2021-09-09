@@ -32,6 +32,7 @@ class Qxapply extends Controller
      * @var string
      */
     public $table = 'qx_apply_user';
+    public $table2 = 'qx_discount_config';
 
     /**
      * 牵线列表
@@ -143,5 +144,103 @@ class Qxapply extends Controller
             $this->success('保存成功!');
         }
         $this->error('保存失败');
+    }
+
+    /**
+     * 活动配置列表
+     * @auth true
+     */
+    public function index_config()
+    {
+
+        $this->title = '限时活动列表';
+        $query = $this->_query($this->table2);
+        $query->dateBetween('create_time')->equal('uid,type,is_show')->order('create_time desc')->page();
+    }
+     /**
+     * 添加配置信息
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function add_config()
+    {
+        $uid = input('uid');
+        $this->type = '';
+        if($uid){
+            $this->uid = $uid;
+            $this->type = 2;
+        }
+        $this->_form($this->table2, 'form');
+    }
+    /**
+     * 编辑配置信息
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function edit()
+    {
+        $this->type = '';
+        $this->uid = '';
+        $this->_form($this->table2, 'form');
+    }
+    /**
+     * 数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function _form_filter(&$data)
+    {
+        if ($this->request->isPost()) {
+            $start_time = input('start_time');
+            $end_time = input('end_time');
+            if(empty($start_time) || empty($end_time)){
+                $this->error('活动时间不能为空');
+            }
+            if($start_time > $end_time){
+                 $this->error('结束时间不能小于开始时间');
+            }
+            $discount_price = input('discount_price');
+            $data['discount_price'] = $discount_price*100;
+        } else {
+            if(isset($data['discount_price'])){
+                 $data['discount_price'] = $data['discount_price']/100;
+            }
+        }
+    }
+    /**
+     * 关闭活动
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function close()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        $this->applyCsrfToken();
+        $this->_save($this->table2, ['is_show' => '0']);
+    }
+
+    /**
+     * 开启活动
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function open()
+    {
+        $this->applyCsrfToken();
+        $this->_save($this->table2, ['is_show' => '1']);
     }
 }

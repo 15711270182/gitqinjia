@@ -1,0 +1,113 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card'
+      autocomplete="off">
+
+    <div class="layui-form-item">
+        <div class="layui-form-item ">
+            <label class="layui-form-label">活动类型 {$type}</label>
+            <div class="layui-input-block">
+                {if $type == 2}
+                     <input type="radio" value='{$type}' name="type" disabled title="全部">
+                     <input type="radio" value='{$type}' name="type" checked title="个人">
+                {else/}
+                    {foreach ['1'=>'全部','2'=>'个人'] as $k => $v}
+                        {if isset($vo.type)}
+                            {if $k.'' eq $vo.type}
+                            <input type="radio" value='{$k}' lay-filter="msgType" name="type" checked  style="display:none !important;" title="{$v}">
+                            {else}
+                            <input type="radio" value="{$k}" lay-filter="msgType" name="type" disabled style="display:none !important;" title="{$v}">
+                            {/if}
+                        {else}
+                            <input type="radio" value="{$k}" lay-filter="msgType" name="type" style="display:none !important;" title="{$v}">
+                        {/if}
+                    {/foreach}
+                {/if}
+
+            </div>
+        </div>
+        {if !empty($uid)}
+        <div class="layui-form-item">
+            <label class="layui-form-label">uid</label>
+            <div class="layui-input-block">
+                <input name="uid" required value='{$uid|default=""}' placeholder="请输入uid" class="layui-input">
+            </div>
+        </div>
+        {else/}
+        {if isset($vo.type) && $vo.type == 2}
+             <div class="layui-form-item">
+                <label class="layui-form-label">uid</label>
+                <div class="layui-input-block">
+                    <input name="uid" required value='{$vo.uid|default=""}' placeholder="请输入uid" class="layui-input">
+                </div>
+            </div>
+        {else/}
+             <div class="layui-form-item input-uid">
+                <label class="layui-form-label">uid</label>
+                <div class="layui-input-block">
+                    <input name="uid" required value='{$vo.uid|default=""}' placeholder="请输入uid" class="layui-input">
+                </div>
+            </div>
+        {/if}
+        {/if}
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input name="title" required value='{$vo.title|default=""}' placeholder="请输入标题" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">折扣金额</label>
+            <div class="layui-input-block">
+                <input name="discount_price" required value='{$vo.discount_price|default=""}' placeholder="请输入折扣金额" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动起止时间<span style="color:red">(必填)</span></label>
+            <div class="layui-input-inline">
+                 <input name="start_time" id="start_time"  value="{$vo.start_time|default=''}" placeholder="开始时间" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                 <input name="end_time" id="end_time"  value="{$vo.end_time|default=''}" placeholder="结束时间" class="layui-input">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+{block name='script'}
+<script>
+    form.render();
+    window.laydate.render({range: false,type:'datetime', elem: '#start_time'});
+    window.laydate.render({range: false,type:'datetime', elem: '#end_time'});
+    window.form.render();
+    $('.input-uid').hide();
+    layui.use('form', function () {
+        var form = layui.form;
+        //刷新界面 所有元素
+        form.render();
+    });
+    layui.form.on('radio(msgType)', function (data) {
+        console.log(data.value); //被点击的radio的value值
+        if (data.value == 1) {
+            $('.input-uid').hide();
+        }else{
+            $('.input-uid').show();
+        }
+    })
+</script>
+{/block}
+

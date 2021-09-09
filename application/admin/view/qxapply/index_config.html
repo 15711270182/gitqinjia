@@ -1,0 +1,54 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("admin/qxapply/add_config")}
+<button data-modal='{:url("add_config")}' data-title="添加配置" class='layui-btn layui-btn-sm layui-btn-primary'>添加配置</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='qxapply/config_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>创建时间</th>
+            <th class='text-center nowrap'>标题</th>
+            <th class='text-center nowrap'>描述</th>
+            <th class='text-center nowrap'>类型</th>
+            <th class='text-center nowrap'>用户uid</th>
+            <th class='text-center nowrap'>折扣价</th>
+            <th class='text-center nowrap'>开始时间</th>
+            <th class='text-center nowrap'>结束时间</th>
+            <th class='text-center nowrap'>是否开启</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{$vo.title|default = ''}</td>
+            <td class='text-center nowrap'>{$vo.desc|default = ''}</td>
+            <td class='text-center nowrap'>{if $vo.type == 1}全部{elseif $vo.type == 2 /}个人{else/}其他{/if}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class='text-center nowrap'>{$vo.discount_price/100}</td>
+            <td class='text-center nowrap'>{$vo.start_time}</td>
+            <td class='text-center nowrap'>{$vo.end_time}</td>
+            <td class='text-center nowrap'>{if $vo.is_show == 1}<span style="color:red">开启</span>{else/}关闭{/if}</td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.is_show eq 1"}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定关闭活动吗？" data-action="{:url('close')}" data-value="id#{$vo.id};is_show#0" data-csrf="{:systoken('close')}">关 闭</a>
+                {else /}
+                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要开启活动吗？" data-action="{:url('open')}" data-value="id#{$vo.id};is_show#1" data-csrf="{:systoken('open')}">开 启</a>
+                {/if}
+                <a class="layui-btn layui-btn-sm" data-confirm="编辑" data-modal="{:url('edit')}?id={$vo.id}">编 辑</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}
