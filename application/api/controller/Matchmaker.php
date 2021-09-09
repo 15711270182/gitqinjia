@@ -210,6 +210,10 @@ class Matchmaker extends Base
             $newData[$k]['uid'] = $v['bj_uid'];
             $newData[$k]['create_time'] = date('Y年m月d日',strtotime($v['create_time']));
             $newData[$k]['cover'] = $v['cover'];
+            $newData[$k]['sex'] = 2;
+            if($v['sex'] == '男'){
+                $newData[$k]['sex'] = 1;
+            }
             $newData[$k]['title'] = $v['sex'].'·'.$v['year'].'('.$v['animals'].')'.'·'.$v['education'];
             $newData[$k]['height'] = $v['height'];
             $newData[$k]['current_province'] = $v['current_province'];
