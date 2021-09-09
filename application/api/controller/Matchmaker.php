@@ -117,8 +117,13 @@ class Matchmaker extends Base
             unset($data[$k]['animals']);
             unset($data[$k]['education']);
         }
+        $uinfo = DB::name('userinfo')->where(['id'=>$uid])->find();
+        $is_pair_vip = 0;
+        if($uinfo['is_pair_vip'] == 1 && $uinfo['pair_vip_time'] >= date('Y-m-d H:i:s')){
+            $is_pair_vip = 1;
+        }
         $list = [
-            'is_vip_qx'=>1,//牵线是否是会员  0否  1是
+            'is_pair_vip'=>$is_pair_vip,//是否是牵线会员  0否  1是
             'totalCount'=>$queryData['total'], //总条数
             'current_page'=>$queryData['current_page'], //当前页数
             'totalPage'=>$queryData['last_page'], //总页数
