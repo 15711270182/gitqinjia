@@ -85,12 +85,16 @@ class Matchmaker extends Base
             return $this->errorReturn(self::errcode_fail,'salary参数不能为空');
         }
         $sex = ChildrenModel::getchildrenField(['uid'=>$uid],'sex');
+        $new_sex = 1;
+        if($sex == 1){
+           $new_sex = 2;
+        }
         $age = explode('到',$ask_age);
         $height = explode('到',$ask_height);
         $service = InterfaceService::instance();
         $service->setAuth($this->appid,$this->appkey); // 设置接口认证账号
         $json = [
-            'sex'=>$sex,
+            'sex'=>$new_sex,
             'minage'=>$age[0],
             'maxage'=>$age[1],
             'minheight'=>$height[0],
