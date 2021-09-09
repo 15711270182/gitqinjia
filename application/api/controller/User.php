@@ -172,9 +172,15 @@ class User extends Base
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $data['is_vip'] = 0;
         $data['endtime'] = '';
+        $data['is_pair_vip'] = 0;
+        $data['pair_vip_time'] = '';
         if($userinfo['is_vip'] == 1 && $userinfo['endtime'] >= time()){
             $data['is_vip'] = 1;
             $data['endtime'] = date('Y-m-d',$userinfo['endtime']);
+        }
+         if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= time()){ //牵线会员
+            $data['is_pair_vip'] = 1;
+            $data['pair_vip_time'] = date('Y-m-d',strtotime($userinfo['pair_vip_time']));
         }
         $last_num = $userinfo['count']?$userinfo['count']:0;
         $map['uid'] = $uid;
