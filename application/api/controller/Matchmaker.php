@@ -201,7 +201,7 @@ class Matchmaker extends Base
             ->page($page,$pageSize)
             ->select();
         if(empty($list)){
-            return $this->successReturn([],'暂无数据',self::errcode_ok);
+            return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
         $totalCount = DB::name('qx_apply_user')->where(['uid'=>$uid])->count();
         $totalPage = ceil($totalCount/$pageSize);
