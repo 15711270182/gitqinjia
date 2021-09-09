@@ -57,8 +57,10 @@ class Qxapply extends Controller
         foreach ($data as &$vo) {
             $headimgurl = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('headimgurl');
             $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
+            $pair_last_num = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('pair_last_num');
             $vo['headimgurl'] = $headimgurl;
             $vo['nickname'] = emoji_decode($nickname);
+            $vo['pair_last_num'] = $pair_last_num;
             $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
             $vo['sex'] = '女';
             if ($Children['sex'] == 1){
@@ -104,6 +106,13 @@ class Qxapply extends Controller
         if (in_array('10000', explode(',', $this->request->post('id')))) {
             $this->error('系统超级账号禁止操作！');
         }
+        $id = $this->request->post('id');
+        $uid = DB::name('qx_apply_user')->where(['id'=>$id])->value('uid');
+        $userinfo = DB::name('userinfo')->where(['id'=>$uid])->find();
+        if($userinfo['pair_last_num'] <= 0){
+            $this->error('牵线次数已用完！');
+        }
+        DB::name('userinfo')->where(['id'=>$uid])->setDec('pair_last_num',1);
         $this->applyCsrfToken();
         $this->_save($this->table, ['apply_status' => '2','update_time'=>date('Y-m-d H:i:s')]);
     }

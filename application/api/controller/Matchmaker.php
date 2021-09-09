@@ -207,6 +207,7 @@ class Matchmaker extends Base
         $totalPage = ceil($totalCount/$pageSize);
         $newData = [];
         foreach($list as $k=>$v){
+            $newData[$k]['uid'] = $v['bj_uid'];
             $newData[$k]['create_time'] = date('Y年m月d日',strtotime($v['create_time']));
             $newData[$k]['cover'] = $v['cover'];
             $newData[$k]['title'] = $v['sex'].'·'.$v['year'].'('.$v['animals'].')'.'·'.$v['education'];

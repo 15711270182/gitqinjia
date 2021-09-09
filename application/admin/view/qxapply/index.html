@@ -10,6 +10,7 @@
         <tr>
             <th class='text-center nowrap'>发送申请时间</th>
             <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>牵线剩余次数</th>
             <th class='text-center nowrap'>用户信息</th>
             <th class='text-center nowrap'>嘉宾id</th>
             <th class='text-center nowrap'>嘉宾资料信息</th>
@@ -25,6 +26,7 @@
         <tr>
             <td class='text-center nowrap'>{$vo.create_time}</td>
             <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class='text-center nowrap'><span style="color:red">{$vo.pair_last_num}</span></td>
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
                 <div class="inline-block">

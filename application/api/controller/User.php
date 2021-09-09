@@ -189,7 +189,7 @@ class User extends Base
             $paytype = $userinfo['paytype'];
             cache('paytypeuid-'.$userinfo['paytype'],$paytype,3*24*3600);
         }
-        $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid])->count();
+        $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid,'apply_status'=>2])->count();
         $sy_num = 15 - $qx_num;
         $list = [
             'qx_num'=>$qx_num,
