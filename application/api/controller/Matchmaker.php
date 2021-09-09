@@ -150,7 +150,7 @@ class Matchmaker extends Base
         if($qxInfo){
             $queryData['apply_status'] = $qxInfo['apply_status'];
         }
-        $uinfo = DB::name('userinfo')->where(['uid'=>$uid])->find();
+        $uinfo = DB::name('userinfo')->where(['id'=>$uid])->find();
         $queryData['is_pair_vip'] = 0;
         if($uinfo['is_pair_vip'] == 1 && $uinfo['pair_vip_time'] >= date('Y-m-d H:i:s')){
             $queryData['is_pair_vip'] = 1;
