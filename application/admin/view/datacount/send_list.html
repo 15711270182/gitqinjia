@@ -5,6 +5,7 @@
         <thead>
         <tr>
             <th class='text-center nowrap'>发送时间</th>
+            <th class='text-center nowrap'>短信类型</th>
             <th class='text-center nowrap'>发起方ID</th>
             <th class='text-center nowrap'>发起方信息</th>
             <th class='text-center nowrap'>接收方ID</th>
@@ -17,6 +18,7 @@
         {foreach $list as $key=>$vo}
         <tr>
             <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{if $vo.type == 1}资料未完善{else/}查看手机号{/if}</td>
             <td class='text-center nowrap'>{$vo.uid}</td>
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.b_headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">

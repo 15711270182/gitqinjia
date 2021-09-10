@@ -423,6 +423,11 @@ class Index extends Base
                 unset($newData[$k]['province']);
             }
         }
+        //被查看者没有填写相亲说明 择偶标准等  发送模板消息 或短信
+        $b_find = ChildrenModel::childrenFind(['uid'=>$bid]);
+        if(empty($b_find['remarks']) || empty($b_find['expect_education']) || empty($b_find['min_age']) || empty($b_find['min_height'])){
+            $this->sendMessageBid($uid,$bid);
+        }
         //子女信息
         $userinfo = UserModel::userFind(['id'=>$bid]);
         $children['realname'] = $userinfo['realname'];
@@ -644,7 +649,71 @@ class Index extends Base
         }
         return $this->errorReturn(self::errcode_fail,'次数已经用光啦');
     }
-
+    /**
+     * @Notes: 查看详情被查看方未完善资料- 给对方发送短信通知/模板消息
+     * @Interface sendMsg
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function sendMessageBid($uid,$bid){
+        $messageCache = cache('message-'.$bid);
+        if(empty($messageCache)){
+            $userinfo = UserModel::userFind(['id'=>$bid]);
+            $where_x['unionid'] = $userinfo['unionid'];
+            $where_x['subscribe'] = 1;
+            $mini_user = UserModel::wxFind($where_x);
+            if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                $create_at = ChildrenModel::getchildrenField(['uid'=>$bid],'create_at');
+                $nickname = !empty($userinfo['nickname'])?$userinfo['nickname']:'微信用户';
+                $date = date('Y-m-d H:i:s',$create_at);
+                $openid = $mini_user['openid'];
+                $tip = '某家长刚查看了您的资料,但因为信息不全,又默默离开了~建议您尽快完善';
+                $remark = '填写资料越详细，会有更多的人联系你哦';
+                $temp_id = 'pFlGp3GAYyMdxQLoBXg18B-WLbW5hBA4GvqmsNZoIKo';
+                $arr = array();
+                $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                $arr['keyword1'] = array('value'=>$nickname,'color'=>'#0000ff');
+                $arr['keyword2'] = array('value'=>$date,'color'=>'#0000ff');
+                $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                $param = [
+                    'touser'=>$openid,
+                    'template_id'=>$temp_id,
+                    'page'=>'pages/message/message?type=2',
+                    'data'=>$arr,
+                    'miniprogram' => [
+                        'pagepath'=>'pages/message/message?type=2',
+                        'appid'=>'wx70d65d2170dbacd7',
+                    ],
+                ];
+                $this->shiwuSendMsg($param);
+                cache('message-'.$bid,$bid,24*3600);
+            }else{
+                $realname = !empty($userinfo['realname'])?$userinfo['realname']:'有位';
+                //发送短信
+                $b_phone = ChildrenModel::getchildrenField(['uid'=>$bid],'phone'); //收信人 手机号码
+                $project_id = '4lSb84';//模板ID
+                $vars = json_encode([
+                    'realname' => $realname,
+                    'url' => 'v1kj.cn/info'
+                ]);
+                $send = new SendService();
+                $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+//                custom_log('短信接收返回json',print_r($msgJson,true));
+                $msgJson = json_decode($msgJson,true);
+                if($msgJson['status'] == 'success'){
+                    //添加发送记录
+                    $arrMsg['uid'] = $uid;
+                    $arrMsg['bid'] = $bid;
+                    $arrMsg['remark'] = '用户'.$uid.'查看用户'.$bid.',的个人详情页,对方资料未完善';
+                    $arrMsg['type'] = 1;
+                    $arrMsg['create_time'] = date('Y-m-d H:i:s');
+                    cache('sendmsg-'.$bid,$uid);
+                    DB::name('send_message_record')->insertGetId($arrMsg);
+                    cache('message-'.$bid,$bid,24*3600);
+                }
+            }
+        }
+    }
     /**
      * @Notes: 给被查看方发送短信通知  发送模板消息
      * @Interface sendMsg
