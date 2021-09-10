@@ -226,6 +226,16 @@ class User extends Base
         if(empty($children)){
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
+        $sms = input("sms");
+        //如果是从短信点过来  修改短信为已读
+        if($sms == 1){
+            $sInfo = DB::name('send_message_record')->where(['bid'=>$uid,'is_read'=>1,'type'=>1])->select();
+            if(empty($sInfo)){
+                $upSend['is_read'] = 1;
+                $upSend['update_time'] = date('Y-m-d H:i:s');
+                DB::name('send_message_record')->where(['bid'=>$uid,'type'=>1])->update($upSend);
+            }
+        }
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $children['realname'] = $userinfo['realname'];
         $children['headimgurl'] = $userinfo['headimgurl'];
@@ -261,7 +271,6 @@ class User extends Base
     public function childrenEdit()
     {
         $uid = $this->uid;
-        $sms = input("sms");
         $field = input("field", '', 'htmlspecialchars_decode');//要修改的字段 field
         $value = input("values", '', 'htmlspecialchars_decode');//对应的值
         if(empty($field)){
@@ -269,15 +278,6 @@ class User extends Base
         }
         if(empty($value)){
             return $this->errorReturn(self::errcode_fail,'values参数不能为空');
-        }
-        //如果是从短信点过来  修改短信为已读
-        if($sms == 1){
-            $sInfo = DB::name('send_message_record')->where(['bid'=>$uid,'is_read'=>1,'type'=>1])->select();
-            if(empty($sInfo)){
-                $upSend['is_read'] = 1;
-                $upSend['update_time'] = date('Y-m-d H:i:s');
-                DB::name('send_message_record')->where(['bid'=>$uid,'type'=>1])->update($upSend);
-            }
         }
         //0过不了 empty 的判断
         if($value == '/'){
