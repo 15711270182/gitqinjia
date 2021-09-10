@@ -152,4 +152,54 @@ class Base extends Controller
         }
     }
 
+    /**
+     * @Notes: 红娘牵线 会员支付最优价格信息
+     * @Interface getDisPrice
+     * @param $uid
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function getDisPrice($uid){
+        $activity_price = 3999;
+        $price1 = 0;
+        $price2 = 0;
+        $distcount = 0;
+        $id1 = '';
+        $id2 = '';
+        $distcount_id = '';
+        $time1 = '';
+        $time2 = '';
+        $expire_time = '';
+        $field = 'id,end_time,discount_price';
+        $cInfo1 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>2,'uid'=>$uid])->find(); //个人是否有优惠
+        if(!empty($cInfo1) && $cInfo1['end_time'] > date('Y-m-d H:i:s')){
+            $id1 = $cInfo1['id'];
+            $price1 = $cInfo1['discount_price']/100;
+            $time1 = $cInfo1['end_time'];
+        }
+        $cInfo2 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>1])->find(); //全部是否有优惠
+        if(!empty($cInfo2) && $cInfo2['end_time'] > date('Y-m-d H:i:s')){
+            $id2 = $cInfo2['id'];
+            $price2 = $cInfo2['discount_price']/100;
+            $time2 = $cInfo2['end_time'];
+        }
+        if(!empty($price1) || !empty($price2)){
+            $distcount = $price2;
+            $expire_time = $time2;
+            $distcount_id = $id2;
+            if($price1 > $price2){
+                $distcount_id = $id1;
+                $distcount = $price1;
+                $expire_time = $time1;
+            }
+        }
+        $price = $activity_price - $distcount ;
+        $data = [
+            'distcount_id'=>$distcount_id,
+            'activity_price'=>$price,
+            'distcount_price'=>$distcount,
+            'expire_time'=>$expire_time
+        ];
+        return $data;
+    }
 }

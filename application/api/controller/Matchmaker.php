@@ -36,8 +36,13 @@ class Matchmaker extends Base
      */
     public function getNum()
     {
+        $uid = $this->uid;
+        //获取最优价
+        $priceInfo = $this->getDisPrice($uid);
         $list = [
-            'activity_price'=>'3999',
+            'activity_price'=>$priceInfo['activity_price'],
+            'distcount_price'=>$priceInfo['distcount_price'],
+            'expire_time'=>$priceInfo['expire_time'],
             'original_price'=>'6999',
             'annual_salary'=>'2000',
             'num1'=>'1000',
