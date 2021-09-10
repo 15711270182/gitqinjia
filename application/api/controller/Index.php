@@ -678,10 +678,10 @@ class Index extends Base
                 $param = [
                     'touser'=>$openid,
                     'template_id'=>$temp_id,
-                    'page'=>'pages/message/message?type=2',
+                    'page'=>'pages/editProfile/editProfile',
                     'data'=>$arr,
                     'miniprogram' => [
-                        'pagepath'=>'pages/message/message?type=2',
+                        'pagepath'=>'pages/editProfile/editProfile',
                         'appid'=>'wx70d65d2170dbacd7',
                     ],
                 ];
@@ -707,8 +707,8 @@ class Index extends Base
                     $arrMsg['remark'] = '用户'.$uid.'查看用户'.$bid.',的个人详情页,对方资料未完善';
                     $arrMsg['type'] = 1;
                     $arrMsg['create_time'] = date('Y-m-d H:i:s');
-                    cache('sendmsg-'.$bid,$uid);
                     DB::name('send_message_record')->insertGetId($arrMsg);
+                    cache('msgSend-',$uid);
                     cache('message-'.$bid,$bid,24*3600);
                 }
             }
