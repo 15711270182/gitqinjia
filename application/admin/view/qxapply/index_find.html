@@ -42,7 +42,7 @@
             <td class='text-center nowrap'>{$vo.minheight}</td>
             <td class='text-center nowrap'>{$vo.maxheight}</td>
             <td class='text-center nowrap'>
-                {foreach ['1' => '专科以上', '2' => '本科以上', '3' => '研究生以上', '4' => '博士'] as $k => $v}
+                {foreach ['999'=>'不限','1' => '专科以上', '2' => '本科以上', '3' => '研究生以上', '4' => '博士'] as $k => $v}
                     {if $vo.education eq $k}
                     {$v}
                     {else}
@@ -50,7 +50,7 @@
                 {/foreach}
             </td>
             <td class='text-center nowrap'>
-                {foreach ['1' => '10万以下', '2' => '10万-20万', '3' => '20-30万', '4' => '30-50万', '5' => '50-100万','6'=>'100以上'] as $k => $v}
+                {foreach ['999'=>'不限','1' => '10万以下', '2' => '10万-20万', '3' => '20-30万', '4' => '30-50万', '5' => '50-100万','6'=>'100以上'] as $k => $v}
                     {if $vo.salary eq $k}
                     {$v}
                     {else}
