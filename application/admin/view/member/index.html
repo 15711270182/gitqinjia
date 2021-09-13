@@ -13,7 +13,8 @@
             <th class='text-center nowrap'>用户信息</th>
             <th class='text-center nowrap'>备注</th>
             <th class='text-center nowrap'>电话</th>
-            <th class='text-center nowrap'>剩余次数</th>
+            <th class='text-center nowrap'>剩余牵线数</th>
+            <th class='text-center nowrap'>剩余查看号码数</th>
             <th class='text-center nowrap'>邀请人(ID)</th>
             <th class='text-center nowrap'>被访问记录</th>
             <th class='text-center nowrap'>浏览记录</th>
@@ -53,6 +54,7 @@
             </td>
             <td class='text-center nowrap'>{$vo.remarks_text}</td>
             <td class='text-center nowrap'>{$vo.phone|default=''}</td>
+            <td class='text-center nowrap'>{$vo.pair_last_num}</td>
             <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
             <!--<td class='text-center nowrap'>{$vo.relation_id}</td>-->
             <td class='text-center nowrap'>{if !empty($vo.relation_id)}{$vo.relation_name}({$vo.relation_id}){else/}{/if}</td>

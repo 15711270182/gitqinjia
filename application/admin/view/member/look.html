@@ -192,22 +192,30 @@
                 <input name="max_age" class="layui-input" placeholder="请输入最高年龄" value="{$children.max_age}">
             </label>
         </div>
-        <div class="layui-form-item layui-row layui-col-space15">
-            <label class="layui-col-xs4 relative">
-                <span class="color-green">推荐分:</span>
-                <input name="score" class="layui-input" placeholder="请输入推荐分" value="{$children.score|default='0'}">
-            </label>
-            <label class="layui-col-xs4 relative">
-                <span class="color-green">今日推荐分:</span>
-                <input name="today_score" class="layui-input" placeholder="请输入今日推荐分" value="{$children.today_score|default='0'}">
-            </label>
-        </div>
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+            <!--<label class="layui-col-xs4 relative">-->
+                <!--<span class="color-green">推荐分:</span>-->
+                <!--<input name="score" class="layui-input" placeholder="请输入推荐分" value="{$children.score|default='0'}">-->
+            <!--</label>-->
+            <!--<label class="layui-col-xs4 relative">-->
+                <!--<span class="color-green">今日推荐分:</span>-->
+                <!--<input name="today_score" class="layui-input" placeholder="请输入今日推荐分" value="{$children.today_score|default='0'}">-->
+            <!--</label>-->
+        <!--</div>-->
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs11 relative">
                 <span class="color-green">备注说明:</span>
                 <textarea class="layui-textarea" name="remarks_text">{$children.remarks_text|default=''}</textarea>
             </label>
         </div>
+        {if $pair_last_num >0}
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">设置牵线次数:</span>
+                 <input name="pair_last_num" class="layui-input" placeholder="设置牵线次数" value="{$pair_last_num}">
+            </label>
+        </div>
+        {/if}
         <a class="layui-btn layui-btn-sm" href="/index.php/admin.html#/index.php/admin/recommend/index?uid={$children.uid}" target="_blank">推荐详情</a>
         <a class="layui-btn layui-btn-sm" href="/index.php/admin.html#/index.php/admin/qxapply/add_config?uid={$children.uid}" target="_blank">设置优惠价</a>
 
