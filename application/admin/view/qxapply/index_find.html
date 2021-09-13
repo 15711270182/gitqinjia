@@ -1,0 +1,67 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='qxapply/find_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>搜索时间</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>最小年龄</th>
+            <th class='text-center nowrap'>最大年龄</th>
+            <th class='text-center nowrap'>最小身高</th>
+            <th class='text-center nowrap'>最大身高</th>
+            <th class='text-center nowrap'>学历</th>
+            <th class='text-center nowrap'>薪水</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.minage}</td>
+            <td class="text-center nowrap">{$vo.maxage}</td>
+            <td class='text-center nowrap'>{$vo.minheight}</td>
+            <td class='text-center nowrap'>{$vo.maxheight}</td>
+            <td class='text-center nowrap'>
+                {foreach ['1' => '专科以上', '2' => '本科以上', '3' => '研究生以上', '4' => '博士'] as $k => $v}
+                    {if $vo.education eq $k}
+                    {$v}
+                    {else}
+                    {/if}
+                {/foreach}
+            </td>
+            <td class='text-center nowrap'>
+                {foreach ['1' => '10万以下', '2' => '10万-20万', '3' => '20-30万', '4' => '30-50万','5'=>'100以上'] as $k => $v}
+                    {if $vo.salary eq $k}
+                    {$v}
+                    {else}
+                    {/if}
+                {/foreach}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

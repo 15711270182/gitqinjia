@@ -96,6 +96,20 @@ class Matchmaker extends Base
         }
         $age = explode('到',$ask_age);
         $height = explode('到',$ask_height);
+        //添加搜索日志
+        if($page == 1){
+            $searchLog['uid'] = $uid;
+            $searchLog['sex'] = $sex;
+            $searchLog['minage'] = $age[0];
+            $searchLog['maxage'] = $age[1];
+            $searchLog['minheight'] = $height[0];
+            $searchLog['maxheight'] = $height[1];
+            $searchLog['education'] = $education;
+            $searchLog['salary'] = $salary;
+            $searchLog['create_time'] = date('Y-m-d H:i:s');
+            DB::name('qx_search_record')->insertGetId($searchLog);
+        }
+
         $service = InterfaceService::instance();
         $service->setAuth($this->appid,$this->appkey); // 设置接口认证账号
         $json = [

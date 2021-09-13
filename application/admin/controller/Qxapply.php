@@ -33,6 +33,7 @@ class Qxapply extends Controller
      */
     public $table = 'qx_apply_user';
     public $table2 = 'qx_discount_config';
+    public $table3 = 'qx_search_record';
 
     /**
      * 牵线列表
@@ -242,5 +243,41 @@ class Qxapply extends Controller
     {
         $this->applyCsrfToken();
         $this->_save($this->table2, ['is_show' => '1']);
+    }
+    /**
+     * 用户搜索条件列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function index_find()
+    {
+        $this->title = '用户搜索条件列表';
+        $this->_query($this->table3)
+            ->equal('uid,sex')
+            ->dateBetween('create_time')
+            ->order('id desc')
+            ->page();
+    }
+    protected function _index_find_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $headimgurl = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('headimgurl');
+            $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
+            $vo['headimgurl'] = $headimgurl;
+            $vo['nickname'] = emoji_decode($nickname);
+            if ($vo['sex'] == 1){
+                $vo['sex'] = '男';
+            }else{
+                 $vo['sex'] = '女';
+            }
+            $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
+            $vo['age'] = (int)date('Y') - (int)$Children['year'];
+            $vo['address'] = $Children['province']. '-' .$Children['residence'];
+        }
     }
 }

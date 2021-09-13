@@ -14,6 +14,34 @@
             </div>
         </div>
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="type">
+                    {foreach [''=>'-- 不限 --','1'=>'资料未完善','0'=>'查看手机号'] as $k=>$v}
+                    {eq name='Think.get.type' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">是否已读</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="is_read">
+                    {foreach [''=>'-- 不限 --','1'=>'是','0'=>'否'] as $k=>$v}
+                    {eq name='Think.get.is_read' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon search_btn">&#xe615;</i> 查 询</button>
         </div>
     </form>

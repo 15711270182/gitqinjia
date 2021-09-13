@@ -148,6 +148,14 @@
             </label>
         </div>
 
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">上传个人图片:</label>
+            <div class="layui-input-inline margin-right-0" style="width:800px">
+                <input name="slider" type="hidden" value="{$slider|default=''}">
+                <script>$('[name="slider"]').uploadMultipleImage();</script>
+            </div>
+        </div>
+
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
             <legend>要求</legend>
         </fieldset>

@@ -298,6 +298,11 @@ class Member extends Controller
             '2' => '近期购车',
             '3' => '无车'
         );
+
+        $img_path_arr = DB::name("qx_user_pictures")->where(['uid'=>$id,'is_del'=>0])->column('img_path'); //查询用户生活照片
+        $slider  = implode('|',$img_path_arr);
+
+        $this->slider = $slider;
         $this->realname = $realname;
         $this->sex_list = $sex_list;
         $this->children = $Children;
@@ -335,10 +340,33 @@ class Member extends Controller
         if($params['min_age'] == 0 && $params['max_age'] > 0){
             $params['min_age'] = '999';
         }
+        //真实姓名
         $realname = $params['realname'];
         $uid = DB::name('children')->where(['id'=>$id])->value('uid');
         $res1 = DB::name('userinfo')->where(['id'=>$uid])->update(['realname'=>$realname,'update_time'=>date('Y-m-d H:i::s')]);
+        //头像
+        $slider = $this->request->post('slider');
+        $img_arr = [];
+        if($slider){
+            $img_path_arr = DB::name("qx_user_pictures")->where(['uid'=>$uid,'is_del'=>0])->column('img_path');
+            $slider_arr =   explode('|',$slider);
+            foreach ($slider_arr as $kk=>$vv){
+                if(in_array($vv,$img_path_arr)){
+                    unset($slider_arr[$kk]);
+                }
+            }
+            if($slider_arr){
+                 foreach($slider_arr as $k=>$v){
+                    $img_arr[$k]['uid'] = $uid;
+                    $img_arr[$k]['img_path'] = $v;
+                    $img_arr[$k]['create_time'] = date('Y-m-d H:i:s');
+                }
+                DB::name("qx_user_pictures")->insertAll($img_arr);
+            }
+        }
         unset($params['realname']);
+        unset($params['slider']);
+        //修改子女资料信息
         $params['update_time'] = date('Y-m-d H:i:s');
         $res2 = DB::name('children')->where(['id'=>$id])->update($params);
         if ($res1 && $res2){

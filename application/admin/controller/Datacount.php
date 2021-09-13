@@ -384,7 +384,7 @@ class Datacount extends Controller
      */
     public function sendList(){
         $this->title = '发送短信列表';
-        $this->_query('send_message_record')->dateBetween('create_time')->equal('bid')->order('create_time desc')->page();
+        $this->_query('send_message_record')->dateBetween('create_time')->equal('bid,type,is_read')->order('create_time desc')->page();
     }
     protected function _sendList_page_filter(&$data)
     {
