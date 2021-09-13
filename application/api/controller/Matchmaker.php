@@ -28,7 +28,7 @@ class Matchmaker extends Base
     public  $appid = 123456;
     public  $appkey = 123456;
     /**
-     * @Notes:页数数据
+     * @Notes:页面数据
      * @Interface getNum
      * @return string
      * @author: zy
