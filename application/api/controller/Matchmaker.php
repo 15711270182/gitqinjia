@@ -86,7 +86,7 @@ class Matchmaker extends Base
         if(empty($education)){ //1专科以上 2本科以上 3研究生以上 4博士
             return $this->errorReturn(self::errcode_fail,'education参数不能为空');
         }
-        if(empty($salary)){ //1 10万以下 2 10万-20万 3 20-30万  4 30-50万 5 100以上
+        if(empty($salary)){ //1 10万以下 2 10万-20万 3 20-30万  4 30-50万 5 50-100 6 100以上
             return $this->errorReturn(self::errcode_fail,'salary参数不能为空');
         }
         $sex = ChildrenModel::getchildrenField(['uid'=>$uid],'sex');
