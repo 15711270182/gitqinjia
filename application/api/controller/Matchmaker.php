@@ -60,7 +60,7 @@ class Matchmaker extends Base
      */
     public function getWxcode(){
         $data['activity_price'] = '3999';
-        $data['img_url'] = 'https://pics.njzec.com/wxewm.png';
+        $data['img_url'] = 'https://pics.njzec.com/kefu.jpg';
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
