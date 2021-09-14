@@ -120,7 +120,7 @@ class Qxapply extends Controller
         if($pair_last_num == 0){
             //会员自动取消
             $uSave['is_pair_vip'] = 0;
-            $uSave['pair_vip_time'] = '';
+            $uSave['pair_vip_time'] = '0000-00-00 00:00:00';
             DB::name('userinfo')->where(['id'=>$uid])->update($uSave);
         }
         $this->applyCsrfToken();
