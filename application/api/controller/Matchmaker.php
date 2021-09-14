@@ -190,6 +190,10 @@ class Matchmaker extends Base
     public function clickMatch(){
         $uid = $this->uid;
         $bj_uid = input("bj_uid");
+        $pair_last_num = DB::name('userinfo')->where(['id'=>$uid])->value('pair_last_num');
+        if($pair_last_num == 0){
+            return $this->errorReturn(self::errcode_fail,'牵线次数已用完');
+        }
         //请求铂金详情数据 添加入库
         $service = InterfaceService::instance();
         $service->setAuth($this->appid,$this->appkey); // 设置接口认证账号

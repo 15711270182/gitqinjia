@@ -116,6 +116,13 @@ class Qxapply extends Controller
             $this->error('牵线次数已用完！');
         }
         DB::name('userinfo')->where(['id'=>$uid])->setDec('pair_last_num',1);
+        $pair_last_num = DB::name('userinfo')->where(['id'=>$uid])->value('pair_last_num');
+        if($pair_last_num == 0){
+            //会员自动取消
+            $uSave['is_pair_vip'] = 0;
+            $uSave['pair_vip_time'] = '';
+            DB::name('userinfo')->where(['id'=>$uid])->update($uSave);
+        }
         $this->applyCsrfToken();
         $this->_save($this->table, ['apply_status' => '2','update_time'=>date('Y-m-d H:i:s')]);
     }
