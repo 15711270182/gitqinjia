@@ -192,14 +192,14 @@ class User extends Base
         $is_pair_vip = 0;
         $pair_vip_time = '';
         $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid,'apply_status'=>2])->count();
-        $sy_num = 15 - $qx_num;
-        if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= time()){ //牵线会员
+//        $sy_num = $userinfo['pair_last_num'] - $qx_num;
+        if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= date('Y-m-d H:i:s')){ //牵线会员
             $is_pair_vip = 1;
             $pair_vip_time = date('Y-m-d',strtotime($userinfo['pair_vip_time']));
         }
         $list = [
             'qx_num'=>$qx_num,
-            'sy_num'=>$sy_num,
+            'sy_num'=>$userinfo['pair_last_num'],
             'is_pair_vip' =>$is_pair_vip,
             'pair_vip_time' =>$pair_vip_time,
             'subscribe'=>$subscribe,
