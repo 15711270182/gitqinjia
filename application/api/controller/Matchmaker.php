@@ -260,4 +260,30 @@ class Matchmaker extends Base
         $data['list'] = $newData;
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
+
+    /**
+     * @Notes: 记录页面浏览时长
+     * @Interface viewCount
+     * @author: zy
+     * @Time: 2021/09/14
+     */
+    public function viewCount(){
+        $uid = $this->uid;
+        $type = input('type');
+        if(empty($type)){
+            return $this->errorReturn(self::errcode_fail,'type参数不能为空');
+        }
+        $browse_duration = input('browse_duration');
+        if(empty($browse_duration)){
+            return $this->errorReturn(self::errcode_fail,'browse_duration参数不能为空');
+        }
+        $add['uid'] = $uid;
+        $add['type'] = $type;
+        $add['browse_duration'] = $browse_duration;
+        $add['create_time'] = date('Y-m-d H:i:s');
+        DB::name('qx_browse_record')->insertGetId($add);
+        return $this->successReturn('','成功',self::errcode_ok);
+    }
+
+
 }

@@ -68,6 +68,8 @@ Route::group('api/Matchmaker',function(){
     Route::any('getUserDetail', 'api/Matchmaker/getUserDetail'); //获取嘉宾详情信息
     Route::any('clickMatch', 'api/Matchmaker/clickMatch'); //点击牵线
     Route::any('matchRecord', 'api/Matchmaker/matchRecord'); //牵线记录列表
+
+    Route::any('viewCount', 'api/Matchmaker/viewCount'); //记录页面浏览时长
 });
 
 

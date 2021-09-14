@@ -63,7 +63,7 @@ class Orderhnqx extends Base
         $data['order_number'] = $order_num;
         $data['uid'] = $uid;
         $data['distcount_id'] = $distcount_id;
-        $data['payment'] = $price;
+        $data['payment'] = $price*100;
         $data['create_at'] = time();
         $data['pay_time'] = time();
         $data['source'] = 3;
