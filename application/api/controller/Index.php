@@ -912,6 +912,38 @@ class Index extends Base
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
+     * @Notes: 分享图海报  新版
+     * @Interface shareInfoNew
+     * @return string
+     * @author: zy
+     * @Time:
+     */
+    public function shareInfoNew()
+    {
+        $uid = $this->uid;
+        $share_uid = input("uid"); //分享人的uid
+        if(!$share_uid){
+            return $this->errorReturn(self::errcode_fail,'分享人uid不能为空');
+        }
+        cache('shareposter-'.$uid, null);
+        $url = cache('shareposter-'.$share_uid);
+        if(!$url){
+            $Poster = new Poster();
+            $url = $Poster->index($share_uid);
+            cache('shareposter-'.$share_uid,$url);
+        }
+        if($uid == $share_uid){
+            $data['text'] = "我的信息全在这，快帮忙介绍个对象吧";
+        }else{
+            $cInfo = ChildrenModel::childrenFind(['uid'=>$share_uid]);
+            $year = $cInfo['year'];
+            $sex = $cInfo['sex'] == 1 ?'男孩':'女孩';
+            $data['text'] = "这个".$year."年".$sex."条件挺好的，适不适合你家孩子？";
+        }
+        $data['img'] = $url;
+        return $this->successReturn($data,'成功',self::errcode_ok);
+    }
+    /**
      * @Notes:获取常见问题
      * @Interface ques
      * @return string

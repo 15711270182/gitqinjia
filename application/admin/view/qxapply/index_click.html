@@ -3,14 +3,15 @@
 
 {block name="content"}
 <div class="think-box-shadow">
-    {include file='qxapply/click_search'}
+    {include file='qxapply/browse_search'}
     <table class="layui-table margin-top-10" lay-skin="line">
         {notempty name='list'}
         <thead>
         <tr>
-            <th class='text-center nowrap'>点击时间</th>
+            <th class='text-center nowrap'>浏览时间</th>
             <th class='text-center nowrap'>用户ID</th>
             <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>浏览时长(秒)</th>
             <th class='text-center nowrap'>类型</th>
         </tr>
         </thead>
@@ -32,8 +33,9 @@
                     </div>
                 </div>
             </td>
+            <td class='text-center nowrap'>{$vo.browse_duration}</td>
             <td class='text-center nowrap'>
-                {foreach ['4'=>'搜索列表','5' => '服务详情页'] as $k => $v}
+                {foreach ['1'=>'服务详情','2' => '搜索列表', '3' => '列表详情'] as $k => $v}
                     {if $vo.type eq $k}
                     {$v}
                     {else}
