@@ -269,12 +269,12 @@ class Matchmaker extends Base
      */
     public function viewCount(){
         $uid = $this->uid;
-        $type = input('type');
+        $type = input('type'); //type  1图表数据页  2 搜索列表页  3详情页  4立即咨询(列表)  5 立即咨询（服务详情页）
         if(empty($type)){
             return $this->errorReturn(self::errcode_fail,'type参数不能为空');
         }
         $browse_duration = input('browse_duration');
-        if(empty($browse_duration)){
+        if(empty($browse_duration) && $type != 4){
             return $this->errorReturn(self::errcode_fail,'browse_duration参数不能为空');
         }
         $add['uid'] = $uid;

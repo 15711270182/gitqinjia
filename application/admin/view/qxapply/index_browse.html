@@ -1,0 +1,52 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='qxapply/browse_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>浏览时间</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>浏览时长</th>
+            <th class='text-center nowrap'>类型</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.browse_duration}</td>
+            <td class='text-center nowrap'>
+                {foreach ['1'=>'服务详情','2' => '搜索列表', '3' => '列表详情'] as $k => $v}
+                    {if $vo.type eq $k}
+                    {$v}
+                    {else}
+                    {/if}
+                {/foreach}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

@@ -34,6 +34,7 @@ class Qxapply extends Controller
     public $table = 'qx_apply_user';
     public $table2 = 'qx_discount_config';
     public $table3 = 'qx_search_record';
+    public $table4 = 'qx_browse_record';
 
     /**
      * 牵线列表
@@ -275,9 +276,61 @@ class Qxapply extends Controller
             }else{
                  $vo['sex'] = '女';
             }
+            if($vo['minage'] == '999'){
+                $vo['minage'] = '不限';
+            }
+            if($vo['maxage'] == '999'){
+                $vo['maxage'] = '不限';
+            }
+            if($vo['minheight'] == '999'){
+                $vo['minheight'] = '不限';
+            }
+            if($vo['maxheight'] == '999'){
+                $vo['maxheight'] = '不限';
+            }
             $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
         }
     }
+    /**
+     * 页面浏览时长列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function index_browse()
+    {
+        $where['type'] = [1,2,3];
+        $this->title = '页面浏览时长列表';
+        $this->_query($this->table4)
+            ->equal('type,uid')
+            ->where($where)
+            ->dateBetween('create_time')
+            ->order('id desc')
+            ->page();
+    }
+    protected function _index_browse_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $headimgurl = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('headimgurl');
+            $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
+            $vo['headimgurl'] = $headimgurl;
+            $vo['nickname'] = emoji_decode($nickname);
+
+            $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
+            if ($Children['sex'] == 1){
+                $vo['sex'] = '男';
+            }else{
+                 $vo['sex'] = '女';
+            }
+            $vo['age'] = (int)date('Y') - (int)$Children['year'];
+            $vo['address'] = $Children['province']. '-' .$Children['residence'];
+        }
+    }
+
 }
