@@ -184,11 +184,7 @@ class User extends Base
 
         $wechat_url = 'http://mp.weixin.qq.com/s?__biz=Mzg3ODYzMjk5OA==&mid=100000006&idx=1&sn=085429b461d09aa0f663db416f363230&chksm=4f11884f786601595841cbdde10c0f56a0aaf384f08c8db9e258cba3e21bbe9af176faa7fe97#rd';
 
-        $paytype = cache('paytypeuid-'.$uid);
-        if(!$paytype){
-            $paytype = $userinfo['paytype'];
-            cache('paytypeuid-'.$userinfo['paytype'],$paytype,3*24*3600);
-        }
+        $paytype = $userinfo['paytype'];
         $is_pair_vip = 0;
         $pair_vip_time = '';
         $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid,'apply_status'=>2])->count();

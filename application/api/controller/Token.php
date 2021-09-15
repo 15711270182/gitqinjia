@@ -53,7 +53,8 @@ class Token extends Base
                     $data = [];
                     $data['openid'] = $openid;
                     $data['unionid'] = $unionid;
-                    $data['paytype'] = rand(1,2);
+//                    $data['paytype'] = rand(1,2);
+                    $data['paytype'] = 1; //默认月卡
                     $data['appid'] = config('wechat.miniapp.appid');
                     $data['add_time'] = time();
                     $resId = UserModel::userAdd($data);
@@ -113,7 +114,8 @@ class Token extends Base
         $data['openid'] = $openid;
         $data['appid'] = config('wechat.miniapp.appid');
         $data['add_time'] = time();
-        $data['paytype'] = rand(1, 2);
+//        $data['paytype'] = rand(1, 2);
+        $data['paytype'] = 1; //默认月卡
         $userid = UserModel::userAdd($data);
         $data = [];
         $data['uid'] = $userid;
