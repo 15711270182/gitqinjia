@@ -18,7 +18,7 @@
             <div class="layui-input-inline">
                 <select name = "type" class="content">
                     <option value="" selected>请选择</option>
-                    {foreach ['1'=>'服务详情','2' => '搜索列表', '3' => '列表详情'] as $k=>$v}
+                    {foreach ['1'=>'服务详情','2' => '筛选结果', '3' => '嘉宾资料'] as $k=>$v}
                     {if $k.'' eq $Think.get.type}
                     <option selected value="{$k}">{$v}</option>
                     {else}

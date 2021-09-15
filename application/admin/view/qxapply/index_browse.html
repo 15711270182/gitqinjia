@@ -35,7 +35,7 @@
             </td>
             <td class='text-center nowrap'>{$vo.browse_duration}</td>
             <td class='text-center nowrap'>
-                {foreach ['1'=>'服务详情','2' => '搜索列表', '3' => '列表详情'] as $k => $v}
+                {foreach ['1'=>'服务详情','2' => '筛选结果', '3' => '嘉宾资料'] as $k => $v}
                     {if $vo.type eq $k}
                     {$v}
                     {else}
