@@ -17,10 +17,7 @@ class Hnqx extends Controller
     public function openVip(){
         $uid = input('uid');
         $priceInfo = getDisPrice($uid);
-        $this->assign('uid',$uid);
         $this->assign('priceInfo',$priceInfo);
-//        $jssdk = WechatService::getWebJssdkSign();
-//        $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
     }
 
