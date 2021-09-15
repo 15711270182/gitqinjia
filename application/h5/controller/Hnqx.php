@@ -16,25 +16,14 @@ class Hnqx extends Controller
 {
     public function openVip(){
         $uid = input('uid');
-        $userinfo = Db::name('userinfo')->where(['id' => $uid])->find();
-        $realname = $userinfo['realname'];
-        $headimgurl = $userinfo['headimgurl'];
-        $headimgurl = !empty($headimgurl)?$headimgurl:'https://pics.njzec.com/default.png';
-        if (empty($realname)) {
-            $name = '家长';
-        }else{
-            $name = $realname.'家长';
-        }
-
-        $base = new BaseController();
-        $priceInfo = $base->getDisPrice($uid);
-
-        $this->assign('realname',$name);
-        $this->assign('headimgurl',$headimgurl);
+        $priceInfo = getDisPrice($uid);
+        $this->assign('uid',$uid);
         $this->assign('priceInfo',$priceInfo);
-
+        $jssdk = WechatService::getWebJssdkSign();
+        $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
     }
+
     public function stip(){
         $jssdk = WechatService::getWebJssdkSign();
         $jssdk['link'] = "pages/index/index";

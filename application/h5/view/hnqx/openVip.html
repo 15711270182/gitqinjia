@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="pragram" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="description" content="柠檬心理收银台2" />
+    <meta name="keyword" content="柠檬心理收银台2" />
+    <title>柠檬心理收银台2</title>
+    <script type="text/javascript" src="/static/live/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/live/js/autosize.js"></script>
+
+
+     <style type="text/css">
+        *{margin: 0;padding: 0;}
+        html,body{height: 100%;font-family: '微软雅黑 Light';background-color: #2c6cff;}
+        #contenter{max-width: 640px;margin: 0 auto;position: relative;}
+        a{text-decoration:none;}
+        hr{border: none;height: 0.26rem;background-color: #fff;}
+        #header{position:relative;height:9rem;background-image:url('/static/live/cashier/bg_syt@2x.png');background-size:100% 100%;}
+        #header .head{height:1.6rem;display:flex;justify-content:center;align-items:center;padding:0.8rem 0rem;}
+        #header .head .icon{width:1.2rem;height:1.2rem;}
+        #header .head .icon img{width:1.2rem;height:1.2rem;}
+        #header .head .name{line-height:1.6rem;color:#fff;font-family:'SourceHanSansCN-Regular';font-size:0.86rem;text-indent:0.4rem;}
+        #content{position:absolute;z-index:1;top:7rem;left:0;right:0;margin:0 auto;background-image:url('/static/live/cashier/card_syt@3x.png');background-size:100% 100%;width:20.5rem;height:27.5rem;}
+        #content .desc{font-family:'SourceHanSansCN-Light';font-size:0.62rem;color:#676972;padding:4.2rem 2.4rem 1rem;line-height:1rem;font-weight:400;}
+        #content .pay_type{display:flex;justify-content:center;align-items:center;height:1rem;padding:1.8rem 0rem 0rem;}
+        #content .pay_type .icon{width:0.486rem;height:0.594rem;}
+        #content .pay_type .icon img{width:0.486rem;height:0.594rem;vertical-align:top;}
+        #content .pay_type .name{line-height:1rem;color:#AEB0B9;font-family:'SourceHanSansCN-Regular';font-size:0.58rem;text-indent:0.4rem;}
+        #content .pays{height:auto;width:17rem;margin:0 auto;}
+        #content .pays .btn{width:17rem;height:2.83rem;margin:0.9rem 0rem;}
+        #content .pays .btn img{width:17rem;height:2.83rem;}
+        #content .link{font-family;"SourceHanSansCN-Regular";font-size:0.6rem;color:#AEB0B9;text-align:center;margin-top:1.8rem;}
+
+        #zfb{position:fixed;z-index:10;background-color:rgba(0,0,0,0.8);top:0;left:0;right:0;height:100%;display:flex;justify-content:center;align-items:center;}
+        #zfb #zfb_info{position:relative;width:12rem;height:16rem;}
+        #zfb #zfb_info .zfb{position:absolute;z-index:11;width:12rem;height:16rem;top:0;left:0;right:0;display:flex;flex-direction: row;flex-wrap: wrap;justify-content:center;}
+        #zfb #zfb_info .zfb .name{background-color:#1777FF;width:10.4rem;height:1.8rem;line-height:1.8rem;color:#fff;text-align:center;border-radius:1rem;font-size:0.8rem;}
+        #zfb #zfb_info .zfb .icon{width:3.96rem;height:0.48rem;padding:0.4rem 0rem;}
+        #zfb #zfb_info .zfb .icon img{width:3.96rem;height:0.48rem;vertical-align:top;}
+        #zfb #zfb_info .zfb .qrcode{width:10rem;height:10rem;border:0.3rem solid #1777FF;border-radius:0.3rem;}
+        #zfb #zfb_info .zfb .qrcode img{width:10rem;height:10rem;}
+        #zfb #zfb_info .zfb .txt{color:#fff;line-height:2rem;font-size:0.92rem;text-align:center;}
+        #wx{position:fixed;z-index:10;background-color:rgba(0,0,0,0.8);top:0;left:0;right:0;height:100%;display:flex;justify-content:center;align-items:center;}
+        #wx #wx_info{position:relative;width:12rem;height:16rem;}
+        #wx #wx_info .wx{position:absolute;z-index:11;width:12rem;height:16rem;top:0;left:0;right:0;display:flex;  flex-direction: row;flex-wrap: wrap;justify-content:center;}
+        #wx #wx_info .wx .name{background-color:#21B509;width:11rem;height:2.2rem;line-height:2.2rem;color:#fff;text-align:center;border-radius:1.2rem;font-size:0.8rem;}
+        #wx #wx_info .wx .icon{width:3.96rem;height:0.48rem;padding:0.4rem 0rem;}
+        #wx #wx_info .wx .icon img{width:3.96rem;height:0.48rem;vertical-align:top;}
+        #wx #wx_info .wx .qrcode{width:10rem;height:10rem;border:0.3rem solid #21B509;border-radius:0.3rem;}
+        #wx #wx_info .wx .qrcode img{width:10rem;height:10rem;}
+        #wx #wx_info .wx .txt{color:#fff;line-height:2rem;font-size:0.92rem;text-align:center;}
+
+        #xy{position:fixed;z-index:10;background-color:rgba(0,0,0,0.8);top:0;left:0;right:0;height:100%;display:flex;justify-content:center;align-items:center;}
+        #xy #xy_info{position:relative;width:16.4rem;height:22rem;}
+        #xy #xy_info .close{position:absolute;z-index:11;width:1.2rem;height:1.2rem;right:0;top:-2rem;}
+        #xy #xy_info .close img{width:1.2rem;height:1.2rem;}
+        #xy #xy_info .xy{position:absolute;z-index:11;width:16.4rem;height:20rem;top:0;left:0;right:0;background-color:#fff;border-radius:0.5rem;padding:1.5rem 0rem;}
+        #xy #xy_info .xy .name{height:2.2rem;line-height:2.2rem;color:#676972;text-align:center;border-radius:1.2rem;font-size:0.82rem;font-family:'SourceHanSansCN-Bold';font-size:1.1rem;font-weight:700;}
+        #xy #xy_info .xy .text{height:18rem;color:#676972;font-size:0.70rem;line-height:1.22rem;padding:0.4rem 1.4rem;font-weight:400;overflow-y:scroll;}
+
+
+    </style>
+</head>
+<body>
+    <div id="contenter">
+    <div id="xy" style="display:none;">
+        <div id="xy_info">
+            <div class="close" onclick="$('#xy').hide();">
+                <img src="/static/live/cashier/yhfwxy_icon_close@3x.png"/>
+            </div>
+            <div class="xy" onclick="fun(event)">
+                <div class="name">心理服务协议</div>
+                <div class="text">
+                    本咨询服务协议由以下三方通过网络签署：<br/><hr/>
+                    甲方（签约专家）：<br/><hr/>
+                    身份证号码：<br/><hr/>
+                    乙方（求助者）：<br/><hr/>
+                    身份证号码：<br/><hr/>
+                    丙方：南京柠心檬信息科技有限公司<br/><hr/>
+                    地址：南京市浦口区文景路61号创芯汇805室<br/><hr/>
+                    通讯地址：南京市浦口区文景路61号创芯汇805室<br/><hr/>
+                    鉴于：<br/><hr/>
+                    1、丙方是一家根据中国法律合法成立并有效存续的有限责任公司，合法拥有柠檬心理咨询居间服务平台的经营权，提供信息咨询、技术服务等。<br/><hr/>
+                    2、甲方为持有中国的自然人，已与丙方签约为丙方平台签约专家，并承诺其提供给丙方的信息是完全真实的。<br/><hr/>
+                    3、乙方为丙方平台的注册用户，并承诺其提供给丙方的信息是完全真实的；<br/><hr/>
+                    4、现乙方有意就问题向甲方寻求专业心理咨询，甲方亦愿意向乙方提供相关服务。<br/><hr/>
+                    5、甲、乙双方在本协议签署前已经仔细阅读并充分理解丙方放置在丙方平台上的本协议版本及免责声明，并已经确认同意相关交易规则。<br/><hr/>
+                    各方经友好协商一致，签订如下协议，以兹共同遵照履行。<br/><hr/>
+                    第一条 服务内容<br/><hr/>
+                    1.1、 甲方同意向乙方提供小时（以下简称“服务时间”）的心理咨询服务，甲、乙双方明确并同意，在乙方完成本协议项下服务费支付义务后，具体服务时间自乙方与甲方通过丙方平台预约的服务时间到达时开始计算。<br/><hr/>
+                    若甲、乙双方并未预约服务时间，则在乙方完成本协议项下服务费支付义务后，具体服务时间自乙方通过丙方平台接受甲方服务之时起开始计算。<br/><hr/>
+                    1.2、 甲方在提供本协议项下心理咨询服务时，应严格遵守相关法律法规、行业规范及平台规则的要求，尽其所能为乙方提供不低于行业同等水平的服务。<br/><hr/>
+                    1.3、 乙方明确并承诺，其已经明确心理咨询业务规则，理解且同意本协议项下的心理咨询服务可能并不会产生直接、强烈、明显的效果，在接受服务后亦可能产生的其他后果，乙方愿意承担该等后果。<br/><hr/>
+                    1.4、 乙方明确并承诺，其在接受心理咨询过程中应向甲方如实说明自身情况及遇到的问题，并遵从甲方给出的专业性建议及意见。<br/><hr/>
+                    第二条 服务费用<br/><hr/>
+                    2.1、 乙方应就本协议项下的心理咨询服务向甲方支付咨询服务费。咨询服务费的计算公式如下所示：<br/><hr/>
+                    咨询服务费 =咨询服务费单价人民币元/时 *服务时间（小时）<br/><hr/>
+                    故乙方应向甲方支付咨询服务费总计人民币元（大写：人民币元）。<br/><hr/>
+                    2.2、 甲、乙双方应向丙方支付信息技术服务费，甲方不可撤销的明确并同意，其原意代乙方支付全部信息技术服务费。<br/><hr/>
+                    2.3、 为完成交易之目的，甲方不可撤销的授权丙方代收乙方支付的咨询服务费，并授权丙方直接从代收的每笔咨询服务费中立即收取甲方应向丙方支付的信息技术服务费。丙方应根据其与甲方之间的协议按期足额向甲方支付扣除信息技术服务费后的剩余代收款项。具体付款流程如下：<br/><hr/>
+                    （1） 乙方将本协议第2.1条约定的咨询服务费支付至丙方后，方可向甲方发出心理咨询的意向通知；<br/><hr/>
+                    （2） 丙方确认收到乙方支付的咨询服务费后，应及时通过平台通知甲方该情况，同时亦应反馈至乙方其咨询服务费已经按平台规则支付，其有权在预约时间接受甲方提供的服务或是通过丙方平台向甲方提出服务申请；<br/><hr/>
+                    （3） 甲方在收到丙方的通知后应根据本协议及相关规则的规定及要求为乙方提供心理咨询服务；<br/><hr/>
+                    （4） 丙方应定期通过平台通知或短信方式向甲方确认其信息技术服务费的支付情况。<br/><hr/>
+                    2.4、 丙方应妥善保存其代收的咨询服务费，并与其自有资金分开保存。非根据本协议、其他协议及相关规则的约定，不得擅自挪用、移转或混同代收的咨询服务费。甲方明确并同意，丙方根据本协议代收代管咨询服务费期间，咨询服务费产生的利息归丙方所有。<br/><hr/>
+                    2.5、 甲方对于丙方代收咨询服务费及扣除信息技术服务费存在疑问的，应当及时向丙方反馈，双方配合查清。<br/><hr/>
+                    第三条 保密责任<br/><hr/>
+                    3.1、 本协议及本协议履行过程中涉及的所有信息（包括但不限于乙方身份信息等）均为保密信息。各方应妥善保管相关信息，除本框架协议第3.2条约定的情形外，任何一方不得向第三方披露任何保密信息。<br/><hr/>
+                    3.2、 各方明确并同意，在下列情况下，任何一方可向第三方披露保密信息：<br/><hr/>
+                    （1） 已经取得其他各方事先书面确认；<br/><hr/>
+                    （2） 根据行政机关、司法机关的合理要求；<br/><hr/>
+                    （3） 公众已可通过其他合法渠道获知；<br/><hr/>
+                    （4） 丙方为完成本协议之目的，向内部工作人员、委托的中介机构披露保密信息。但披露方应保证内部工作人员、委托的中介机构，无论劳动关系、委托关系是否存续，均承担与披露方相同的保密义务。<br/><hr/>
+                    3.3、 任何一方擅自披露保密信息造成其他各方损失的，披露方应承担相应的赔偿责任。<br/><hr/>
+                    3.4、 本协议项下保密责任不会随本协议的失效、终止、撤销而失去效力。<br/><hr/>
+                    第四条 协议终止<br/><hr/>
+                    4.1、 甲方有权在甲、乙方双方预约的服务时间到达【24】小时前通过丙方平台通知乙方及丙方解除本协议，但甲方应退还或委托丙方退还收取的全部咨询服务费，并承担由此给乙方及丙方造成的一切损失。甲方进一步明确，若甲方行使本条款约定之解除权，丙方已经收取的信息技术服务费不予退还。<br/><hr/>
+                    4.2、 丙方有权在甲方或乙方违反本协议约定时通过丙方平台通知甲方及乙方解除本协议。甲方应退还或委托丙方退还已经收取的、但尚未接受的心理咨询服务所对应的咨询服务费。若丙方因甲方违约而行使本条款约定之解除权，丙方已经收取的信息技术服务费不予退还，否则，丙方应于解除本协议后的【7】个工作日内，将收取的信息技术服务费退还给甲方。<br/><hr/>
+                    各方明确并同意，丙方行使本条款约定之解除权并不影响丙方追究违约方违约责任之权利。<br/><hr/>
+                    第五条 违约责任<br/><hr/>
+                    5.1、 各方均应严格履行本协议，非经各方协商一致或依照本协议约定，任何一方不得解除本协议。<br/><hr/>
+                    5.2、 任何一方任何违反本协议约定的行为均构成违约，违约方应承担因违约而产生的赔偿责任并承担其余其他各方因违约而产生的其他费用和损失，包括但不限于调查费、诉讼费、律师费等。<br/><hr/>
+                    第六条 法律适用和争议解决<br/><hr/>
+                    6.1、 本协议的效力、履行、终止、解释均适用中华人民共和国法律。<br/><hr/>
+                    6.2、 因本协议产生的任何争议，本协议任何一方均有权向丙方所在地有管辖权的法院提起诉讼解决。<br/><hr/>
+                    第七条 其他<br/><hr/>
+                    7.1、 本协议由各方在线签署，采用电子文本形式制成，并保存在丙方为此设立的专用服务器上备查，各方均认可该形式的协议效力。<br/><hr/>
+                    7.2、 本协议的任何修改、补充均应以电子文本形式作出并于丙方平台公告。<br/><hr/>
+                    7.3、 本协议的任何条款被认定无效，其余条款并不受影响，依然有效。<br/><hr/>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div id="wx" style="display:none;" onclick="$('#wx').hide();">
+        <div id="wx_info">
+            <div class="wx" onclick="fun(event)">
+                <div class="name">请使用微信扫码支付</div>
+                <div class="icon">
+                    <img src="/static/live/cashier/arrow@3x.png"/>
+                </div>
+                <div class="qrcode">
+                    <img src="/static/live/cashier/wx1.png"/>
+                </div>
+                <div class="txt">长按识别扫码</div>
+            </div>
+        </div>
+    </div>
+    <div id="header">
+        <div class="head">
+            <div class="icon">
+                <img src="/static/live/cashier/logo2@3x.png"/>
+            </div>
+            <div class="name">柠檬心理</div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="desc">柠檬心理于2012年正式成立，为超过500万的用户提供心理成长服务，是一个由理论、实践经验丰富的导师团队组建的专业团队。<br/><hr/> 我们的情感急诊室，以“高效、专业、安全、结果”为基准准则，用专业的理论体系配合实际操作流程，用心帮助每一个有情感诉求的朋友，为他们提供多元化情感定制服务，让幸福不再留有遗憾。 </div>
+        <div class="pay_type">
+            <div class="icon">
+                <img src="/static/live/cashier/syt_icon_safe@3x.png"/>
+            </div>
+            <div class="name">官方支付入口，请放心支付</div>
+        </div>
+        <div class="pays">
+            <div class="btn" id="buy" >
+                <img src="/static/live/cashier/syt_btn_wxzf@3x.png"/>
+            </div>
+            <div class="btn" onclick="$('#zfb').show();">
+                <img src="/static/live/cashier/syt_btn_zfbzf@3x.png"/>
+            </div>
+        </div>
+        <div class="link" onclick="$('#xy').show();">请认真阅读《用户服务协议》，同意后再支付</div>
+    </div>
+</div>
+<script type="application/javascript">
+    //阻止点击事件向上冒泡
+    var fun = function (e) {
+        e.stopPropagation();
+    }
+
+</script>
+
+        <script type="text/javascript" language="javascript" src="/static/live/js/jweixin-1.0.0.js"></script>
+        <script>
+        //设置配置文件
+        wx.config({
+                debug: false,       //调试模式是否开启，开启则在PC端控制台console里面打印，在手机端就是弹出状态吗
+                appId: "{$dat['appId']}",
+                timestamp: "{$dat['timestamp']}",
+                nonceStr: "{$dat['nonceStr']}",
+                signature: "{$dat['signature']}",
+                jsApiList: [
+                    'onMenuShareTimeline',       //分享到朋友圈
+                    'onMenuShareAppMessage',    //分享给朋友
+                    'onMenuShareQQ',           //分享给QQ好友
+                    'onMenuShareQZone'        //分享到QQ空间
+                ]
+            });
+        //调用接口
+        wx.ready(function(){
+            //掉用分享给朋友的接口，这里只做分享给朋友，分享到其他地方一次内推
+            wx.onMenuShareAppMessage({
+                title: '柠檬心理收银台2', // 分享标题
+                desc: '用专业呵护你的世界', // 分享描述
+                link: "{$dat['link']}", // 分享链接，注意：该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: "https://testqin.njzec.com/static/live/images/share.png", // 分享图标
+                success: function (res) {
+                    alert('分享成功')
+                }
+            });
+        });
+    </script>
+<script type="application/javascript">
+
+        $(function(){
+
+
+            $("#buy").click(function(){
+                 wxpay();
+                var canbuy = 1;
+                if (canbuy != "1")
+                {
+                    alert('暂未开通，敬请期待');
+                    return false;
+                }
+
+                jsApiCall(1);
+            })
+
+
+        })
+
+
+
+        function wxpay(){
+
+                wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: "{$result['appid']?:''}", // 必填，公众号的唯一标识
+                timestamp: "{$result['timeStamp']?:''}", // 必填，生成签名的时间戳
+                nonceStr: "{$result['nonce_str']?:''}", // 必填，生成签名的随机串
+                signature: "{$result['sign']?:''}",// 必填，签名，见附录1
+                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+        }
+
+        //调用微信JS api 支付
+        function jsApiCall(id) {
+
+
+
+            var wxpaypost;
+            wx.chooseWXPay({
+                timestamp: "{$data['timestamp']}", // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: "{$data['nonceStr']}", // 支付签名随机串，不长于 32 位
+                package: "{$data['package']}", // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: "{$data['signType']}", // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: "{$data['paySign']}", // 支付签名
+                success: function (res) {
+                    alert('支付成功！');
+                },
+                cancel:function(res){
+                    alert('取消支付');
+
+                }
+            });
+
+        }
+
+
+
+
+    </script>
+</body>
+</html>

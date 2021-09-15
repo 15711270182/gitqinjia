@@ -38,7 +38,7 @@ class Matchmaker extends Base
     {
         $uid = $this->uid;
         //获取最优价
-        $priceInfo = $this->getDisPrice($uid);
+        $priceInfo = getDisPrice($uid);
         $list = [
             'activity_price'=>$priceInfo['activity_price'],
             'distcount_price'=>$priceInfo['distcount_price'],
