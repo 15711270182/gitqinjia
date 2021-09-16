@@ -33,7 +33,10 @@ class Hnqx extends Controller
              echo "<script> alert('签名错误') </script>";
              die;
         }
+        $jssdk = WechatService::getWebJssdkSign();
+        $jssdk['link'] = "pages/index/index";
         $this->assign('data',$newArr);
+        $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
     }
 
