@@ -791,7 +791,7 @@ function lock($key,$time = 5)
                     $expire_time = $time1;
                 }
             }
-            $price = $activity_price - $distcount ;
+            $price = sprintf('%.2f',($activity_price - $distcount)) ;;
             $data = [
                 'distcount_id'=>$distcount_id,
                 'activity_price'=>$price,
