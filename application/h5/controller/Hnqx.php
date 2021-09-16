@@ -15,9 +15,25 @@ use app\api\controller\Base as BaseController;
 class Hnqx extends Controller
 {
     public function openVip(){
-        $uid = input('uid');
-        $priceInfo = getDisPrice($uid);
-        $this->assign('priceInfo',$priceInfo);
+        $json_data = input('json_data');
+        $data = json_decode($json_data,true);
+        $newArr['uid'] = $data['uid'];
+        $newArr['openid'] = $data['openid'];
+        $newArr['price'] = $data['price'];
+        $temp = $newArr;
+        ksort($temp);
+        reset($temp);
+        $tempStr = "";
+        foreach ($temp as $key => $value) {
+            $tempStr .= $key . "=" . $value . "&";
+        }
+        $tempStr = substr($tempStr, 0, -1);
+        $signature = md5($tempStr);
+        if($signature != $data['signature']){
+             echo "<script> alert('签名错误') </script>";
+             die;
+        }
+        $this->assign('data',$newArr);
         return $this->fetch('openVip');
     }
 

@@ -47,7 +47,8 @@ class Orderhnqx extends Base
         if (empty($uid)) return $this->errorReturn(self::errcode_fail,'uid参数错误');
         $openid = input('openid', '', 'htmlspecialchars_decode');//公众号的openid
         if (empty($openid)) return $this->errorReturn(self::errcode_fail,'openid参数错误');
-        $price = input('activity_price', '', 'htmlspecialchars_decode');
+//        $price = input('activity_price', '', 'htmlspecialchars_decode');
+        $price = input('price', '', 'htmlspecialchars_decode');
         if (empty($price)) return $this->errorReturn(self::errcode_fail,'price参数错误');
 
         $order_num = 'xthl_' . time() . createRandStr(8);
@@ -55,11 +56,11 @@ class Orderhnqx extends Base
         if($lockInfo == false){
             return $this->errorReturn(self::errcode_fail,'操作过于频繁,请稍后重试!');
         }
-        $priceInfo = getDisPrice($uid);
-        $activity_price = $priceInfo['activity_price'];
-        if($activity_price != $price){
-            return $this->errorReturn(self::errcode_fail,'支付价格与实际价格不符');
-        }
+//        $priceInfo = getDisPrice($uid);
+//        $activity_price = $priceInfo['activity_price'];
+//        if($activity_price != $price){
+//            return $this->errorReturn(self::errcode_fail,'支付价格与实际价格不符');
+//        }
         $data['order_number'] = $order_num;
         $data['uid'] = $uid;
         $data['distcount_id'] = $distcount_id;

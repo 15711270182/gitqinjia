@@ -12,6 +12,11 @@ class Hnqx extends Controller
     //公众号会员支付授权
     public function index()
     {
+        $money = input('money');
+        if(empty($money)){
+             echo "<script> alert('支付价格不能为空') </script>";
+             die;
+        }
         $this->url = $this->request->url(true);
         $this->fans = WechatService::getWebOauthInfo($this->url);
 
@@ -22,7 +27,20 @@ class Hnqx extends Controller
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
             if ($uid) {
-                $url = 'https://testqin.njzec.com/h5/hnqx/openVip?uid=' . $uid . '&openid=' . $map['openid'];
+                $json_data['uid'] = $uid;
+                $json_data['openid'] =  $info['openid'];
+                $json_data['price'] = $money;
+                $temp = $json_data;
+                ksort($temp);
+                reset($temp);
+                $tempStr = "";
+                foreach ($temp as $key => $value) {
+                    $tempStr .= $key . "=" . $value . "&";
+                }
+                $tempStr = substr($tempStr, 0, -1);
+                $json_data['signature'] = md5($tempStr);
+
+                $url = 'https://testqin.njzec.com/h5/hnqx/openVip?json_data='.json_encode($json_data);
                 header("Location:" . $url);
                 die;
             }else{
