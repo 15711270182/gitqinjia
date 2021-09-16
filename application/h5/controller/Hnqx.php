@@ -34,7 +34,7 @@ class Hnqx extends Controller
              die;
         }
         $jssdk = WechatService::getWebJssdkSign();
-        $jssdk['link'] = "pages/home/home";
+        $jssdk['link'] = "https://testqin.njzec.com/web/hnqx/index?money=".$newArr['price'];
         $this->assign('data',$newArr);
         $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
