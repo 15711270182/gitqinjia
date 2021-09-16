@@ -47,7 +47,7 @@ class Order extends Controller
     {
         $this->title = '订单管理';
         $this->_query($this->table)
-            ->equal('uid,status')
+            ->equal('uid,status,source')
             ->timeBetween('pay_time')
             ->order('id desc')
             ->page();

@@ -27,7 +27,20 @@
                 </select>
             </div>
         </div>
-
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">支付来源</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="source">
+                    {foreach [''=>'-- 请选择 --','0'=>'小程序','1'=>'公众号','3'=>'高客单价'] as $k=>$v}
+                    {eq name='Think.get.source' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
         </div>

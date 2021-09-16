@@ -14,6 +14,7 @@
             <th class='text-center nowrap'>用户头像</th>
             <th class='text-center nowrap'>支付金额</th>
             <th class='text-center nowrap'>购买商品</th>
+            <th class='text-center nowrap'>支付来源</th>
             <th class='text-center nowrap'>状态</th>
         </tr>
         </thead>
@@ -28,6 +29,14 @@
             <td class='text-center nowrap'><img src="{$vo.headimgurl|default=''}" style="width:60px;height:60px;border-radius:50%;" data-tips-image class="inline-block"></td>
             <td class='text-center nowrap'>{$vo.payment/100}</td>
             <td class='text-center nowrap'>{$vo.goods|default=0}</td>
+            <td class='text-center nowrap'>
+                {foreach ['0'=>'小程序','1' => '公众号', '3' => '高客单价'] as $k => $v}
+                    {if $vo.source eq $k}
+                    {$v}
+                    {else}
+                    {/if}
+                {/foreach}
+            </td>
             <td class='text-center nowrap'>{$vo['status']==1?'已支付':'未支付'}</td>
            
         </tr>
