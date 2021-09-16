@@ -130,7 +130,8 @@ class Orderhnqx extends Base
             //购买会员 增加会员时间
             $data = [];
             $data['is_pair_vip'] = 1;
-            $data['pair_vip_time'] = 180*24*3600;
+            $time = time() + 180*24*3600;
+            $data['pair_vip_time'] = date('Y-m-d H:i:s',$time);
             $data['pair_last_num'] = 15;
 
             UserModel::userEdit(['id'=>$orderInfo['uid']],$data);

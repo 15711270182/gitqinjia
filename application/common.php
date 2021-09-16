@@ -793,10 +793,10 @@ function lock($key,$time = 5)
             }
             $price = $activity_price - $distcount ;
             $data = [
-//                'distcount_id'=>$distcount_id,
-//                'activity_price'=>$price,
-                'distcount_id'=>0,
-                'activity_price'=>0.1,
+                'distcount_id'=>$distcount_id,
+                'activity_price'=>$price,
+//                'distcount_id'=>0,
+//                'activity_price'=>0.01,
                 'distcount_price'=>$distcount,
                 'expire_time'=>$expire_time
             ];
