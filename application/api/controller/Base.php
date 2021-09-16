@@ -28,7 +28,7 @@ class Base extends Controller
         $action =   $this->request->action();
         $controller=$this->request->controller();
         $api = $controller.'/'.$action;
-        if($controller != 'Task' && $controller != 'Token' && $api != 'Index/getuserlist' && $api != 'Index/checktel' && $api != 'Index/checkcode' && $api != 'Index/getvideolist' && $api != 'Index/getvideoinfo' && $api != 'Index/shareinfo' && $api != 'Index/ques' && $api !='User/pushsubuser' && $api !='Index/sendtjmsg' && $api != 'Order/makeorderh5' && $api != 'Orderhnqx') { //不需要检测的接口
+        if($controller != 'Task' && $controller != 'Token' && $controller != 'Orderhnqx' && $api != 'Index/getuserlist' && $api != 'Index/checktel' && $api != 'Index/checkcode' && $api != 'Index/getvideolist' && $api != 'Index/getvideoinfo' && $api != 'Index/shareinfo' && $api != 'Index/ques' && $api !='User/pushsubuser' && $api !='Index/sendtjmsg' && $api != 'Order/makeorderh5') { //不需要检测的接口
             if (!in_array($action, ['session', 'auth', 'getcdntoken', 'getphone', 'paymemberh5', 'ordernotify', 'payscoreh5', 'pageeditor'])) {
                 //判断当前用户登录状态
                 $user = UsersService::check($session3rd,$debug_uid);
