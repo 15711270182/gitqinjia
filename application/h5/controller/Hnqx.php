@@ -34,7 +34,7 @@ class Hnqx extends Controller
              die;
         }
         $jssdk = WechatService::getWebJssdkSign();
-        $jssdk['link'] = "pages/index/index";
+        $jssdk['link'] = "pages/home/home";
         $this->assign('data',$newArr);
         $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
