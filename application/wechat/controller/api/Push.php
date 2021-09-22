@@ -264,9 +264,12 @@ class Push extends Controller
                 if (!($mediaId = MediaService::upload($data['video_url'], 'video', $videoData))) return false;
                 return $this->sendMessage('video', ['media_id' => $mediaId, 'title' => $data['video_title'], 'description' => $data['video_desc']], $isCustom);
             case 'card':
-                    if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])) return false;
+                    if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])){
+                         custom_log('card_data',print_r($data,true));
+                         return false;
+                    }
                     $mediaId = MediaService::upload($data['card_url']);
-//                custom_log('end_test',$mediaId);
+                    custom_log('card_mediaId',$mediaId);
                     return $this->sendDiyMsg('card', [
                         'msgtype' => 'miniprogrampage',
                         'touser' => $this->openid,
