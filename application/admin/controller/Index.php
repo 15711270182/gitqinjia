@@ -57,60 +57,6 @@ class Index extends Controller
     {
         $this->think_ver = \think\App::VERSION;
         $this->mysql_ver = Db::query('select version() as ver')[0]['ver'];
-//        $this->fetch();
-        //新增授权用户
-        $where_m[] = ['openid','<>',0];
-        $where_m[] = ['openid','<>',1];
-        $this->registTotal = Db::name('miniapp_userinfo')->where($where_m)->count();
-        $this->registToday = Db::name('miniapp_userinfo')->where($where_m)->whereTime('create_at', 'today')->count();
-        $this->registBefore = Db::name('miniapp_userinfo')->where($where_m)->whereTime('create_at', 'yesterday')->count();
-        //完善资料用户
-        $where_u[] = ['info_status','=',2];
-        $where_u[] = ['is_ban','=',1];
-        $where_u[] = ['is_test','=',0];
-        $this->infoTotal = Db::name('inlove_user')->where($where_u)->count();
-        $this->infoToday = Db::name('inlove_user')->where($where_u)->whereTime('create_time', 'today')->count();
-        $this->infoBefore = Db::name('inlove_user')->where($where_u)->whereTime('create_time', 'yesterday')->count();
-        //完善资料用户 + 双认证
-        $where_u[] = ['education_status','=',2];
-        $this->authTotal = Db::name('inlove_user')->where($where_u)->count();
-        $this->authToday = Db::name('inlove_user')->where($where_u)->whereTime('create_time', 'today')->count();
-        $this->authBefore = Db::name('inlove_user')->where($where_u)->whereTime('create_time', 'yesterday')->count();
-        //订单数
-        $this->orderTotal = Db::name('inlove_orders')->where(['status'=>1])->count();
-        $this->orderHyToday = Db::name('inlove_orders')->where(['status'=>1,'type'=>1])->whereTime('create_time', 'today')->count();
-        $this->orderGzToday = Db::name('inlove_orders')->where(['status'=>1,'type'=>2])->whereTime('create_time', 'today')->count();
-        $this->orderMoneyHyToday = Db::name('inlove_orders')->where(['status'=>1,'type'=>1])->whereTime('create_time', 'today')->sum('total_money');
-        $this->orderMoneyGzToday = Db::name('inlove_orders')->where(['status'=>1,'type'=>2])->whereTime('create_time', 'today')->sum('total_money');
-        //学历待审核数
-        $this->authAudit = Db::name('inlove_auth_record')->where(['status'=>0,'type'=>5])->count();
-
-        //推广数据统计
-        $target_uid = 234;
-        $date = date('Y-m-d');
-        $this->totalJson = ['xs' => [], 'ys' => []];
-        if($date == date('Y-m-d')){
-            $h = date('H')+1;
-        }else{
-            $h = 24;
-        }
-        for ($i = 0; $i <= $h; $i++) {
-            $this->totalJson['xs'][] = date( $i . '点');
-            $item = ['_1' => 0,'_2'=>0,'_3'=>0];
-            $start_time = date('Y-m-d '.$i.':00:00',strtotime($date));
-            $end_time = date('Y-m-d '.$i.':59:59',strtotime($date));
-            $where = "target_uid = {$target_uid} and create_time between '{$start_time}' and '{$end_time}'";
-            $list = Db::name('inlove_record_statistics')->field('count(*) count,type')->where($where)->group('type')->select();
-
-            foreach ($list as $vo) $item["_{$vo['type']}"] = $vo['count'];
-            $this->totalJson['ys']['_1'][] = $item['_1']; //1用户访问访问数
-            $this->totalJson['ys']['_2'][] = $item['_2']; //2喜欢点击数
-            $this->totalJson['ys']['_3'][] = $item['_3'];//3点击无感数
-        }
-        $this->enjoyNum =  Db::name('inlove_record_statistics')->where(['target_uid'=>$target_uid,'type'=>2])->count();
-        $this->averseNum =  Db::name('inlove_record_statistics')->where(['target_uid'=>$target_uid,'type'=>3])->count();
-        $this->visitNum =  Db::name('inlove_record_statistics')->where(['target_uid'=>$target_uid,'type'=>1])->count();
-        $this->date = $date;
         $this->fetch();
     }
 
