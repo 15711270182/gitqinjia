@@ -9,12 +9,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <title>完美亲家</title>
-
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+    <p id="p" class="hidden" style=text-align:center;font-size:28px;margin-top:40vh>请打开微信 搜索完美亲家</p>
     <script>
-        window.location.href = "weixin://dl/business/?t=9gAlzgO5Ouu"
+        window.location.href ="weixin://dl/business/?t=9gAlzgO5Ouu";
+        let p =document.querySelector('#p');
+        setTimeout(function(){
+            p.removeAttribute('class');
+        },3000)
     </script>
 </body>
 
