@@ -72,4 +72,9 @@ Route::group('api/Matchmaker',function(){
     Route::any('viewCount', 'api/Matchmaker/viewCount'); //记录页面浏览时长
 });
 
+//意见反馈模块
+Route::group('api/Feedback',function(){
+    Route::any('add', 'api/Feedback/add'); //添加意见反馈
+    Route::any('count', 'api/Feedback/count'); //获取意见反馈次数
+});
 
