@@ -74,6 +74,17 @@ class Index extends Base
                 $info_status = 0; //资料未完善
             }
         }
+        //判断择偶标准相亲说明是否完善
+        $field_e = 'remarks,expect_education,min_age,min_height';
+        $eInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_e);
+        $eInfo = array_values($eInfo);
+        $info_exp_status = 1; //资料完善
+        foreach($eInfo as $k=>$v){
+            if(empty($v)){
+                 $info_exp_status = 0; //资料未完善
+                 break;
+            }
+        }
         if(date('H') >= 10){ //剩余时间
             $temp_time = strtotime(date('Y-m-d').' 23:59:59')+10*3600;
             $date = date('Ymd');
@@ -231,6 +242,7 @@ class Index extends Base
         $data['product'] = $product;
         $data['user_status'] = $userinfo['status'];
         $data['info_status'] = $info_status;
+        $data['info_exp_status'] = $info_exp_status;
         $data['is_wechat'] = $is_wechat;
         $s_time = date('Y-m-d 00:00:00');
         $e_time = date('Y-m-d H:i:s');
