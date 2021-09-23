@@ -15,6 +15,8 @@
 namespace app\api\controller;
 use app\api\model\TelCollection;
 use app\api\model\User as UserModel;
+use app\api\model\Children as ChildrenModel;
+use app\api\service\UsersService as UsersService;
 use think\Db;
 use think\Queue;
 
@@ -80,7 +82,22 @@ class Feedback extends Base
     public function count()
     {
         $uid = $this->uid;
-        $count = Db::name('feedback')->where(['uid'=>$uid])->count();
-        return $this->successReturn($count,'成功',self::errcode_ok);
+        $bid = input('bid');  //被反馈人
+        if(empty($bid)){
+            return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
+        }
+        $userinfo = UserModel::userFind(['id'=>$bid]);
+        $data['headimgurl'] = $userinfo['headimgurl'];
+        $children = ChildrenModel::childrenFind(['uid'=>$bid],'sex,year,education,residence');
+        $sex = '女';
+        if($children['sex'] == 1){
+            $sex = '男';
+        }
+        $year = substr($children['year'],-2).'年';
+        $shuxiang = getShuXiang($children['year']);
+        $education = UsersService::education($children['education']);
+        $data['content'] = $sex.'·'.$year.'('.$shuxiang.')'.'·'.$education.'·现居'.$children['residence'];
+        $data['count'] = Db::name('feedback')->where(['uid'=>$uid])->count();
+        return $this->successReturn($data,'成功',self::errcode_ok);
     }
 }
