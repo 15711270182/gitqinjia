@@ -97,6 +97,14 @@ class Feedback extends Base
         $shuxiang = getShuXiang($children['year']);
         $education = UsersService::education($children['education']);
         $data['content'] = $sex.'·'.$year.'('.$shuxiang.')'.'·'.$education.'·现居'.$children['residence'];
+        //查看时间
+        $tel = TelCollection::telFind(['uid'=>$uid,'bid'=>$bid,'type'=>1],'create_at');
+        $time = date('Y-m-d:',$tel['create_at']);
+        if($time == date('Y-m-d')){
+            $data['tel_time'] = date('H:i',$tel['create_at']);
+        }else{
+            $data['tel_time'] = date('Y-m-d H:i',$tel['create_at']);
+        }
         $data['count'] = Db::name('feedback')->where(['uid'=>$uid])->count();
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
