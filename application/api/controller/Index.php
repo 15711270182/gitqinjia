@@ -499,6 +499,12 @@ class Index extends Base
         if(empty($bid)){
             return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
         }
+        //查看有没有反馈过对方
+        $fInfo = Db::name('feedback')->where(['uid'=>$uid,'bid'=>$bid])->find();
+        $feed_status = 0;
+        if(!empty($fInfo)){
+            $feed_status = 1;
+        }
         //看看有没有以前有没有看过
         $TelCollection = TelModel::telFind(['uid'=>$uid,'bid'=>$bid]);
         if(!empty($TelCollection)){
@@ -518,6 +524,7 @@ class Index extends Base
             $data = $this->TelChange($bid,1);
             $data['status'] = 1;
             $data['count'] = 1;
+            $data['feed_status'] = $feed_status;
             return $this->successReturn($data,'成功',self::errcode_ok);
         }
         $children = ChildrenModel::childrenFind(['uid'=>$bid]);
@@ -550,12 +557,14 @@ class Index extends Base
             $data = $this->TelChange($bid,1);
             $data['status'] = 1;
             $data['count'] = 1;
+            $data['feed_status'] = $feed_status;
             return $this->successReturn($data,'成功',self::errcode_ok);
         }
         //不是会员也没看过
         $data = $this->TelChange($bid,2);
         $data['status'] = 2;//2是看不了
         $data['count'] = $userinfo['count'];//剩余次数
+        $data['feed_status'] = $feed_status;
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**

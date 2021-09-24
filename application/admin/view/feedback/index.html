@@ -1,0 +1,51 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='feedback/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>提交时间</th>
+            <th class='text-center nowrap'>用户ID</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>被反馈人uid</th>
+            <th class='text-center nowrap'>反馈内容</th>
+            <th class='text-center nowrap'>反馈类型</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.create_time}</td>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
+                    <div>性别：<span>{$vo.sex}</span>，
+                         年龄：<span>{$vo.age|default='-'}</span>
+                    </div>
+                    <div>
+                         地区：<span>{$vo.address|default='-'}</span>
+                    </div>
+                </div>
+            </td>
+            <td class='text-center nowrap'>{$vo.bid}</td>
+            <td class='text-center nowrap'>{$vo.content|default='-'}</td>
+            <td class='text-center nowrap'>
+                {if $vo.type eq 1}未联系{/if}
+                {if $vo.type eq 2}<span class="color-green">已联系</span>{/if}
+            </td>
+
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}
