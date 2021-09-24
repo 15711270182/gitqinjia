@@ -235,8 +235,10 @@ class RecommendService
         $condition['status'] = 1;
         $condition['is_ban'] = 1;
         $condition['residence'] = $user_info['residence'];
-        $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
-
+        $condition['sex'] = 1;
+        if($user_info['sex'] == 1){
+            $condition['sex'] = 2;
+        }
         // 教育要求
         $condition['education'] = $user_info['education'];
         if ($user_info['expect_education']){
@@ -331,8 +333,10 @@ class RecommendService
         $condition['is_del'] = 1;
         $condition['status'] = 1;
         $condition['is_ban'] = 1;
-        $condition['sex'] = $user_info['sex'] == 1 ? 2 : 1;
-
+        $condition['sex'] = 1;
+        if($user_info['sex'] == 1){
+            $condition['sex'] = 2;
+        }
         if ($residence) $condition['residence'] = $user_info['residence'];
         $MatchDb = $MatchDb->where($condition);
 
@@ -632,8 +636,11 @@ class RecommendService
     public function amoreRecommend($uid)
     {
         $sex = Db::table('children')->where(['uid'=>$uid])->value('sex');
-        $sex_new = $sex == 1 ? 2 : 1;
-
+        if($sex == 1){
+            $sex_new = 2;
+        }else{
+            $sex_new = 1;
+        }
         // 获取被收藏比较多的用户
         $collection_id_list = array();
         $collection_where['c.is_del'] = 1;

@@ -318,7 +318,7 @@ class Qxapply extends Controller
             ->equal('type,uid')
             ->where($where)
             ->dateBetween('create_time')
-            ->order('id desc')
+            ->order('browse_duration desc')
             ->page();
     }
     protected function _index_browse_page_filter(&$data)
