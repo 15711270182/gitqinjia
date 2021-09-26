@@ -277,7 +277,7 @@ class Matchmaker extends Base
         if(empty($type)){
             return $this->errorReturn(self::errcode_fail,'type参数不能为空');
         }
-        $browse_duration = input('browse_duration');
+        $browse_duration = input('browse_duration','');
         if($type != 4 && $type != 5){
             if(empty($browse_duration)){
                 return $this->errorReturn(self::errcode_fail,'browse_duration参数不能为空');
