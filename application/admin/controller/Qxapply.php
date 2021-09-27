@@ -357,8 +357,12 @@ class Qxapply extends Controller
         $create_time = urldecode(input('create_time'));
         $uid = input('uid');
         $type = input('type');
-        $time = explode(' - ',$create_time);
-        if($create_time){$whereTime = "create_time between '{$time['0']}' and '{$time['1']}' ";}
+        if($create_time){
+            $time = explode(' - ',$create_time);
+            $start_time = date('Y-m-d 00:00:00',strtotime($time[0]));
+            $end_time = date('Y-m-d 23:59:59',strtotime($time[1]));
+            $whereTime = "create_time between '{$start_time}' and '{$end_time}' ";
+        }
         if($uid){$where['uid'] = $uid;}
         $xlsname = "牵线服务浏览数据";  //文件名
         if($type){
