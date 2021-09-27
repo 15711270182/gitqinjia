@@ -813,7 +813,7 @@ function getDisPrice($uid){
  */
 function writeExcel($title,$data,$xlsname)
 {
-    error_reporting(E_ALL);
+    // error_reporting(E_ALL);
     date_default_timezone_set('Asia/chongqing');
     $excel = new \PHPExcel();
     $excel->getProperties()->setCreator("Knps")
@@ -837,6 +837,7 @@ function writeExcel($title,$data,$xlsname)
             $j++;
         }
     }
+    ob_end_clean();
     header("Pragma: public");
     header("Expires: 0");
     header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
@@ -846,8 +847,8 @@ function writeExcel($title,$data,$xlsname)
     header("Content-Type:application/download");
     header('Content-Disposition:attachment;filename="'.$xlsname.'.xls"');
     header("Content-Transfer-Encoding:binary");
-    $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+    $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
     $objWriter->save('php://output');
-    exit();
+    exit;
 }
 

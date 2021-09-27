@@ -20,7 +20,7 @@
         {foreach $list as $key=>$vo}
         <tr>
             <td class='text-center nowrap'>{$vo.create_time}</td>
-            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class='text-center nowrap'><a target="_blank" href="/index.php/admin.html#/index.php/admin/member/look?id={$vo.uid}">{$vo.uid}</a></td>
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
                 <div class="inline-block">

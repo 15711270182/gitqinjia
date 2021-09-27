@@ -441,7 +441,7 @@ class Qxapply extends Controller
 
     //白名单用户  不显示
     public function UserConfig(){
-        $user = ['479','1001','218'];
+        $user = ['479','218','677','346','1001','1234','514','1881','354'];
         return $user;
     }
 }
