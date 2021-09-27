@@ -4,7 +4,7 @@
         <div class="layui-form-item layui-inline">
             <label class="layui-form-label">浏览时间:</label>
             <div class="layui-input-inline margin-right-0" style="width:200px">
-                 <input data-date-range name="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择浏览时间" class="layui-input">
+                 <input data-date-range name="create_time" id="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择浏览时间" class="layui-input">
             </div>
          </div>
         <div class="layui-form-item layui-inline">
@@ -30,11 +30,20 @@
          </div>
         <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+            <button class="layui-btn layui-btn-primary layui-bg-green" data-export-list><i class="layui-icon layui-icon-export"></i> 导 出</button>
         </div>
     </form>
-
 </fieldset>
 
-<script>
-    form.render()
-</script>
+ <script>
+        window.form.render();
+        $('[data-export-list]').on('click', function () {
+            var create_time = $("input[name='create_time']").val();
+            var uid = $("input[name='uid']").val();
+            var type = $("select[name='type']").val();
+            if(confirm("确定导出吗？") == false){
+                return false;
+            }
+            window.location.href = '{:url("@")}?s=admin/qxapply/browse_export?create_time='+create_time+"&uid="+uid+"&type="+type;
+        });
+ </script>

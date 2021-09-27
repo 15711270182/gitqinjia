@@ -17,6 +17,7 @@ namespace app\admin\controller;
 
 use library\Controller;
 use library\tools\Data;
+use app\api\service\UsersService;
 use think\Db;
 
 /**
@@ -312,11 +313,13 @@ class Qxapply extends Controller
      */
     public function index_browse()
     {
+        $uid = $this->UserConfig();
         $where['type'] = [1,2,3];
         $this->title = '页面浏览时长列表';
         $this->_query($this->table4)
             ->equal('type,uid')
             ->where($where)
+            ->whereNotIn('uid',$uid)
             ->dateBetween('create_time')
             ->order('browse_duration desc')
             ->page();
@@ -338,6 +341,63 @@ class Qxapply extends Controller
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
         }
+    }
+
+    /**
+     * @Notes:搜索列表导出功能
+     * @Interface browse_export
+     * @author: zy
+     * @Time: 2021/09/27
+     */
+    public function browse_export(){
+        $whereTime = '';
+        $uidArr = $this->UserConfig();
+        $create_time = urldecode(input('create_time'));
+        $uid = input('uid');
+        $type = input('type');
+        $time = explode(' - ',$create_time);
+        if($create_time){$whereTime = "create_time between '{$time['0']}' and '{$time['1']}' ";}
+        if($uid){$where['uid'] = $uid;}
+        if($type){
+            $where['type'] = $type;
+        }else{
+            $where['type'] = [1,2,3];
+        }
+        $data = DB::name('qx_browse_record')
+            ->where($where)
+            ->whereNotIn('uid',$uidArr)
+            ->where($whereTime)
+            ->order('browse_duration desc')
+            ->select();
+        if(empty($data)){
+            $this->error('暂无导出数据');
+        }
+        $newData = [];
+        $uidColumn = array_column($data,'uid');
+        $nickname = DB::name('userinfo')->where(['id'=>$uidColumn])->column('id,nickname');
+        $sex = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,sex');
+        $year = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,year');
+        $education = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,education');
+        foreach($data as $k=>$v){
+            $newData[$k]['create_time'] = $v['create_time'];
+            $newData[$k]['uid'] = $v['uid'];
+            $newData[$k]['nickname'] = isset($nickname[$v['uid']])?emoji_decode($nickname[$v['uid']]):'匿名';
+            $newData[$k]['sex'] = isset($sex[$v['uid']])?($sex[$v['uid']] == 1?'男':'女'):'未知';
+            $newData[$k]['age'] = isset($year[$v['uid']])?(int)date('Y') - (int)$year[$v['uid']]:'';
+            $newData[$k]['education'] = isset($education[$v['uid']])?UsersService::education($education[$v['uid']]):'';
+
+            $newData[$k]['browse_duration'] = $v['browse_duration'];
+            if($v['type'] == 1){
+                $newData[$k]['type'] = '服务详情';
+            }elseif($v['type'] == 2){
+                $newData[$k]['type'] = '筛选结果';
+            }else{
+                $newData[$k]['type'] = '嘉宾资料';
+            }
+        }
+        $title = ['浏览时间','用户uid','昵称','性别','年龄','学历','浏览时长','类型']; //标题
+        $xlsname = "牵线服务浏览数据";  //文件名
+        writeExcel($title,$newData , $xlsname);
     }
     /**
      * 点击立即咨询列表
@@ -377,5 +437,11 @@ class Qxapply extends Controller
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
         }
+    }
+
+    //白名单用户  不显示
+    public function UserConfig(){
+        $user = ['479','1001','218'];
+        return $user;
     }
 }

@@ -757,48 +757,112 @@ function lock($key,$time = 5)
      * @author: zy
      * @Time: ${DATE}   ${TIME}
      */
-    function getDisPrice($uid){
-            $activity_price = 3999;
-            $price1 = 0;
-            $price2 = 0;
-            $distcount = 0;
-            $id1 = '';
-            $id2 = '';
-            $distcount_id = '';
-            $time1 = '';
-            $time2 = '';
-            $expire_time = '';
-            $field = 'id,end_time,discount_price';
-            $cInfo1 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>2,'uid'=>$uid])->find(); //个人是否有优惠
-            if(!empty($cInfo1) && $cInfo1['end_time'] > date('Y-m-d H:i:s')){
-                $id1 = $cInfo1['id'];
-                $price1 = $cInfo1['discount_price']/100;
-                $time1 = $cInfo1['end_time'];
+function getDisPrice($uid){
+        $activity_price = 3999;
+        $price1 = 0;
+        $price2 = 0;
+        $distcount = 0;
+        $id1 = '';
+        $id2 = '';
+        $distcount_id = '';
+        $time1 = '';
+        $time2 = '';
+        $expire_time = '';
+        $field = 'id,end_time,discount_price';
+        $cInfo1 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>2,'uid'=>$uid])->find(); //个人是否有优惠
+        if(!empty($cInfo1) && $cInfo1['end_time'] > date('Y-m-d H:i:s')){
+            $id1 = $cInfo1['id'];
+            $price1 = $cInfo1['discount_price']/100;
+            $time1 = $cInfo1['end_time'];
+        }
+        $cInfo2 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>1])->find(); //全部是否有优惠
+        if(!empty($cInfo2) && $cInfo2['end_time'] > date('Y-m-d H:i:s')){
+            $id2 = $cInfo2['id'];
+            $price2 = $cInfo2['discount_price']/100;
+            $time2 = $cInfo2['end_time'];
+        }
+        if(!empty($price1) || !empty($price2)){
+            $distcount = $price2;
+            $expire_time = $time2;
+            $distcount_id = $id2;
+            if($price1 > $price2){
+                $distcount_id = $id1;
+                $distcount = $price1;
+                $expire_time = $time1;
             }
-            $cInfo2 = DB::name('qx_discount_config')->field($field)->where(['is_show'=>1,'type'=>1])->find(); //全部是否有优惠
-            if(!empty($cInfo2) && $cInfo2['end_time'] > date('Y-m-d H:i:s')){
-                $id2 = $cInfo2['id'];
-                $price2 = $cInfo2['discount_price']/100;
-                $time2 = $cInfo2['end_time'];
-            }
-            if(!empty($price1) || !empty($price2)){
-                $distcount = $price2;
-                $expire_time = $time2;
-                $distcount_id = $id2;
-                if($price1 > $price2){
-                    $distcount_id = $id1;
-                    $distcount = $price1;
-                    $expire_time = $time1;
-                }
-            }
-            $price = sprintf('%.2f',($activity_price - $distcount));
-            $data = [
-                'distcount_id'=>$distcount_id,
-                'activity_price'=>$price,
+        }
+        $price = sprintf('%.2f',($activity_price - $distcount));
+        $data = [
+            'distcount_id'=>$distcount_id,
+            'activity_price'=>$price,
 //                'distcount_id'=>0,
 //                'activity_price'=>0.01,
-                'distcount_price'=>$distcount,
-                'expire_time'=>$expire_time
-            ];
-            return $data;
+            'distcount_price'=>$distcount,
+            'expire_time'=>$expire_time
+        ];
+        return $data;
+}
+/**
+ * 导出数据到EXCEL
+ * @param $data
+ * @param $title
+ * @param $xlsname
+ * @throws PHPExcel_Exception
+ * @throws PHPExcel_Reader_Exception
+ * @throws PHPExcel_Writer_Exception
+ */
+function writeExcel($title,$data,$xlsname)
+{
+    error_reporting(E_ALL);
+    date_default_timezone_set('Asia/chongqing');
+    $excel = new \PHPExcel();
+    $excel->getProperties()->setCreator("Knps")
+        ->setLastModifiedBy("min tech")
+        ->setKeywords("excel")
+        ->setCategory("result file"); // 种类
+    $letter=array();
+    $zimu=array('A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+    if(count($data[0])>count($zimu)){
+        for($i=0;$i<count($data[0]);$i++){
+            if($i>=count($zimu)){
+                $one=intval($i/26)-1;
+                $two=$i%26;
+                $letter[$i]=$zimu[$one]."".$zimu[$two];
+            }else{
+                $letter[$i]=$zimu[$i];
+            }
+        }
+    }else{
+        $letter=$zimu;
     }
+    $tableheader = array();
+    //格式化数据
+    $data[]=$title;
+    //$data[]=;
+    $tableheader=$data[count($data)-1];
+    for($i = 0;$i < count($tableheader);$i++) {
+        $excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
+    }
+    for ($i = 2;$i <= count($data);$i++) {
+        $j = 0;
+        foreach ($data[$i - 2] as $value) {
+            //$excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value");
+            $excel->getActiveSheet()->setCellValueExplicit("$letter[$j]$i","$value",PHPExcel_Cell_DataType::TYPE_STRING);
+            $j++;
+        }
+    }
+    header("Pragma: public");
+    header("Expires: 0");
+    header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+    header("Content-Type:application/force-download");
+    header("Content-Type:application/vnd.ms-execl");
+    header("Content-Type:application/octet-stream");
+    header("Content-Type:application/download");
+    header('Content-Disposition:attachment;filename="'.$xlsname.'.xls"');
+    header("Content-Transfer-Encoding:binary");
+    $objWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+    $objWriter->save('php://output');
+    exit();
+}
+
