@@ -266,9 +266,11 @@ class Qxapply extends Controller
     public function index_find()
     {
         $this->title = '用户搜索条件列表';
+        $uidArr = $this->UserConfig();
         $this->_query($this->table3)
             ->equal('uid,sex')
             ->dateBetween('create_time')
+            ->whereNotIn('uid',$uidArr)
             ->order('id desc')
             ->page();
     }
@@ -313,13 +315,13 @@ class Qxapply extends Controller
      */
     public function index_browse()
     {
-        $uid = $this->UserConfig();
+        $uidArr = $this->UserConfig();
         $where['type'] = [1,2,3];
         $this->title = '页面浏览时长列表';
         $this->_query($this->table4)
             ->equal('type,uid')
             ->where($where)
-            ->whereNotIn('uid',$uid)
+            ->whereNotIn('uid',$uidArr)
             ->dateBetween('create_time')
             ->order('browse_duration desc')
             ->page();
@@ -358,7 +360,16 @@ class Qxapply extends Controller
         $time = explode(' - ',$create_time);
         if($create_time){$whereTime = "create_time between '{$time['0']}' and '{$time['1']}' ";}
         if($uid){$where['uid'] = $uid;}
+        $xlsname = "牵线服务浏览数据";  //文件名
         if($type){
+            if($type == 1){
+                $type_name = '服务详情';
+            }elseif($type == 2){
+                $type_name = '筛选结果';
+            }else{
+                $type_name = '嘉宾资料';
+            }
+            $xlsname = "牵线服务浏览数据-".$type_name;  //文件名
             $where['type'] = $type;
         }else{
             $where['type'] = [1,2,3];
@@ -396,7 +407,7 @@ class Qxapply extends Controller
             }
         }
         $title = ['浏览时间','用户uid','昵称','性别','年龄','学历','浏览时长','类型']; //标题
-        $xlsname = "牵线服务浏览数据";  //文件名
+//        $xlsname = "牵线服务浏览数据";  //文件名
         writeExcel($title,$newData , $xlsname);
     }
     /**
@@ -411,11 +422,13 @@ class Qxapply extends Controller
      */
     public function index_click()
     {
+        $uidArr = $this->UserConfig();
         $where['type'] = [4,5];
         $this->title = '点击立即咨询列表';
         $this->_query($this->table4)
             ->equal('type,uid')
             ->where($where)
+            ->whereNotIn('uid',$uidArr)
             ->dateBetween('create_time')
             ->order('id desc')
             ->page();
