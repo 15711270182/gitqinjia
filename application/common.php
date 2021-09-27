@@ -820,23 +820,9 @@ function writeExcel($title,$data,$xlsname)
         ->setLastModifiedBy("min tech")
         ->setKeywords("excel")
         ->setCategory("result file"); // 种类
-    $letter=array();
-    $zimu=array('A','B','C','D','E','F','G','H','I','J','K','L','M',
+
+    $letter=array('A','B','C','D','E','F','G','H','I','J','K','L','M',
         'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-    if(count($data[0])>count($zimu)){
-        for($i=0;$i<count($data[0]);$i++){
-            if($i>=count($zimu)){
-                $one=intval($i/26)-1;
-                $two=$i%26;
-                $letter[$i]=$zimu[$one]."".$zimu[$two];
-            }else{
-                $letter[$i]=$zimu[$i];
-            }
-        }
-    }else{
-        $letter=$zimu;
-    }
-    $tableheader = array();
     //格式化数据
     $data[]=$title;
     //$data[]=;
@@ -847,7 +833,6 @@ function writeExcel($title,$data,$xlsname)
     for ($i = 2;$i <= count($data);$i++) {
         $j = 0;
         foreach ($data[$i - 2] as $value) {
-            //$excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value");
             $excel->getActiveSheet()->setCellValueExplicit("$letter[$j]$i","$value",PHPExcel_Cell_DataType::TYPE_STRING);
             $j++;
         }

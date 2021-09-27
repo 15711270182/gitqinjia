@@ -383,7 +383,7 @@ class Qxapply extends Controller
             $newData[$k]['uid'] = $v['uid'];
             $newData[$k]['nickname'] = isset($nickname[$v['uid']])?emoji_decode($nickname[$v['uid']]):'匿名';
             $newData[$k]['sex'] = isset($sex[$v['uid']])?($sex[$v['uid']] == 1?'男':'女'):'未知';
-            $newData[$k]['age'] = isset($year[$v['uid']])?(int)date('Y') - (int)$year[$v['uid']]:'';
+            $newData[$k]['age'] = isset($year[$v['uid']])?(int)date('Y') - (int)$year[$v['uid']]:'未知';
             $newData[$k]['education'] = isset($education[$v['uid']])?UsersService::education($education[$v['uid']]):'';
 
             $newData[$k]['browse_duration'] = $v['browse_duration'];
