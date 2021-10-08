@@ -1,0 +1,91 @@
+{extend name='admin@main'}
+
+
+{block name="content"}
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>用户编号</th>
+            <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>居住地</th>
+            <th class='text-center nowrap'>籍贯</th>
+            <th class='text-center nowrap'>年收入</th>
+            <th class='text-center nowrap'>行业</th>
+            <th class='text-center nowrap'>操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center nowrap'>{$vo.uid}</td>
+            <td class="text-center nowrap">
+            <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.cover|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
+                <div class="inline-block">
+                    <div>基本信息：<span>{$vo.title|default='-'}</span></div>
+                    <div>
+                         年龄：<span>{$vo.age|default='-'}</span>，
+                         身高：<span>{$vo.height}</span>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center nowrap">{$vo.current_province|default=''}.{$vo.current_city|default=''}</td>
+            <td class='text-center nowrap'>{$vo.native_province|default=''}.{$vo.native_city|default=''}</td>
+            <td class='text-center nowrap'>{$vo.salary|default=''}</td>
+            <td class='text-center nowrap'>{$vo.industry|default=''}</td>
+            <td class='text-center nowrap'>
+                <a class="layui-btn layui-btn-sm" data-confirm="查看详情" data-open="{:url('find_detail')}?uid={$vo.uid}">查看详情</a>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <div class="pagination-container nowrap">
+        <span>共 {$totalCount} 条记录，每页显示15条，共 {$totalPage} 页当前显示第 {$current_page} 页。</span>
+        <ul class="pagination">
+            <li class="disabled">
+                {if $current_page-1 <= 0}
+                    <span>«</span>
+                {else}
+                    <a data-open="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$current_page-1}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}" onclick="return false" href="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$current_page-1}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}">«</a>
+                {/if}
+            </li>
+            {foreach $pageData as $k=>$v}
+                {if $v.'' eq $current_page}
+                    <li class="active">
+                        <span>{$v}</span>
+                    </li>
+                {else}
+                   {if $totalPage > 10 && $v == 9}
+                       <li class="disabled">
+                            <span>...</span>
+                       </li>
+                   {else}
+                    {if $v < 9}
+                    <li>
+                        <a data-open="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$v}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}" onclick="return false" href="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$v}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}">{$v}</a>
+                    </li>
+                    {/if}
+                    {if $totalPage > 10 && ($totalPage - $v) <= 2}
+                    <li>
+                        <a data-open="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$v}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}" onclick="return false" href="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$v}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}">{$v}</a>
+                    </li>
+                    {/if}
+                   {/if}
+                {/if}
+            {/foreach}
+            <li class="disabled">
+                {if $current_page+1 > $totalPage}
+                    <span>»</span>
+                {else}
+                    <a data-open="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$current_page+1}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}" onclick="return false" href="/index.php/admin/qxapply/find_list.html?spm=m-204-207&page={$current_page+1}&new_sex={$new_sex}&minage={$minage}&maxage={$maxage}&minheight={$minheight}&maxheight={$maxheight}&education={$education}&salary={$salary}">»</a>
+                {/if}
+            </li>
+        </ul>
+    </div>
+</div>
+
+{/block}

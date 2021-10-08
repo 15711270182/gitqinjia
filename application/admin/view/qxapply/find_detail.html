@@ -1,0 +1,126 @@
+<style>
+    .layui-input, .layui-textarea {
+        background-color: whitesmoke;
+    }
+    .user_button{
+        margin-top: 3px;
+    }
+</style>
+    <div class="layui-card-body padding-bottom-25 padding-left-40">
+        <div><input type="button" value="返回上一级" onclick="javascript:history.go(-1);"/></div>
+        <div><span class="layui-btn" style="width:100%;background-color: #616161;text-align: left;">基本信息(<span style="color:white">{$uid}</span>)</span></div>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.sex|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">年龄:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.age|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">生日:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.birthday|default=""}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身高:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.height|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">生肖:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.animals|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">星座:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.constellation|default=""}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学校:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.academy}' class="layui-input" id="academy">
+                </div>
+                <label class="layui-form-label">学历:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                     <input type="" disabled value='{$vo.education|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">学历类型:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.education_type|default=""}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">职业:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.industry|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">年薪</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.salary}' class="layui-input">
+                </div>
+                <label class="layui-form-label">婚姻状况:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.marriage_type}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车况:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.saddle_type}' class="layui-input">
+                </div>
+                <label class="layui-form-label">房况:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.house_type}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">居住地:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.current_province|default=""}.{$vo.current_city|default=""}' class="layui-input">
+                </div>
+                <label class="layui-form-label">户籍地:</label>
+                <div class="layui-input-inline margin-right-0" style="width:200px">
+                    <input type="" disabled value='{$vo.native_province|default=""}.{$vo.native_city|default=""}' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">自我介绍:</label>
+                <div class="layui-input-inline margin-right-0" style="width: 80%;margin-top: 8px;">
+                    <textarea class="layui-textarea" style="height:300px;">
+                        {$vo.introduce|default=""}
+                    </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">感情观:</label>
+                <div class="layui-input-inline margin-right-0" style="width: 80%;margin-top: 8px;">
+                    <textarea  class="layui-textarea" >
+                        {$vo.feeling|default=""}
+                    </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">心仪的TA:</label>
+                <div class="layui-input-inline margin-right-0" style="width: 80%;margin-top: 8px;">
+                    <textarea class="layui-textarea" >
+                        {$vo.mate|default=""}
+                    </textarea>
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">头像:</label>
+                <div class="layui-input-inline margin-right-0" style="width:800px">
+                    {foreach $vo.photoList as $k=>$v}
+                    <img data-tips-image src='{$v}' style="margin-top:5px;width: 120px;height: 120px;">
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+

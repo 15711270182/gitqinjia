@@ -17,6 +17,7 @@
             <th class='text-center nowrap'>最大身高</th>
             <th class='text-center nowrap'>学历</th>
             <th class='text-center nowrap'>薪水</th>
+            <th class='text-center nowrap'>操作</th>
         </tr>
         </thead>
         {/notempty}
@@ -56,6 +57,9 @@
                     {else}
                     {/if}
                 {/foreach}
+            </td>
+            <td class='text-center nowrap'>
+                <a class="layui-btn layui-btn-sm" data-confirm="筛选" data-open="{:url('find_list')}?new_sex={$vo.new_sex}&minage={$vo.minage}&maxage={$vo.maxage}&minheight={$vo.minheight}&maxheight={$vo.maxheight}&education={$vo.education}&salary={$vo.salary}">筛 选</a>
             </td>
         </tr>
         {/foreach}

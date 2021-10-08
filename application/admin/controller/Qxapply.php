@@ -18,6 +18,7 @@ namespace app\admin\controller;
 use library\Controller;
 use library\tools\Data;
 use app\api\service\UsersService;
+use app\api\service\InterfaceService;
 use think\Db;
 
 /**
@@ -281,6 +282,7 @@ class Qxapply extends Controller
             $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
             $vo['headimgurl'] = $headimgurl;
             $vo['nickname'] = emoji_decode($nickname);
+            $vo['new_sex'] = $vo['sex'];
             if ($vo['sex'] == 1){
                 $vo['sex'] = '男';
             }else{
@@ -302,6 +304,103 @@ class Qxapply extends Controller
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
         }
+    }
+    //筛选列表
+    public function find_list(){
+        $page = input('page') ?: '1';
+        $sex = input('new_sex');
+        $minage = input('minage');
+        $maxage = input('maxage');
+        $minheight = input('minheight');
+        $maxheight = input('maxheight');
+        $education = input('education');
+        $salary = input('salary');
+        if(empty($sex) || empty($minage) || empty($maxage) || empty($minheight) || empty($maxheight) || empty($education) || empty($salary)){
+            $this->error('参数错误');
+        }
+        $this->new_sex = $sex;
+        $this->minage = $minage;
+        $this->maxage = $maxage;
+        $this->minheight = $minheight;
+        $this->maxheight = $maxheight;
+        $this->education = $education;
+        $this->salary = $salary;
+        if($minage == '不限'){
+            $minage = '999';
+        }
+        if($maxage == '不限'){
+            $maxage = '999';
+        }
+        if($minheight == '不限'){
+            $minheight = '999';
+        }
+        if($maxheight == '不限'){
+            $maxheight = '999';
+        }
+        $new_sex = 1;
+        if($sex == 1){
+            $new_sex = 2;
+        }
+        $service = InterfaceService::instance();
+        $service->setAuth('123456','123456'); // 设置接口认证账号
+        $json = [
+            'sex'=>$new_sex,
+            'minage'=>$minage,
+            'maxage'=>$maxage,
+            'minheight'=>$minheight,
+            'maxheight'=>$maxheight,
+            'education'=>$education,
+            'salary'=>$salary
+        ];
+        $queryData = $service->doRequest('apinew/v1/query/lists?page='.$page,$json); // 发起接口请求
+        if(empty($queryData)){
+             $this->error('暂无数据');
+        }
+        $data = $queryData['data'];
+        foreach($data as $k=>$v){
+            $data[$k]['title'] = $v['sex'].'·'.$v['year'].'('.$v['animals'].')'.'·'.$v['education'];
+            $data[$k]['sex'] = 2;
+            if($v['sex'] == '男'){
+                $data[$k]['sex'] = 1;
+            }
+            unset($data[$k]['year']);
+            unset($data[$k]['animals']);
+            unset($data[$k]['education']);
+        }
+        $last_page = $queryData['last_page'];
+        $pageData = [];
+        for($i=1;$i<=$last_page;$i++){
+            $pageData[] = $i;
+        }
+        $this->totalCount = $queryData['total'];//总条数
+        $this->current_page = $queryData['current_page'];//当前页数
+        $this->totalPage = $queryData['last_page']; //总页数
+        $this->pageData = $pageData;
+        $this->list = $data;
+        $this->fetch();
+    }
+
+    /**
+     * @Notes:筛选列表 详情
+     * @Interface find_detail
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function find_detail(){
+        $uid = input('uid');
+        if(empty($uid)){
+            $this->error('uid参数错误');
+        }
+        $this->uid = $uid;
+        $service = InterfaceService::instance();
+        $service->setAuth('123456','123456'); // 设置接口认证账号
+        $queryData = $service->doRequest('apinew/v1/query/detail',['uid'=>$uid]); // 发起接口请求
+        if(empty($queryData)){
+            $this->error('接口返回错误');
+        }
+        $queryData['photoList'] = explode(',',$queryData['photo']);
+        $this->vo = $queryData;
+        $this->fetch();
     }
     /**
      * 页面浏览时长列表
