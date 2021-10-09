@@ -158,7 +158,14 @@ class Member extends Controller
                 $where .= " and c.height = '{$height_max}'";
             }
         }
-
+        $info_status = input('info_status');
+        if(!empty($info_status)){
+            if($info_status == 1){ //完善资料
+                $where .= " and expect_education !=0 and min_age !=0 and min_height !=0";
+            }else{
+                $where .= " and expect_education = 0 and min_age = 0 and min_height = 0";
+            }
+        }
         $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
         c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status,c.weight_score,c.remarks_text,(select count(*) from tel_collection t where t.bid = c.uid and t.status=1) as look_tel";
         $equal = 'u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house,c.hometown#hometown';
@@ -209,10 +216,19 @@ class Member extends Controller
             if(!empty($vo['expect_education']) && !empty($vo['min_age']) && !empty($vo['min_height'])){
                 $vo['info_status'] = 1; //已完善
             }
+            $vo['sub_remarks_text'] = $this->subtext($vo['remarks_text'],8);
 
         }
     }
+    public function subtext($text, $length)
+    {
+        if(mb_strlen($text, 'utf8') > $length) {
+            return mb_substr($text, 0, $length, 'utf8').'...';
+        } else {
+            return $text;
+        }
 
+    }
     public function telCountInfo()
     {
         $id = input('id');

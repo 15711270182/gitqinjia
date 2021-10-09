@@ -51,6 +51,10 @@
                     {/foreach}
                 </select>
             </div>
+        </div>
+
+         <div class="layui-form-item layui-inline">
+
             <label class="layui-form-label">学历</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="education">
@@ -75,9 +79,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-
-         <div class="layui-form-item layui-inline">
             <label class="layui-form-label">房产</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="house">
@@ -90,7 +91,32 @@
                     {/foreach}
                 </select>
             </div>
-
+            <label class="layui-form-label">会员</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="is_vip">
+                    {foreach [''=>'-- 不限 --','1'=>'是','0'=>'否'] as $k=>$v}
+                    {eq name='Think.get.is_vip' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+            <label class="layui-form-label">是否完善</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="info_status">
+                    {foreach [''=>'-- 不限 --','1'=>'是','2'=>'否'] as $k=>$v}
+                    {eq name='Think.get.info_status' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+         </div>
+         <div class="layui-form-item layui-inline">
             <label class="layui-form-label">居住地</label>
             <div class="layui-input-inline">
                 <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
@@ -127,18 +153,6 @@
                     {/foreach}
                 </select>
             </div>
-            <label class="layui-form-label">会员</label>
-            <div class="layui-input-inline">
-                <select class="layui-select" name="is_vip">
-                    {foreach [''=>'-- 不限 --','1'=>'是','0'=>'否'] as $k=>$v}
-                    {eq name='Think.get.is_vip' value='$k.""'}
-                    <option selected value="{$k}">{$v}</option>
-                    {else}
-                    <option value="{$k}">{$v}</option>
-                    {/eq}
-                    {/foreach}
-                </select>
-            </div>
             <label class="layui-form-label">注销</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="status">
@@ -151,10 +165,9 @@
                     {/foreach}
                 </select>
             </div>
-
          </div>
          <div class="layui-form-item layui-inline">
-             <label class="layui-form-label">年龄</label>
+            <label class="layui-form-label">年龄</label>
             <div class="layui-input-inline">
                 <input name="age_min" value="{$age_min|default=''}" placeholder="年龄开始" class="layui-input">
             </div>

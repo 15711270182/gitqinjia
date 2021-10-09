@@ -16,6 +16,8 @@
             <!--<th class='text-center nowrap'>剩余牵线数</th>-->
             <th class='text-center nowrap'>剩余查看号码数</th>
             <th class='text-center nowrap'>邀请人(ID)</th>
+            <th class='text-center nowrap'>操作</th>
+            <th class='text-center nowrap'>是否完善资料</th>
             <th class='text-center nowrap'>被访问记录</th>
             <th class='text-center nowrap'>浏览记录</th>
             <th class='text-center nowrap'>被查看号码数
@@ -24,12 +26,11 @@
                     <i class="layui-edge layui-table-sort-desc" title="降序"  data-dbclick="" data-load="{$url}&search_tel=desc"></i>
                 </span>
             </th>
-            <th class='text-center nowrap'>是否完善资料</th>
+
             <th class='text-center nowrap'>会员</th>
             <th class='text-center nowrap'>权重分</th>
             <!--<th class='text-center nowrap'>禁用</th>-->
             <th class='text-center nowrap'>注销</th>
-            <th class='text-center nowrap'>操作</th>
         </tr>
         </thead>
         {/notempty}
@@ -52,36 +53,12 @@
 
                 </div>
             </td>
-            <td class='text-center nowrap'>{$vo.remarks_text}</td>
+            <td class='text-center nowrap' title="{$vo.remarks_text}">{$vo.sub_remarks_text}</td>
             <td class='text-center nowrap'>{$vo.phone|default=''}</td>
             <!--<td class='text-center nowrap'>{$vo.pair_last_num}</td>-->
             <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
             <!--<td class='text-center nowrap'>{$vo.relation_id}</td>-->
             <td class='text-center nowrap'>{if !empty($vo.relation_id)}{$vo.relation_name}({$vo.relation_id}){else/}{/if}</td>
-            <td class='text-center nowrap' title="被访问记录" style="cursor: pointer;color: #00a0e9;" data-title="被访问记录" data-open='{:url("infoList")}?bid={$vo.id}'>{$vo.blook_count|default=0}</td>
-            <td class='text-center nowrap' title="浏览记录" style="cursor: pointer;color: #00a0e9;" data-title="浏览记录" data-open='{:url("infoList")}?uid={$vo.id}'>{$vo.look_count|default=0}</td>
-            <td class='text-center nowrap' title="被查看号码数" style="cursor: pointer;color: #00a0e9;" data-title="被查看号码数" data-open='{:url("looktelList")}?bid={$vo.id}'>{$vo.look_tel}</td>
-            <td class='text-center nowrap'>
-                {if condition="$vo.info_status eq 1"}<span class="color-gray" style="color:red">是</span>
-                {else /} <span class="color-gray">否</span>
-                {/if}
-            </td>
-            <td class='text-center nowrap'>
-                {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
-                {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
-            </td>
-            <td class='text-center nowrap'>{$vo.weight_score}</td>
-            <!--<td class='text-center nowrap'>-->
-                <!--{if condition="$vo.is_ban eq 0"}<span class="color-gray" style="color:red">是</span>-->
-                <!--{else /} <span class="color-gray">否</span>-->
-                <!--{/if}-->
-            <!--</td>-->
-            <td class='text-center nowrap'>
-                {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
-                {else /} <span class="color-gray">否</span>
-                {/if}
-            </td>
-
             <td class='text-center nowrap'>
                 <a class="layui-btn layui-btn-normal layui-btn-sm" data-title="子女详情" data-modal='{:url("look")}?id={$vo.id}'>子女详情</a>
                 {eq name='vo.team_status' value='1'}
@@ -98,6 +75,25 @@
                 <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确定要注销该用户吗？" data-action="{:url('newglory')}?id={$vo.id}" data-value="id#{$vo.id};status#{$vo.status}" data-csrf="{:systoken('newglory')}">注销</a>
                 {/if}
                 <a class="layui-btn layui-btn-sm" data-type="store-config-type-params" data-modal='{:url("getuserposter")}?id={$vo.id}' class='layui-btn layui-btn-sm layui-btn-primary'>获取海报</a>
+            </td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.info_status eq 1"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
+            </td>
+            <td class='text-center nowrap' title="被访问记录" style="cursor: pointer;color: #00a0e9;" data-title="被访问记录" data-open='{:url("infoList")}?bid={$vo.id}'>{$vo.blook_count|default=0}</td>
+            <td class='text-center nowrap' title="浏览记录" style="cursor: pointer;color: #00a0e9;" data-title="浏览记录" data-open='{:url("infoList")}?uid={$vo.id}'>{$vo.look_count|default=0}</td>
+            <td class='text-center nowrap' title="被查看号码数" style="cursor: pointer;color: #00a0e9;" data-title="被查看号码数" data-open='{:url("looktelList")}?bid={$vo.id}'>{$vo.look_tel}</td>
+
+            <td class='text-center nowrap'>
+                {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
+                {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
+            </td>
+            <td class='text-center nowrap'>{$vo.weight_score}</td>
+            <td class='text-center nowrap'>
+                {if condition="$vo.status eq 0"}<span class="color-gray" style="color:red">是</span>
+                {else /} <span class="color-gray">否</span>
+                {/if}
             </td>
         </tr>
         {/foreach}

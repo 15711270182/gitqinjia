@@ -303,6 +303,7 @@ class Qxapply extends Controller
             $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
+            $vo['phone'] = $Children['phone'];
         }
     }
     //筛选列表
