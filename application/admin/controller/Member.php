@@ -161,14 +161,22 @@ class Member extends Controller
         $info_status = input('info_status');
         if(!empty($info_status)){
             if($info_status == 1){ //完善资料
-                $where .= " and expect_education !=0 and min_age !=0 and min_height !=0";
+                $where .= " and c.expect_education !=0 and c.min_age !=0 and c.min_height !=0";
             }else{
-                $where .= " and expect_education = 0 and min_age = 0 and min_height = 0";
+                $where .= " and c.expect_education = 0 and c.min_age = 0 and c.min_height = 0";
             }
         }
-        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
+        $is_vip = input('is_vip','');
+        $time = time();
+        if($is_vip == 1){
+            $where .= " and u.is_vip = 1 and u.endtime >= '{$time}'";
+        }
+        if($is_vip == 0){
+            $where .= " and u.endtime < '{$time}'";
+        }
+        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
         c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status,c.weight_score,c.remarks_text,(select count(*) from tel_collection t where t.bid = c.uid and t.status=1) as look_tel";
-        $equal = 'u.id#id,u.nickname#nickname,u.is_vip#is_vip,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house,c.hometown#hometown';
+        $equal = 'u.id#id,u.nickname#nickname,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house,c.hometown#hometown';
         $this->_query($this->table)
                 ->alias('u')
                 ->field($field)
@@ -217,6 +225,10 @@ class Member extends Controller
                 $vo['info_status'] = 1; //已完善
             }
             $vo['sub_remarks_text'] = $this->subtext($vo['remarks_text'],8);
+            $vo['vip'] = 0;//是否是会员
+            if($vo['is_vip']== 1 && $vo['endtime']>= time()){ //判断用户是否是会员
+                $vo['vip'] = 1;
+            }
 
         }
     }
@@ -254,6 +266,8 @@ class Member extends Controller
         $map = ['uid' => $id];
         $realname = Db::name('userinfo')->where(['id'=>$id])->value('realname');
         $pair_last_num = Db::name('userinfo')->where(['id'=>$id])->value('pair_last_num');
+        $is_vip = Db::name('userinfo')->where(['id'=>$id])->value('is_vip');
+        $endtime = Db::name('userinfo')->where(['id'=>$id])->value('endtime');
         $Children = Db::name('Children')->where($map)->find();
         if ($Children['sex'] == 1){
             $Children['sex_name'] = '男';
@@ -319,6 +333,8 @@ class Member extends Controller
         $img_path_arr = DB::name("qx_user_pictures")->where(['uid'=>$id,'is_del'=>0])->column('img_path'); //查询用户生活照片
         $slider  = implode('|',$img_path_arr);
 
+        $this->is_vip = $is_vip;
+        $this->endtime = date('Y-m-d H:i:s',$endtime);
         $this->slider = $slider;
         $this->pair_last_num = $pair_last_num;
         $this->realname = $realname;

@@ -603,7 +603,7 @@ class RecommendService
     {
         // 获取近5天推荐记录
         $near_three_id_list = array();
-        $near_three_date = date('Ymd', strtotime('-5 days'));
+        $near_three_date = date('Ymd', strtotime('-7 days'));
         $near_three_list = Db::table('recommend_record')->where('uid', $uid)
             ->where('date', '>=', $near_three_date)->select();
 

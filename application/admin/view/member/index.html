@@ -86,8 +86,11 @@
             <td class='text-center nowrap' title="被查看号码数" style="cursor: pointer;color: #00a0e9;" data-title="被查看号码数" data-open='{:url("looktelList")}?bid={$vo.id}'>{$vo.look_tel}</td>
 
             <td class='text-center nowrap'>
-                {eq name='vo.is_vip' value='1'}<span class="color-gray">是</span>{/eq}
-                {eq name='vo.is_vip' value='0'}<span class="color-gray">否</span>{/eq}
+                {if $vo.vip == 1}
+                <span style="color:red">是</span>
+                {else/}
+                否
+                {/if}
             </td>
             <td class='text-center nowrap'>{$vo.weight_score}</td>
             <td class='text-center nowrap'>
