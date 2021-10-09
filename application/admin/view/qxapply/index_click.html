@@ -11,6 +11,7 @@
             <th class='text-center nowrap'>点击时间</th>
             <th class='text-center nowrap'>用户ID</th>
             <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>手机号</th>
             <th class='text-center nowrap'>类型</th>
         </tr>
         </thead>
@@ -32,6 +33,7 @@
                     </div>
                 </div>
             </td>
+            <td class='text-center nowrap'>{$vo.phone}</td>
             <td class='text-center nowrap'>
                 {foreach ['4'=>'筛选结果','5' => '服务详情'] as $k => $v}
                     {if $vo.type eq $k}

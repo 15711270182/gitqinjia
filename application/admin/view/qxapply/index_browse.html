@@ -11,6 +11,7 @@
             <th class='text-center nowrap'>浏览时间</th>
             <th class='text-center nowrap'>用户ID</th>
             <th class='text-center nowrap'>用户信息</th>
+            <th class='text-center nowrap'>手机号</th>
             <th class='text-center nowrap'>浏览时长(秒)</th>
             <th class='text-center nowrap'>类型</th>
         </tr>
@@ -33,6 +34,7 @@
                     </div>
                 </div>
             </td>
+            <td class='text-center nowrap'>{$vo.phone}</td>
             <td class='text-center nowrap'>{$vo.browse_duration}</td>
             <td class='text-center nowrap'>
                 {foreach ['1'=>'服务详情','2' => '筛选结果', '3' => '嘉宾资料'] as $k => $v}

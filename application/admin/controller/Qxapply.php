@@ -442,6 +442,7 @@ class Qxapply extends Controller
             }
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
+            $vo['phone'] = $Children['phone'];
         }
     }
 
@@ -493,9 +494,11 @@ class Qxapply extends Controller
         $sex = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,sex');
         $year = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,year');
         $education = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,education');
+        $phone = DB::name('Children')->where(['uid'=>$uidColumn])->column('uid,phone');
         foreach($data as $k=>$v){
             $newData[$k]['create_time'] = $v['create_time'];
             $newData[$k]['uid'] = $v['uid'];
+            $newData[$k]['phone'] = isset($phone[$v['uid']])?$phone[$v['uid']]:'';
             $newData[$k]['nickname'] = isset($nickname[$v['uid']])?emoji_decode($nickname[$v['uid']]):'匿名';
             $newData[$k]['sex'] = isset($sex[$v['uid']])?($sex[$v['uid']] == 1?'男':'女'):'未知';
             $newData[$k]['age'] = isset($year[$v['uid']])?(int)date('Y') - (int)$year[$v['uid']]:'未知';
@@ -510,7 +513,7 @@ class Qxapply extends Controller
                 $newData[$k]['type'] = '嘉宾资料';
             }
         }
-        $title = ['浏览时间','用户uid','昵称','性别','年龄','学历','浏览时长','类型']; //标题
+        $title = ['浏览时间','用户uid','手机号','昵称','性别','年龄','学历','浏览时长','类型']; //标题
 //        $xlsname = "牵线服务浏览数据";  //文件名
         writeExcel($title,$newData , $xlsname);
     }
@@ -553,6 +556,7 @@ class Qxapply extends Controller
             }
             $vo['age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
+            $vo['phone'] = $Children['phone'];
         }
     }
 
