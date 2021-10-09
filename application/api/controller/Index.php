@@ -946,12 +946,19 @@ class Index extends Base
         if(!$share_uid){
             return $this->errorReturn(self::errcode_fail,'分享人uid不能为空');
         }
-        cache('shareposter-'.$uid, null);
         $url = cache('shareposter-'.$share_uid);
-        if(!$url){
-            $Poster = new Poster();
-            $url = $Poster->index($share_uid);
-            cache('shareposter-'.$share_uid,$url);
+        if(empty($url)){
+            $url = UserModel::userValue(['id'=>$share_uid],'share_get_poster');
+            if(empty($url)){
+                $Poster = new Poster();
+                $url = $Poster->index($share_uid);
+                cache('shareposter-'.$share_uid,$url);
+//                $url = 'www.baidu.com';
+            }
+        }
+        $userinfo = UserModel::userFind(['id'=>$share_uid]);
+        if(empty($userinfo['share_get_poster'])){
+            UserModel::userEdit(['id'=>$share_uid],['share_get_poster'=>$url]);
         }
         if($uid == $share_uid){
             $data['text'] = "我的信息全在这，快帮忙介绍个对象吧";

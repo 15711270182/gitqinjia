@@ -175,6 +175,8 @@ class Poster extends Controller
         $s_arr = json_decode($sourceurl_data,true);
         $sourceurl_qiniu = $s_arr['img'];
         cache('shareposter-'.$uid,$sourceurl_qiniu);
+        $save['share_get_poster'] = $sourceurl_qiniu;
+        Db::name('userinfo')->where(['id'=>$uid])->update($save);
         return $sourceurl_qiniu;
     }
 
