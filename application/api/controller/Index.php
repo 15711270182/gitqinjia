@@ -948,13 +948,12 @@ class Index extends Base
         }
         $url = cache('shareposter-'.$share_uid);
         if(empty($url)){
-            $url = UserModel::userValue(['id'=>$share_uid],'share_get_poster');
-            if(empty($url)){
+//            $url = UserModel::userValue(['id'=>$share_uid],'share_get_poster');
+//            if(empty($url)){
                 $Poster = new Poster();
                 $url = $Poster->index($share_uid);
-                cache('shareposter-'.$share_uid,$url);
 //                $url = 'www.baidu.com';
-            }
+//            }
         }
         $userinfo = UserModel::userFind(['id'=>$share_uid]);
         if(empty($userinfo['share_get_poster'])){
