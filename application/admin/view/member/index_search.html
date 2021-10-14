@@ -94,7 +94,7 @@
             <label class="layui-form-label">会员</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="is_vip">
-                    {foreach [''=>'-- 不限 --','1'=>'是','0'=>'否'] as $k=>$v}
+                    {foreach [''=>'-- 不限 --','1'=>'是','2'=>'否'] as $k=>$v}
                     {eq name='Think.get.is_vip' value='$k.""'}
                     <option selected value="{$k}">{$v}</option>
                     {else}

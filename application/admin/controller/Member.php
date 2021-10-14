@@ -167,11 +167,12 @@ class Member extends Controller
             }
         }
         $is_vip = input('is_vip','');
+        // var_dump($is_vip);
         $time = time();
         if($is_vip == 1){
             $where .= " and u.is_vip = 1 and u.endtime >= '{$time}'";
         }
-        if($is_vip == 0){
+        if($is_vip == 2){
             $where .= " and u.endtime < '{$time}'";
         }
         $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
@@ -185,7 +186,7 @@ class Member extends Controller
                 ->timeBetween('u.add_time#add_time')
                 ->where($where)
                 ->order($order)->page();
-//        var_dump(DB::name('userinfo')->getLastSql());die;
+        // var_dump(DB::name('userinfo')->getLastSql());die;
     }
     /**
      * 列表数据处理
@@ -888,4 +889,5 @@ class Member extends Controller
             $vo['t_age'] = getage($tinfo['year']);
         }
     }
+
 }
