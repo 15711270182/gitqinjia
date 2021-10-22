@@ -30,22 +30,26 @@
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
                 <div class="inline-block">
-                    <div>昵称：<span>{$vo.nickname|default='-'}</span></div>
-                    <div>性别：<span>{$vo.sex}</span>，
-                         年龄：<span>{$vo.age|default='-'}</span>
+                    <div>
+                        昵称：<span>{$vo.nickname|default='-'}</span>,
+                        性别：<span>{$vo.qj_sex}</span>
+                    </div>
+                    <div>
+                         年龄：<span>{$vo.qj_age|default='-'}</span>,
+                         年份：<span>{$vo.qj_year|default='-'}</span>
                     </div>
                     <div>
                          地区：<span>{$vo.address|default='-'}</span>
                     </div>
                 </div>
             </td>
-            <td class='text-center nowrap'>{$vo.bj_uid}</td>
+            <td class='text-center nowrap'><a href="admin.html#/index.php/admin/qxapply/find_detail?uid={$vo.bj_uid}" target="_blank">{$vo.bj_uid}</a></td>
             <td class="text-center nowrap">
             <img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.cover|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top">
                 <div class="inline-block">
                     <div>
                          性别：<span>{$vo.sex}</span>，
-                         年龄：<span>{$vo.age|default='-'}</span>，
+                         年份：<span>{$vo.year|default='-'}</span>，
                          身高：<span>{$vo.height|default='-'}</span>
 
                     </div>
@@ -72,11 +76,14 @@
             <td class='text-center nowrap'>
                 {if $vo.apply_status eq 0}
                     <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
+                    <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定撤销申请吗？" data-action='{:url("revokeApply")}'
+                           data-csrf="{:systoken('revokeApply')}" data-value="id#{$vo.id}">撤销申请</a>
                 {else/}
                     {if $vo.apply_status eq 1}
-                        <a data-dbclick class="layui-btn layui-bg-blue" data-confirm="确定牵线成功？" data-action='{:url("agreeApply")}'
+                        
+                        <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定牵线成功？" data-action='{:url("agreeApply")}'
                            data-csrf="{:systoken('agreeApply')}" data-value="id#{$vo.id}">同意</a>
-                        <a data-dbclick class="layui-btn layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
+                        <a data-dbclick class="layui-btn layui-btn-sm layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
                            data-csrf="{:systoken('refuseApply')}" data-value="id#{$vo.id}">拒绝</a>
                     {else/}
                         暂无操作

@@ -53,6 +53,7 @@ class Qxapply extends Controller
         $this->title = '牵线列表';
         $this->_query($this->table)
             ->equal('uid,apply_status')
+            ->where(['is_del'=>0])
             ->dateBetween('create_time')
             ->order('id desc')
             ->page();
@@ -67,11 +68,12 @@ class Qxapply extends Controller
             $vo['nickname'] = emoji_decode($nickname);
             $vo['pair_last_num'] = $pair_last_num;
             $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
-            $vo['sex'] = '女';
+            $vo['qj_year'] = $Children['year']; 
+            $vo['qj_sex'] = '女';
             if ($Children['sex'] == 1){
-                $vo['sex'] = '男';
+                $vo['qj_sex'] = '男';
             }
-            $vo['age'] = (int)date('Y') - (int)$Children['year'];
+            $vo['qj_age'] = (int)date('Y') - (int)$Children['year'];
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
 
             $vo['remark_sub'] = $this->subtext($vo['remark'],15);
@@ -99,6 +101,20 @@ class Qxapply extends Controller
         }
         $this->applyCsrfToken();
         $this->_save($this->table, ['apply_status' => '1','apply_pass_time'=>date('Y-m-d H:i:s')]);
+    }
+     /**
+     * 撤销牵线申请
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function revokeApply()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        $this->applyCsrfToken();
+        $this->_save($this->table, ['is_del' => '1','del_time'=>date('Y-m-d H:i:s')]);
     }
     /**
      * 同意牵线

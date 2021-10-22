@@ -169,7 +169,7 @@ class Matchmaker extends Base
         if(empty($queryData)){
             return $this->errorReturn(self::errcode_fail,'接口返回错误');
         }
-        $qxInfo = DB::name('qx_apply_user')->where(['uid'=>$uid,'bj_uid'=>$bj_uid])->find();
+        $qxInfo = DB::name('qx_apply_user')->where(['uid'=>$uid,'bj_uid'=>$bj_uid,'is_del'=>0])->find();
         $queryData['apply_status'] = '';
         if($qxInfo){
             $queryData['apply_status'] = $qxInfo['apply_status'];
@@ -193,6 +193,11 @@ class Matchmaker extends Base
         $pair_last_num = DB::name('userinfo')->where(['id'=>$uid])->value('pair_last_num');
         if($pair_last_num == 0){
             return $this->errorReturn(self::errcode_fail,'牵线次数已用完');
+        }
+        $where_apply = "uid = {$uid} and is_del = 0 and (apply_status = 0 or apply_status = 1)";
+        $apply_count = DB::name('qx_apply_user')->where($where_apply)->count();
+        if($apply_count >= 3){
+            return $this->errorReturn(self::errcode_fail,'同时牵线服务人数不宜超过3个，请等待红娘牵线结果出来后，再来申请！');
         }
         //请求铂金详情数据 添加入库
         $service = InterfaceService::instance();
@@ -232,15 +237,18 @@ class Matchmaker extends Base
         $uid = $this->uid;
         $page = input('page') ?: '1';
         $pageSize = input('pageSize') ?: '10';
+        $where = [];
+        $where['uid'] = $uid;
+        $where['is_del'] = 0;
         $list = DB::name('qx_apply_user')
-            ->where(['uid'=>$uid])
+            ->where($where)
             ->order('create_time desc')
             ->page($page,$pageSize)
             ->select();
         if(empty($list)){
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
-        $totalCount = DB::name('qx_apply_user')->where(['uid'=>$uid])->count();
+        $totalCount = DB::name('qx_apply_user')->where($where)->count();
         $totalPage = ceil($totalCount/$pageSize);
         $newData = [];
         foreach($list as $k=>$v){
