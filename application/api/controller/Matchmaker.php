@@ -179,6 +179,7 @@ class Matchmaker extends Base
         if($uinfo['is_pair_vip'] == 1 && $uinfo['pair_vip_time'] >= date('Y-m-d H:i:s')){
             $queryData['is_pair_vip'] = 1;
         }
+        $queryData['bj_uid'] = input("bj_uid");
         return $this->successReturn($queryData,'成功',self::errcode_ok);
     }
      /**
