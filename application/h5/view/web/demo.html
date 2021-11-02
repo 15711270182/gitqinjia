@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="pragram" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>查看照片</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+     <style type="text/css">
+        *{margin: 0;padding: 0;}
+        body{height: 100%;font-family: '微软雅黑 Light';position:relative;}
+        #d1{width:100vw;height:100vh;}
+        #d1 img{width:100vw;height:100vh;}
+        #d2{width: 81.2%;position:absolute;top: 4%;left: 9%;}
+        #d2 img{height:100%;width: 100%;}
+        #counDown{color:#FFFFFF;width:100%;font-weight:bold;position: absolute;top: 4%;font-size: 1.6rem;text-align: center;display:none;}
+        #counDown span{color: #FFF91E;font-size: 2.2rem;line-height:2rem;display: inline-block;margin: 0 10px;}
+        #destroy{width: 81.2%;position:absolute;top: 4%;left: 9%;display: none;}
+        #destroy img{height:100%;width: 100%;}
+        #d3{width:84%;height:55%;position:absolute;top:15.5%;left: 8%;border-radius: 20px;overflow: hidden;}
+        #d3 img{width:100%;height:100%;border-radius: 20px;filter: blur(10px);}
+        #content{width:84%;height:55%;position:absolute;top:15.5%;left: 8%;border-radius: 20px;overflow: hidden;background: rgba(0, 0, 0, 0.3);}
+        #content .i1{width:31.4%;margin:24.9% auto 0;}
+        #content .i1 img{width:100%;height:100%;}
+        #content .i2{margin:1.7% 0 0 0;font-size:20px;color: #FFFFFF;text-align:center}
+        #content2{width:84%;height:55%;position:absolute;top:15.5%;left: 8%;border-radius: 20px;overflow: hidden;background: #2E2E2E;display: none;}
+        #content2 .i1{width:31.4%;margin:24.9% auto 0;}
+        #content2 .i1 img{width:100%;height:100%;}
+        #content2 .i2{margin:1.7% 0 0 0;font-size:20px;color: #FFFFFF;text-align:center}
+        #bottom{width:84%;position: absolute;top:79%;left: 8%;display:none;}
+        #bottom img{width:100%;height:100%;}
+        #code{position:fixed;top: 0; right: 0; bottom: 0;left: 0;background: rgba(0, 0, 0, 0.8);display: none;}
+        /* #code .cont{width: 74.6%;height:44.8%;background: #FFFFFF;border-radius: 34px;position: absolute;top: 27.6%;left: 12.7%;} */
+        #code .cont{width: 280px;height:299px;background: #FFFFFF;border-radius: 34px;position: absolute;top: 50%;left: 50%;margin: -149px 0 0 -140px;}
+        #code .cont .top{font-size:20px;color:#202020;text-align:center;font-weight: bold;margin: 22px 0;}
+        #code .cont .kefu{height:199px;width: 199px;margin: 0 auto;}
+        #code .cont .kefu img{height:199px;width: 199px; user-select: auto; pointer-events: auto;-webkit-touch-callout: auto;-moz-user-select: auto;-webkit-user-select: auto;-o-user-select: auto;}
+        #code .cont .back{height:36px;width: 36px;position: absolute;top: 13.5px;right: 10px;}
+        #code .cont .back img{height:36px;width: 36px;}
+    </style>
+</head>
+<body>
+    <div id='d1'>
+        <img src="https://pics.njweiyi6.com/wmqj1/d1.png" alt="">
+    </div>
+    <div id='d2'>
+        <img src="https://pics.njweiyi6.com/wmqj1/d6.png" alt="">
+    </div>
+    <div id="counDown">
+        照片消失倒计时<span id="time">5</span>秒
+    </div>
+    <div id='destroy'>
+        <img src="https://pics.njweiyi6.com/wmqj1/d4.png" alt="">
+    </div>
+    <div id='d3'>
+        <img src="https://pics.njweiyi6.com/wmqj1/photo.jpg" alt="">
+    </div>
+    <div id='content'>
+        <div class="i1"><img src="https://pics.njweiyi6.com/wmqj1/d2.png" alt=""></div>
+        <div class="i2">手指长按即可查看照片</div>
+    </div>
+    <div id='content2'>
+        <div class="i1"><img src="https://pics.njweiyi6.com/wmqj1/d5.png" alt=""></div>
+        <div class="i2">照片已被查看</div>
+    </div>
+    <div id='bottom' onclick="$('#code').show();">
+        <img src="https://pics.njweiyi6.com/wmqj1/d3.png" alt="">
+    </div>
+
+
+    <!-- 二维码 -->
+    <div id='code'>
+        <div class="cont">
+            <div class="top">
+                长按二维码即可添加
+            </div>
+            <div class="kefu">
+                <img src="https://pics.njweiyi6.com/wmqj1/kefu.jpg" alt="">
+            </div>
+            <div class='back' onclick="$('#code').hide();">
+                <img src="https://pics.njweiyi6.com/wmqj1/back.png" alt="">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="application/javascript">
+    let timeout;
+    let time = 5;
+
+    let sel = window.localStorage.getItem('sel');
+    if(sel == 1){
+        $('#destroy').css('display', 'block');
+        $('#d2').css('display', 'none');
+        $('#content').css('display', 'none');
+        $('#content2').css('display', 'block');
+        $('#bottom').css('display', 'block');
+    }else{
+
+        $('#content').bind('touchstart',function(){
+         if(time > 0){
+            $(this).css('display', 'none');
+            $('#d3 img').css('filter', 'none');
+            $('#d2').css('display', 'none');
+            $('#counDown').css('display', 'block');
+            timeout = setInterval(function(){
+              if(time <= 0){
+                  clearInterval(timeout);
+                  $('#counDown').css('display', 'none');
+                  $('#destroy').css('display', 'block');
+                  
+                  $('#content').css('display', 'none');
+                  $('#content2').css('display', 'block');
+                  $('#bottom').css('display', 'block');
+                  window.localStorage.setItem('sel','1');
+              }
+            console.log(time);
+            time = time - 1;
+            $('#counDown #time').html(time);
+         },1000)
+        }
+        
+    })
+    $('#content').bind('touchend',function(){
+        $(this).css('display', 'block');
+        $('#d3 img').css('filter', 'blur(10px)');
+        clearInterval(timeout);
+        $('#counDown').css('display', 'none');
+        $('#destroy').css('display', 'block');
+                  
+        $('#content').css('display', 'none');
+        $('#content2').css('display', 'block');
+        $('#bottom').css('display', 'block');
+        window.localStorage.setItem('sel','1');
+    })
+    }
+
+    
+</script>
+       
+
+</body>
+</html>
