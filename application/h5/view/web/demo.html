@@ -19,7 +19,7 @@
 
 
      <style type="text/css">
-        *{margin: 0;padding: 0;}
+        *{margin: 0;padding: 0;-webkit-touch-callout: none;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
         body{height: 100%;font-family: '微软雅黑 Light';position:relative;}
         #d1{width:100vw;height:100vh;}
         #d1 img{width:100vw;height:100vh;}
@@ -100,7 +100,7 @@
     let time = 5;
 
     let sel = window.localStorage.getItem('sel');
-    if(sel == 1){
+    if(sel == 2){
         $('#destroy').css('display', 'block');
         $('#d2').css('display', 'none');
         $('#content').css('display', 'none');
@@ -123,7 +123,7 @@
                   $('#content').css('display', 'none');
                   $('#content2').css('display', 'block');
                   $('#bottom').css('display', 'block');
-                  window.localStorage.setItem('sel','1');
+                  window.localStorage.setItem('sel','2');
               }
             console.log(time);
             time = time - 1;
@@ -142,7 +142,7 @@
         $('#content').css('display', 'none');
         $('#content2').css('display', 'block');
         $('#bottom').css('display', 'block');
-        window.localStorage.setItem('sel','1');
+        window.localStorage.setItem('sel','2');
     })
     }
 
