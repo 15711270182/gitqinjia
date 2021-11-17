@@ -56,7 +56,7 @@ class Qxapply extends Controller
             ->equal('uid,apply_status')
             ->where(['is_del'=>0])
             ->dateBetween('create_time')
-            ->order('id desc')
+            ->order('apply_status desc,id desc')
             ->page();
     }
     protected function _index_page_filter(&$data)
