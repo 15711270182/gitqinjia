@@ -106,7 +106,7 @@ class Send
             "sign_version" => 2,
             "vars"         => $vars ,
         ];
-        $post_data = self::signature($post_data,$appid,$appkey,$type);
+        $post_data = self::signature($post_data,$type);
         $ch = curl_init();
         curl_setopt_array($ch, array(
             CURLOPT_URL            => $m_url,
