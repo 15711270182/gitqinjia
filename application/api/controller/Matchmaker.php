@@ -180,6 +180,7 @@ class Matchmaker extends Base
             $queryData['is_pair_vip'] = 1;
         }
         $queryData['bj_uid'] = input("bj_uid");
+        unset($queryData['phone']);
         return $this->successReturn($queryData,'成功',self::errcode_ok);
     }
      /**
