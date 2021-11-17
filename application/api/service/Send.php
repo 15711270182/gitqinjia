@@ -93,6 +93,7 @@ class Send
             $appid = config('send.qinjia.appid');
             $appkey = config('send.qinjia.appsecret');
         }
+        custom_log('后台短信参数_'.$appid,print_r($appkey,true));
         $m_url = config('send.main_url')."message/xsend.json";
         //通过接口获取时间戳
         $timestamp = self::getTimestamp();
@@ -105,7 +106,7 @@ class Send
             "sign_version" => 2,
             "vars"         => $vars ,
         ];
-        $post_data = self::signature($post_data,$appid,$appkey);
+        $post_data = self::signature($post_data,$appid,$appkey,$type);
         $ch = curl_init();
         curl_setopt_array($ch, array(
             CURLOPT_URL            => $m_url,
