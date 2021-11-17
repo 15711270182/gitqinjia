@@ -19,6 +19,7 @@ use library\Controller;
 use library\tools\Data;
 use app\api\service\UsersService;
 use app\api\service\InterfaceService;
+use app\api\service\Send as SendService;
 use think\Db;
 
 /**
@@ -77,6 +78,13 @@ class Qxapply extends Controller
             $vo['address'] = $Children['province']. '-' .$Children['residence'];
 
             $vo['remark_sub'] = $this->subtext($vo['remark'],15);
+
+            $sendInfo = DB::name('send_message_record')->where(['qx_id'=>$vo['id'],'uid'=>$vo['uid'],'bid'=>$vo['bj_uid'],'type'=>3])->find();
+            $vo['send_status'] = 0; //未发送
+            if($sendInfo){
+                $vo['send_status'] = 1; //已发送
+            }
+            $vo['send_time'] = isset($sendInfo['create_time'])?$sendInfo['create_time']:'';
         }
     }
     public function subtext($text, $length)
@@ -88,6 +96,129 @@ class Qxapply extends Controller
         }
 
     }
+    /**
+     * 发送短信
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function sendmsg(){
+        $id = input('id');
+        $this->id = $id;
+        $this->fetch();
+    }
+    /**
+     * 保存发送短信
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function sendSave(){
+        $id = input('id');
+        $content = input('content');
+        if(empty($content)){
+            $this->error('内容必填');
+        }
+        if(mb_strlen($content) > 20){
+            $this->error('内容不可超过20个字');
+        }
+        $qxInfo = DB::name('qx_apply_user')->where(['id'=>$id])->find();
+        if($qxInfo['sex'] == '女'){
+            $content = $content.'小姐姐';
+        }else{
+            $content = $content.'小哥哥';
+        }
+        // 发送短信
+        if($qxInfo['phone']){
+            $b_phone = $qxInfo['phone'];
+        }else{
+            $service = InterfaceService::instance();
+            $service->setAuth('123456','123456'); // 设置接口认证账号
+            $queryDetailData = $service->doRequest('apinew/v1/query/detail',['uid'=>$qxInfo['bj_uid']]); // 发起接口请求
+            if(empty($queryDetailData)){
+                $this->error('接口返回错误');
+            }
+            $b_phone = $queryDetailData['phone'];
+            DB::name('qx_apply_user')->where(['id'=>$id])->update(['phone'=>$b_phone]);
+        }
+        $project_id = '5Kf1g';//模板ID
+        $vars = json_encode([
+            'content' => $content
+        ]);
+        $send = new SendService();
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        custom_log('后台短信接收返回json',print_r($msgJson,true));
+        $msgJson = json_decode($msgJson,true);
+        if($msgJson['status'] == 'success'){
+            $send_content = "有位{$content}对你非常感兴趣,稍后我们牵线老师会跟您联系,请注意接听电话或者微信消息!";
+            $service = InterfaceService::instance();
+            $service->setAuth('123456','123456'); // 设置接口认证账号
+            $json = [
+                'target_uid'=>$qxInfo['bj_uid'],
+                'content'=>$send_content
+            ];
+            $queryData = $service->doRequest('apinew/v1/query/sendmsg',$json); // 发起接口请求
+            if(empty($queryData)){
+                $this->error('接口返回错误');
+            }
+            //添加发送记录
+            $arrMsg['qx_id'] = $id;
+            $arrMsg['uid'] = $qxInfo['uid'];
+            $arrMsg['bid'] = $qxInfo['bj_uid'];
+            $arrMsg['remark'] = '牵线用户'.$qxInfo['uid'].'发送短信给'.$qxInfo['bj_uid'];
+            $arrMsg['type'] = 3;
+            $arrMsg['create_time'] = date('Y-m-d H:i:s');
+            DB::name('send_message_record')->insertGetId($arrMsg);
+
+            $this->success('发送成功!');
+        }
+        $this->error('发送失败');
+    }
+    /**
+     * 保存发送短信 - 测试
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function test(){
+       
+        $content = '身高168的小姐姐';
+        // 发送短信
+        $b_phone = '15711270182';
+        $project_id = '5Kf1g';//模板ID
+        $vars = json_encode([
+            'content' => $content
+        ]);
+        $send = new SendService();
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        custom_log('后台短信接收返回json',print_r($msgJson,true));
+        $msgJson = json_decode($msgJson,true);
+        if($msgJson['status'] == 'success'){
+            $send_content = "有位{$content}对你非常感兴趣,稍后我们牵线老师会跟您联系,请注意接听电话或者微信消息!";
+            $service = InterfaceService::instance();
+            $service->setAuth('123456','123456'); // 设置接口认证账号
+            $json = [
+                'target_uid'=>250,
+                'content'=>$send_content
+            ];
+            $queryData = $service->doRequest('apinew/v1/query/sendmsg',$json); // 发起接口请求
+            if(empty($queryData)){
+                $this->error('接口返回错误');
+            }
+            // //添加发送记录
+            // $arrMsg['qx_id'] = $id;
+            // $arrMsg['uid'] = $qxInfo['uid'];
+            // $arrMsg['bid'] = $qxInfo['bj_uid'];
+            // $arrMsg['remark'] = '牵线用户'.$qxInfo['uid'].'发送短信给'.$qxInfo['bj_uid'];
+            // $arrMsg['type'] = 3;
+            // $arrMsg['create_time'] = date('Y-m-d H:i:s');
+            // DB::name('send_message_record')->insertGetId($arrMsg);
+
+           echo '成功';die;
+        }
+        echo '失败';die;
+    }
+
      /**
      * 通过审核申请
      * @auth true

@@ -1,0 +1,25 @@
+<form data-auto="true" method="post" action="{:url('sendSave')}" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body think-box-shadow padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">短信内容:</span>
+                <textarea class="layui-textarea" name="content"></textarea>
+            </label>
+        </div>
+       <div class="layui-form-item text-center">
+            {if isset($id)}<input type='hidden' value='{$id}' name='id'>{/if}
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+            <button class="layui-btn" type="submit">保存</button>
+        </div>
+    </div>
+</form>
+
+
+
+<script>
+    window.form.render();
+</script>
+
+<style>
+    /* 支持样式代码 */
+</style>

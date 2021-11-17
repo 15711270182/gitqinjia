@@ -221,6 +221,7 @@ class Matchmaker extends Base
         $add['current_city']     = $queryData['current_city'];
         $add['native_province']  = $queryData['native_province'];
         $add['native_city']      = $queryData['native_city'];
+        $add['phone']      = $queryData['phone'];
         $add['create_time']      = date('Y-m-d H:i:s');
         $res = DB::name('qx_apply_user')->insertGetId($add);
         if(!$res){
