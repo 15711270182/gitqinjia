@@ -146,7 +146,7 @@ class Qxapply extends Controller
             'content' => $content
         ]);
         $send = new SendService();
-        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars,1);
         custom_log('后台短信接收返回json',print_r($msgJson,true));
         $msgJson = json_decode($msgJson,true);
         if($msgJson['status'] == 'success'){
@@ -190,9 +190,24 @@ class Qxapply extends Controller
             'content' => $content
         ]);
         $send = new SendService();
-        $msgJson = $send->sendMsg($b_phone,$project_id,$vars);
+        $msgJson = $send->sendMsg($b_phone,$project_id,$vars,1);
         custom_log('后台短信接收返回json',print_r($msgJson,true));
         $msgJson = json_decode($msgJson,true);
+        var_dump($msgJson);die;
+
+
+
+        $project_id = '4lSb84';//模板ID
+        $vars = json_encode([
+            'realname' => '张',
+            'url' => 'v1kj.cn/info'
+        ]);
+        $send = new SendService();
+        $msgJson = $send->sendMsg('15711270182',$project_id,$vars);
+//                custom_log('短信接收返回json',print_r($msgJson,true));
+        $msgJson = json_decode($msgJson,true);
+        var_dump($msgJson);die;
+
         if($msgJson['status'] == 'success'){
             $send_content = "有位{$content}对你非常感兴趣,稍后我们牵线老师会跟您联系,请注意接听电话或者微信消息!";
             $service = InterfaceService::instance();

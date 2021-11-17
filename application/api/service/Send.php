@@ -36,10 +36,16 @@ class Send
     /**
      * 生成签名
      */
-    public function signature($post_data)
+    public function signature($post_data,$type=0)
     {
-        $appid = config('send.appid');
-        $appkey = config('send.appsecret');
+        if($type == 1){ //铂金之恋
+            $appid = config('send.bojin.appid');
+            $appkey = config('send.bojin.appsecret');
+        }else{ //完美亲家
+            $appid = config('send.qinjia.appid');
+            $appkey = config('send.qinjia.appsecret');
+        }
+        
         //整理生成签名所需参数
         $temp = $post_data;
         unset($temp['vars']);
@@ -79,9 +85,14 @@ class Send
      * @author: zy
      * @Time: ${DATE}   ${TIME}
      */
-    public function sendMsg($to,$project_id,$vars){
-        $appid = config('send.appid');
-        $appkey = config('send.appsecret');
+    public function sendMsg($to,$project_id,$vars,$type=0){
+        if($type == 1){ //铂金之恋
+            $appid = config('send.bojin.appid');
+            $appkey = config('send.bojin.appsecret');
+        }else{ //完美亲家
+            $appid = config('send.qinjia.appid');
+            $appkey = config('send.qinjia.appsecret');
+        }
         $m_url = config('send.main_url')."message/xsend.json";
         //通过接口获取时间戳
         $timestamp = self::getTimestamp();
