@@ -66,8 +66,8 @@ class Hnqx extends Controller
         return $this->fetch('pay');
     }
     //支付成功页面
-    public function success(){
-        return $this->fetch('success');
+    public function pay_success(){
+        return $this->fetch('pay_success');
     }
     public function stip(){
         $jssdk = WechatService::getWebJssdkSign();
