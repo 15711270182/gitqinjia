@@ -65,7 +65,10 @@ class Hnqx extends Controller
         $this->assign('dat',$jssdk);
         return $this->fetch('pay');
     }
-
+    //支付成功页面
+    public function success(){
+        return $this->fetch('success');
+    }
     public function stip(){
         $jssdk = WechatService::getWebJssdkSign();
         $jssdk['link'] = "pages/index/index";

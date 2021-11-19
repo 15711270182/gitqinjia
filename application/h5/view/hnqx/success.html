@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta http-equiv="pragram" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate">
+		<meta http-equiv="expires" content="0">
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<meta http-equiv="Expires" content="0">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+		<title></title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			html {
+				font-size: 26.667vw;
+			}
+
+			body {
+				font-size: 16px;
+			}
+
+			.close {
+				width: 3.75rem;
+				height: 0.44rem;
+				padding: 0.1rem 0.16rem;
+				box-sizing: border-box;
+			}
+
+			.close img {
+				width: 0.24rem;
+				height: 0.24rem;
+			}
+
+			.paymentSuccessful {
+				width: 3.75rem;
+				height: 1.18rem;
+				padding: 0.26rem 0.28rem;
+				box-sizing: border-box;
+				display: flex;
+				position: relative;
+			}
+
+			.paymentSuccessful img {
+				width: 0.66rem;
+				height: 0.66rem;
+				margin-left: 0.66rem;
+				margin-right: 0.04rem;
+			}
+
+			.paymentSuccessful .successfulText {
+				height: 0.66rem;
+				padding: 0.06rem 0;
+				box-sizing: border-box;
+			}
+
+			.successfulTextOne {
+				font-size: 0.22rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #0CB620;
+				margin-bottom: 0.04rem;
+			}
+
+			.successfulTextTwo {
+				font-size: 0.13rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #606060;
+			}
+
+			.splitLine {
+				width: 3.19rem;
+				height: 0.01rem;
+				border: 0.01rem solid #DADADA;
+				position: absolute;
+				top: 1.18rem;
+				left: 0.26rem;
+				box-sizing: border-box;
+			}
+
+			.serviceProcess {
+				width: 3.75rem;
+				height: 3.43rem;
+				padding: 0.25rem 0.61rem 0;
+				box-sizing: border-box;
+				position: relative;
+			}
+
+			.serviceProcessOne {
+				text-align: center;
+				font-size: 0.18rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #202020;
+				position: relative;
+				margin-bottom: 0.26rem;
+			}
+
+			.backgroundColor {
+				width: 0.73rem;
+				height: 0.1rem;
+				background: #FF9476;
+				opacity: 0.2;
+				position: absolute;
+				top: 0.14rem;
+				left: 0.9rem;
+			}
+
+			.serviceProcessTwo {
+				height: 0.4rem;
+				margin-bottom: 0.36rem;
+				display: flex;
+			}
+
+			.serviceProcessTwo img {
+				width: 0.4rem;
+				height: 0.4rem;
+				margin-right: 0.12rem;
+			}
+
+			.serviceProcessTwoText {
+				font-size: 0.16rem;
+				font-family: PingFangSC-Medium, PingFang SC;
+				font-weight: 600;
+				color: #202020;
+				margin-bottom: 0.04rem;
+			}
+
+			.serviceProcessTwoText1 {
+				font-size: 0.13rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #909090;
+			}
+
+			.processArrowOne {
+				width: 0.24rem;
+				height: 0.24rem;
+				position: absolute;
+				left: 1.8rem;
+				top: 1.2rem;
+			}
+
+			.processArrowTwo {
+				width: 0.24rem;
+				height: 0.24rem;
+				position: absolute;
+				left: 1.8rem;
+				top: 2rem;
+			}
+
+			.fillInformation {
+				width: 3.75rem;
+				height: 0.5rem;
+				padding: 0rem 0.42rem;
+				box-sizing: border-box;
+				margin-bottom: 0.1rem;
+			}
+
+			.fillInformation-con {
+				height: 0.5rem;
+				background: linear-gradient(144deg, #FFAA7F 0%, #FF625B 100%);
+				border-radius: 0.25rem;
+				text-align: center;
+				line-height: 0.5rem;
+				font-size: 0.18rem;
+				font-family: PingFangSC-Medium, PingFang SC;
+				font-weight: 600;
+				color: #FFFFFF;
+			}
+
+			.tip {
+				font-size: 0.13rem;
+				font-family: PingFangTC-Regular, PingFangTC;
+				font-weight: 400;
+				color: #909090;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="close">
+			<img src="/static/live/cashier/close.png">
+		</div>
+		<div class="paymentSuccessful">
+			<img src="/static/live/cashier/paymentSuccessful.png">
+			<div class="successfulText">
+				<div class="successfulTextOne">支付成功</div>
+				<div class="successfulTextTwo">恭喜您已支付成功！</div>
+			</div>
+			<div class="splitLine"></div>
+		</div>
+		<div class="serviceProcess">
+			<div class="serviceProcessOne">
+				服务流程
+				<div class="backgroundColor"></div>
+			</div>
+			<div class="serviceProcessTwo">
+				<img src="/static/live/cashier/marshalling.png">
+				<div class="serviceProcessTwo-con">
+					<div class="serviceProcessTwoText">1.填写完整真实资料</div>
+					<div class="serviceProcessTwoText1">完整的资料方便红娘老师帮你推荐</div>
+				</div>
+			</div>
+			<img src="/static/live/cashier/processArrow.png" class="processArrowOne">
+			<div class="serviceProcessTwo">
+				<img src="/static/live/cashier/marshallingOne.png">
+				<div class="serviceProcessTwo-con">
+					<div class="serviceProcessTwoText">2.添加服务红娘老师好友</div>
+					<div class="serviceProcessTwoText1">红娘老师全程帮您牵线服务</div>
+				</div>
+			</div>
+			<img src="/static/live/cashier/processArrow.png" class="processArrowTwo">
+			<div class="serviceProcessTwo">
+				<img src="/static/live/cashier/marshallingTwo.png">
+				<div class="serviceProcessTwo-con">
+					<div class="serviceProcessTwoText">3.开始筛选 早日脱单</div>
+					<div class="serviceProcessTwoText1">希望您在完美亲家 帮孩子早日成家</div>
+				</div>
+			</div>
+		</div>
+		<div class="fillInformation">
+			<div class="fillInformation-con">去填写资料</div>
+		</div>
+		<div class="tip">点击按钮，跳转至小程序里面</div>
+	</body>
+</html>
