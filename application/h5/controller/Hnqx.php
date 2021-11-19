@@ -77,4 +77,7 @@ class Hnqx extends Controller
         $jssdk = WechatService::getWebJssdkSign();
         return json_encode($jssdk);
     }
+    public function payh5(){
+        return $this->fetch('payh5');
+    }
 }
