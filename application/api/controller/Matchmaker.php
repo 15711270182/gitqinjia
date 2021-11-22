@@ -15,6 +15,7 @@
 namespace app\api\controller;
 use app\api\model\Children as ChildrenModel;
 use app\api\service\InterfaceService;
+use app\api\service\UsersService;
 use think\Db;
 use think\Queue;
 
@@ -301,6 +302,85 @@ class Matchmaker extends Base
         DB::name('qx_browse_record')->insertGetId($add);
         return $this->successReturn('','成功',self::errcode_ok);
     }
+    /**
+     * @Notes:获取支付成功表单数据
+     * @Interface getFormInfo
+     * @author: zy
+     * @Time: 2021/09/14
+     */
+    public function getFormInfo(){
+        $uid = $this->uid;
+        //子女信息
+        $children = ChildrenModel::childrenFind(['uid'=>$uid]);
+        if(empty($children)){
+            return $this->errorReturn(self::errcode_fail,'无用户资料');
+        }
+        $data = [];
+        $data['age'] = date('Y') - $children['year'];
+        $data['shuxiang'] = getShuXiang($children['year']);
+        $data['xingzuo'] = get_constellation($children['year']);
+        $data['year'] = substr($children['year'],-2).'年';
+        $data['height'] = $children['height'];
+        $data['residence_province'] = $children['province']; //现居地 省份
+        $data['residence_ciity'] = $children['residence']; //现居地 城市
+        $data['education'] = UsersService::education($children['education']);
+        $data['work'] = $children['work'];
+        
+        $data['income'] = UsersService::income($children['income']);
+        $data['house'] = UsersService::house($children['house']);
+        $data['cart'] = UsersService::cart($children['cart']);
+        $data['parents_test'] = UsersService::parents($children['parents']); //父母情况
+        $data['bro_test'] = UsersService::bro($children['bro']); //家中排行
 
+        $data['remarks'] = $children['remarks']; //相亲说明
 
+        //择偶标准
+        $data['min_age'] = $children['min_age'];
+        $data['max_age'] = $children['max_age'];
+        $data['min_height'] = $children['min_height'];
+        $data['max_height'] = $children['max_height'];
+        $data['expect_education'] = UsersService::expect_education($children['expect_education']);
+
+        return $this->successReturn($data,'成功',self::errcode_ok);
+    }
+
+    /**
+     * @Notes:提交表单数据
+     * @Interface addUserInfo
+     * @author: zy
+     * @Time: 2021/11/22
+     */
+    public function addUserInfo(){
+        $uid = $this->uid;
+        $params = input("post.", '', 'htmlspecialchars_decode');
+        unset($params['session3rd']);//去除不要的信息,存进数据库
+        unset($params['debug_uid']);
+        foreach ($params as $key => $value) {
+            if(empty($value) && ($key != 'house_info' || $key != 'cart_info')){
+                return $this->errorReturn(self::errcode_fail,$key.'参数不能为空');
+            }
+        }
+        if($params['house'] == 1){ //已购房
+            if(empty($params['house_info'])){
+                return $this->errorReturn(self::errcode_fail,'房子情况必填');
+            }
+        }
+        if($params['cart'] == 1){ //已购车
+            if(empty($params['cart_info'])){
+                return $this->errorReturn(self::errcode_fail,'车子情况必填');
+            }
+        }
+        $is_have = DB::name("children_form")->where(['uid'=>$uid])->find();
+        if($is_have){
+            return $this->errorReturn(self::errcode_fail,'资料已提交');
+        }
+        // die;
+        $params['uid'] = $uid;
+        $params['create_time'] = date('Y-m-d H:i:s');
+        $res = DB::name("children_form")->insertGetId($params);
+        if(!$res){
+            return $this->errorReturn(self::errcode_fail,'失败');
+        }
+        return $this->successReturn('','成功',self::errcode_ok);
+    }
 }
