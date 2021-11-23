@@ -18,6 +18,7 @@
             <th class='text-center nowrap'>拒绝原因</th>
             <th class='text-center nowrap'>申请通过时间</th>
             <th class='text-center nowrap'>短信发送时间</th>
+            <th class='text-center nowrap'>是否置顶</th>
             <th class='text-center nowrap'>操作</th>
         </tr>
         </thead>
@@ -75,8 +76,12 @@
             <td class='text-center nowrap' title="{$vo.remark}">{$vo.remark_sub|default='-'}</td>
             <td class='text-center nowrap'>{$vo.apply_pass_time|default='-'}</td>
             <td class='text-center nowrap'>{$vo.send_time|default='-'}</td>
+            <td class='text-center nowrap'>{if $vo.top == 1}<span style="color: green">是</span>{else/}否{/if}</td>
             <td class='text-center nowrap'>
                 {if $vo.apply_status eq 0}
+                    {if $vo.top eq 0}
+                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认置顶吗？" data-action="{:url('top')}" data-value="id#{$vo.id};top#1" data-csrf="{:systoken('top')}">置顶</a>
+                    {/if}
                     <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
                     <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定撤销申请吗？" data-action='{:url("revokeApply")}'
                            data-csrf="{:systoken('revokeApply')}" data-value="id#{$vo.id}">撤销申请</a>
@@ -89,6 +94,8 @@
                            data-csrf="{:systoken('agreeApply')}" data-value="id#{$vo.id}">同意</a>
                         <a data-dbclick class="layui-btn layui-btn-sm layui-btn-danger"  data-modal='{:url("refuseApply")}?id={$vo.id}'
                            data-csrf="{:systoken('refuseApply')}" data-value="id#{$vo.id}">拒绝</a>
+                        <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定撤销申请吗？" data-action='{:url("revokeApply")}'
+                           data-csrf="{:systoken('revokeApply')}" data-value="id#{$vo.id}">撤销申请</a>
                     {else/}
                         暂无操作
                     {/if}

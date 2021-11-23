@@ -370,6 +370,11 @@ class Matchmaker extends Base
                 return $this->errorReturn(self::errcode_fail,'车子情况必填');
             }
         }
+        if($params['expect_house'] == 1){ //已购车
+            if(empty($params['expect_house_info'])){
+                return $this->errorReturn(self::errcode_fail,'车子情况必填');
+            }
+        }
         $is_have = DB::name("children_form")->where(['uid'=>$uid])->find();
         if($is_have){
             return $this->errorReturn(self::errcode_fail,'资料已提交');

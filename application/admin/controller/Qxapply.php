@@ -56,7 +56,7 @@ class Qxapply extends Controller
             ->equal('uid,apply_status')
             ->where(['is_del'=>0])
             ->dateBetween('create_time')
-            ->order('apply_status,id desc')
+            ->order('top_time desc,apply_status,id desc')
             ->page();
     }
     protected function _index_page_filter(&$data)
@@ -234,6 +234,20 @@ class Qxapply extends Controller
         echo '失败';die;
     }
 
+     /**
+     * 置顶
+     * @auth true
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function top()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        $this->applyCsrfToken();
+        $this->_save($this->table, ['top' => '1','top_time'=>date('Y-m-d H:i:s')]);
+    }
      /**
      * 通过审核申请
      * @auth true
