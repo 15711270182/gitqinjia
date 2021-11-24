@@ -323,6 +323,7 @@ class Matchmaker extends Base
             return $this->errorReturn(self::errcode_fail,'无用户资料');
         }
         $data = [];
+        $data['sex'] = $children['sex']; 
         $data['age'] = date('Y') - $children['year'];
         $data['shuxiang'] = getShuXiang($children['year']);
         $data['xingzuo'] = get_constellation($children['year']);
