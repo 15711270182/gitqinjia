@@ -71,6 +71,7 @@ class Matchmaker extends Base
      * @Time: 2021/09/07
      */
     public function getUserList(){
+
         // 年龄 身高 学历 年薪
         $uid = $this->uid;
         $ask_age = input("ask_age",'');
@@ -110,10 +111,16 @@ class Matchmaker extends Base
             $searchLog['create_time'] = date('Y-m-d H:i:s');
             DB::name('qx_search_record')->insertGetId($searchLog);
         }
-
+        //过滤已经申请的铂金用户id
+        $filters = '';
+        $bjArr = DB::name('qx_apply_user')->where(['uid'=>$uid])->group('bj_uid')->column('bj_uid');
+        if($bjArr){
+            $filters = implode(',', $bjArr);
+        }
         $service = InterfaceService::instance();
         $service->setAuth($this->appid,$this->appkey); // 设置接口认证账号
         $json = [
+            'filters'=>$filters,
             'sex'=>$new_sex,
             'minage'=>$age[0],
             'maxage'=>$age[1],
