@@ -254,12 +254,15 @@ class Member extends Controller
         $this->assign('list', $info_list);
         return $this->fetch();
     }
-
-    /**
-     * @Notes:查看子女详情
-     * @Interface look
-     * @author: zy
-     * @Time: 2021/07/20 11:33
+     /**
+     * 查看子女详情
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function look()
     {
@@ -466,6 +469,7 @@ class Member extends Controller
     /**
      * 添加系统用户
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -481,6 +485,7 @@ class Member extends Controller
     /**
      * 编辑系统用户
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -518,6 +523,7 @@ class Member extends Controller
     /**
      * 禁用系统用户
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -584,12 +590,15 @@ class Member extends Controller
             $this->error('重试');
         }
     }
-
     /**
-     * @Notes:获取分享海报
-     * @Interface getuserposter
-     * @author: zy
-     * @Time: 2021/08/18
+     * 获取分享海报
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function getuserposter(){
         $uid = input('id');
@@ -814,12 +823,15 @@ class Member extends Controller
             echo 'error!';die;
         }
     }
-
-    /**
-     * @Notes: 浏览记录列表
-     * @Interface infoList
-     * @author: zy
-     * @Time: 2021/08/23
+     /**
+     * 浏览记录列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function infoList(){
         $this->title = '查看列表';
@@ -859,11 +871,15 @@ class Member extends Controller
 
         }
     }
-    /**
-     * @Notes: 被查看记录列表
-     * @Interface infoList
-     * @author: zy
-     * @Time: 2021/08/23
+     /**
+     * 被查看记录列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
      */
     public function looktelList(){
         $this->title = '被查看记录列表';

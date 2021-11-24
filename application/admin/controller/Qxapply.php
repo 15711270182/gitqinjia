@@ -99,6 +99,7 @@ class Qxapply extends Controller
     /**
      * 发送短信
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -110,6 +111,7 @@ class Qxapply extends Controller
     /**
      * 保存发送短信
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -177,6 +179,7 @@ class Qxapply extends Controller
     /**
      * 保存发送短信 - 测试
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -237,6 +240,7 @@ class Qxapply extends Controller
      /**
      * 置顶
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -279,6 +283,7 @@ class Qxapply extends Controller
     /**
      * 同意牵线
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -307,6 +312,7 @@ class Qxapply extends Controller
     /**
      * 拒绝牵线页面
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -319,6 +325,7 @@ class Qxapply extends Controller
     /**
      * 拒绝牵线
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -336,6 +343,7 @@ class Qxapply extends Controller
     /**
      * 活动配置列表
      * @auth true
+     * @menu true
      */
     public function index_config()
     {
@@ -347,6 +355,7 @@ class Qxapply extends Controller
      /**
      * 添加配置信息
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -366,6 +375,7 @@ class Qxapply extends Controller
     /**
      * 编辑配置信息
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -407,6 +417,7 @@ class Qxapply extends Controller
     /**
      * 关闭活动
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -422,6 +433,7 @@ class Qxapply extends Controller
     /**
      * 开启活动
      * @auth true
+     * @menu true
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
