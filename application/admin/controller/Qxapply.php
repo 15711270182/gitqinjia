@@ -56,7 +56,7 @@ class Qxapply extends Controller
             ->equal('uid,apply_status')
             ->where(['is_del'=>0])
             ->dateBetween('create_time')
-            ->order('top_time desc,apply_status,id desc')
+            ->order('top desc,apply_status,id desc')
             ->page();
     }
     protected function _index_page_filter(&$data)
@@ -256,7 +256,7 @@ class Qxapply extends Controller
             $save['top_time'] = date('Y-m-d H:i:s');
         }else{
             $save['top'] = 0;
-            $save['top_time'] = '';
+            $save['top_time'] = '0000-00-00 00:00:00';
         }
         $this->_save($this->table,$save);
     }
