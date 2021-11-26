@@ -78,10 +78,13 @@
             <td class='text-center nowrap'>{$vo.send_time|default='-'}</td>
             <td class='text-center nowrap'>{if $vo.top == 1}<span style="color: green">是</span>{else/}否{/if}</td>
             <td class='text-center nowrap'>
-                {if $vo.apply_status eq 0}
-                    {if $vo.top eq 0}
+                {if $vo.top eq 0}
                     <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认置顶吗？" data-action="{:url('top')}" data-value="id#{$vo.id};top#1" data-csrf="{:systoken('top')}">置顶</a>
-                    {/if}
+
+                {else/}
+                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认取消置顶吗？" data-action="{:url('top')}" data-value="id#{$vo.id};top#0" data-csrf="{:systoken('top')}">取消置顶</a>
+                {/if}
+                {if $vo.apply_status eq 0}
                     <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认申请通过吗？" data-action="{:url('pass')}" data-value="id#{$vo.id};apply_status#1" data-csrf="{:systoken('pass')}">通过申请</a>
                     <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定撤销申请吗？" data-action='{:url("revokeApply")}'
                            data-csrf="{:systoken('revokeApply')}" data-value="id#{$vo.id}">撤销申请</a>

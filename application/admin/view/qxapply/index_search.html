@@ -14,6 +14,20 @@
             </div>
          </div>
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="apply_status">
+                    {foreach [''=>'-- 不限 --','0'=>'申请中','1'=>'牵线中','2'=>'已同意','3'=>'已拒绝',] as $k=>$v}
+                    {eq name='Think.get.apply_status' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
             <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
         </div>
     </form>

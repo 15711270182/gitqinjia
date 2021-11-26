@@ -250,7 +250,15 @@ class Qxapply extends Controller
             $this->error('系统超级账号禁止操作！');
         }
         $this->applyCsrfToken();
-        $this->_save($this->table, ['top' => '1','top_time'=>date('Y-m-d H:i:s')]);
+        $top = input('top');
+        if($top == 1){
+            $save['top'] = 1;
+            $save['top_time'] = date('Y-m-d H:i:s');
+        }else{
+            $save['top'] = 0;
+            $save['top_time'] = '';
+        }
+        $this->_save($this->table,$save);
     }
      /**
      * 通过审核申请
