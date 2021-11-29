@@ -102,6 +102,9 @@
                         <a data-dbclick class="layui-btn layui-btn-sm layui-bg-blue" data-confirm="确定撤销申请吗？" data-action='{:url("revokeApply")}'
                            data-csrf="{:systoken('revokeApply')}" data-value="id#{$vo.id}">撤销申请</a>
                     {else/}
+                        {if $vo.top eq 1}
+                            <a class="layui-btn layui-btn-sm layui-btn-warm" data-confirm="确认取消置顶吗？" data-action="{:url('top')}" data-value="id#{$vo.id};top#0" data-csrf="{:systoken('top')}">取消置顶</a>
+                        {/if}
                         暂无操作
                     {/if}
                 {/if}
