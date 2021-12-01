@@ -361,6 +361,10 @@ class Matchmaker extends Base
     public function addUserInfo(){
         $uid = $this->uid;
         $params = input("post.", '', 'htmlspecialchars_decode');
+        $lockInfo = lock('addUserInfo_'.$uid);
+        if($lockInfo == false){
+            return $this->errorReturn(self::errcode_fail,'操作过于频繁,请稍后重试!');
+        }
         unset($params['session3rd']);//去除不要的信息,存进数据库
         unset($params['debug_uid']);
         foreach ($params as $key => $value) {
@@ -388,13 +392,22 @@ class Matchmaker extends Base
             return $this->errorReturn(self::errcode_fail,'资料已提交');
         }
         // die;
-        $params['uid'] = $uid;
-        $params['create_time'] = date('Y-m-d H:i:s');
-        $res = DB::name("children_form")->insertGetId($params);
+        $info = DB::name("children_form")->where(['uid'=>$uid])->find();
+        if(!empty($info)){
+            $params['uid'] = $uid;
+            $params['update_time'] = date('Y-m-d H:i:s');
+            $res = DB::name("children_form")->where(['uid'=>$uid])->update($params);
+        }else{
+            $params['uid'] = $uid;
+            $params['create_time'] = date('Y-m-d H:i:s');
+            $res = DB::name("children_form")->insertGetId($params);
+        }
         if(!$res){
             return $this->errorReturn(self::errcode_fail,'失败');
         }
-        $data['img_url'] = 'https://pics.njweiyi6.com//210059820678edbe/ff258fcfcc33036f.jpg';
+        $data['title'] = '添加红娘老师微信号';
+        $data['content'] = '红娘老师一对一婚恋咨询,情感导师帮分析,约会相亲全程恋爱指导红娘帮推进';
+        $data['img_url'] = 'https://pics.njweiyi6.com//d1f19a87d7a3dfa0/4a8b89aad4a62f7a.jpg';
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
 }

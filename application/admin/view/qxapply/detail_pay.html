@@ -1,0 +1,170 @@
+{extend name='admin@main'}
+
+{block name="button"}
+
+{block name='content'}
+<div class="think-box-shadow">
+  <div class="layui-tab-content">
+      <table class="layui-table">
+        <tbody>
+        <tr>
+            <td class='text-left nowrap' colspan="9" style="position: relative;">
+              <div class="inline-block"> 
+                <div><h2>基本信息({$vo.uid})</h2></div>  
+              </div>
+            </td>
+        </tr>
+       <tr>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">孩子性别</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">出生年月日</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">生日类型</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">生肖</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">星座</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">身高</td>
+          <td class='text-center nowrap'  style="background-color:rgb(219,242,254)">体重</td>
+          <td class='text-center nowrap'  style="background-color:rgb(219,242,254)">现居地</td>
+          <td class='text-center nowrap'  style="background-color:rgb(219,242,254)">户籍地</td>
+          
+       </tr>
+       <tr>
+         <td class='text-center nowrap'>{if $vo.sex == 1}男{else/}女{/if}</td>
+         <td class='text-center nowrap'>{$vo.year}</td>
+         <td class='text-center nowrap'>{if $vo.year_type == 1}阳历{else/}阴历{/if}</td>
+         <td class='text-center nowrap'>{$vo.zodiac}</td>
+         <td class='text-center nowrap'>{$vo.constellation}</td>
+         <td class='text-center nowrap'>{$vo.height}</td>
+         <td class='text-center nowrap'>{$vo.weight}</td>
+         <td class='text-center nowrap'>{$vo.residence_province}{$vo.residence_city}</td>
+         <td class='text-center nowrap'>{$vo.native_provice}{$vo.native_city}</td>
+       </tr>
+       <tr>
+          
+          <td class='text-center nowrap'  style="background-color:rgb(219,242,254)">家乡</td>
+          <td class='text-center nowrap'  style="background-color:rgb(219,242,254)">学历</td>
+          <td class='text-center nowrap' colspan="7" style="background-color:rgb(219,242,254)">学校</td>
+          <!-- <td class='text-center nowrap' ></td> -->
+       </tr>
+       <tr>
+         
+         <td class='text-center nowrap'>{$vo.hometown_provice}{$vo.hometown_city}</td>
+         <td class='text-center nowrap'>{$vo.education}</td>
+         <td class='text-center nowrap' colspan="7">{$vo.school}</td>
+
+         <!-- <td class='text-center nowrap' colspan="6"></td> -->
+       </tr>
+        <tr>
+            <td class='text-left nowrap' colspan="9" style="position: relative;">
+              <div class="inline-block"> 
+                <div><h2>工作经济</div>  
+              </div>
+            </td>
+        </tr>
+       <tr>
+          
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">工作城市</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">职业</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">是否体制内</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">作息时间</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">月收入</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">房产</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">房产情况</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">车产</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">车产情况</td>
+       </tr>
+       <tr>
+         
+         <td class='text-center nowrap'>{$vo.work_provice}{$vo.work_city}</td>
+         <td class='text-center nowrap'>{$vo.work}</td>
+          <td class='text-center nowrap'>{if $vo.is_system == 1}是{else/}否{/if}</td>
+          <td class='text-center nowrap'>{$vo.work_time}</td>
+          <td class='text-center nowrap'>{$vo.income}</td>
+         <td class='text-center nowrap'>{$vo.house}</td>
+         <td class='text-center nowrap'>{$vo.house_info|default='暂无'}</td>
+         <td class='text-center nowrap'>{$vo.cart}</td>
+         <td class='text-center nowrap'>{$vo.cart_info|default='暂无'}</td>
+       </tr>
+      <tr>
+            <td class='text-left nowrap' colspan="9" style="position: relative;">
+              <div class="inline-block"> 
+                <div><h2>家庭情况</div>  
+              </div>
+            </td>
+        </tr>
+       <tr>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">婚史</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">父母情况</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">家中排行</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">父母职业</td>
+          <td class='text-center nowrap' colspan="5" style="background-color:rgb(219,242,254)">结婚意愿</td>
+          <!-- <td class='text-center nowrap' colspan="4"></td> -->
+          
+         
+       </tr>
+       <tr>
+         <td class='text-center nowrap'>{$vo.marriage_history}</td>
+         <td class='text-center nowrap'>{$vo.parents}</td>
+         <td class='text-center nowrap'>{$vo.bro}</td>
+         <td class='text-center nowrap'>{$vo.parents_work}</td>
+         <td class='text-center nowrap' colspan="5">{$vo.marriage_intention}</td>
+         <!-- <td class='text-center nowrap' colspan="4"></td> -->
+
+       </tr>
+       <tr>
+          <td class='text-center nowrap' colspan="9" style="background-color:rgb(219,242,254);">相亲说明</td>
+       </tr>
+       <tr>
+         <td class='text-center' colspan="9"><textarea class="layui-textarea" name="remarks" disabled>{$vo.remarks|default=''}</textarea></td>
+       </tr>
+
+       <tr>
+            <td class='text-left nowrap' colspan="9" style="position: relative;">
+              <div class="inline-block"> 
+                <div><h2>择偶标准</div>  
+              </div>
+            </td>
+        </tr>
+       <tr>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254);">年龄要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">学历要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">身高要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">工作要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">家庭要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">收入要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">住房要求</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">房子情况</td>
+          <td class='text-center nowrap' style="background-color:rgb(219,242,254)">车辆要求</td>
+          
+         
+       </tr>
+       <tr>
+         <td class='text-center nowrap'>{$vo.min_age}到{$vo.max_age}</td>
+         <td class='text-center nowrap'>{$vo.expect_education}</td>
+         <td class='text-center nowrap'>{$vo.min_height}到{$vo.max_height}</td>
+         <td class='text-center nowrap'>{$vo.expect_work}</td>
+         <td class='text-center nowrap'>{$vo.expect_family}</td>
+         <td class='text-center nowrap'>{$vo.expect_income}</td>
+         <td class='text-center nowrap'>{$vo.expect_house}</td>
+         <td class='text-center nowrap'>{$vo.expect_house_info}</td>
+         <td class='text-center nowrap'>{$vo.expect_cart}</td>
+         
+       </tr>
+       <tr>
+         <td class='text-center nowrap' style="background-color:rgb(219,242,254)">是否接受离异</td>
+       </tr>
+       <tr>
+         <td class='text-center nowrap'>{if $vo.is_divorce == 1}是{else/}否{/if}</td>
+       </tr>
+       </tbody>
+      </table>
+  </div>
+</div>
+
+{/block}
+
+{block name='script'}
+
+
+{/block}
+{block name="style"}
+
+{/block}

@@ -761,4 +761,123 @@ class Qxapply extends Controller
         $user = ['479','218','677','346','1001','1234','514','1881','354'];
         return $user;
     }
+
+    /**
+     * 支付用户信息列表
+     * @auth true
+     * @menu true
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function index_pay()
+    {
+        
+        $this->title = '支付用户信息列表';
+        $this->_query('children_form')
+            ->equal('uid')
+            ->dateBetween('create_time')
+            ->order('id desc')
+            ->page();
+    }
+    protected function _index_pay_page_filter(&$data)
+    {
+        foreach ($data as &$vo) {
+            $headimgurl = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('headimgurl');
+            $nickname = DB::name('userinfo')->where(['id'=>$vo['uid']])->value('nickname');
+            $vo['headimgurl'] = $headimgurl;
+            $vo['nickname'] = emoji_decode($nickname);
+
+            $Children = Db::name('Children')->where(['uid'=>$vo['uid']])->find();
+            if ($Children['sex'] == 1){
+                $vo['sex'] = '男';
+            }else{
+                 $vo['sex'] = '女';
+            }
+            $vo['age'] = (int)date('Y') - (int)$Children['year'];
+            $vo['address'] = $Children['province']. '-' .$Children['residence'];
+            $vo['phone'] = $Children['phone'];
+        }
+    }
+    //支付用户的资料详情
+    public function detail_pay()
+    {
+        $uid = input('uid');
+        if(empty($uid)){
+            $this->error('uid参数不能为空');
+        }
+        $vo = DB::name('children_form')->where(['uid'=>$uid])->find();
+
+       
+        $vo['education'] = UsersService::education($vo['education']);
+        $vo['income'] = UsersService::income($vo['income']);
+        $vo['house'] = UsersService::house($vo['house']);
+        $vo['cart'] = UsersService::cart($vo['cart']);
+        $vo['parents_test'] = UsersService::parents($vo['parents']); //父母情况
+        $vo['bro_test'] = UsersService::bro($vo['bro']); //家中排行
+        $vo['marriage_history'] = $this->marriage_history($vo['marriage_history']); 
+        $vo['marriage_intention'] = $this->marriage_intention($vo['marriage_intention']); 
+        //择偶要求
+        if($vo['min_age'] === '999'){
+            $vo['min_age'] = '不限';
+        }
+         if($vo['max_age'] === '999'){
+            $vo['max_age'] = '不限';
+        }
+        if($vo['min_height'] === '999'){
+            $vo['min_height'] = '不限';
+        }
+         if($vo['max_height'] === '999'){
+            $vo['max_height'] = '不限';
+        }
+        $vo['expect_education'] = $this->expect_education($vo['expect_education']);
+        $vo['expect_income'] = UsersService::income($vo['expect_income']);
+        $vo['expect_house'] = UsersService::house($vo['expect_house']);
+        $vo['expect_cart'] = UsersService::cart($vo['expect_cart']);
+        switch ($vo['expect_family']) {
+            case '1':
+                $expect_family = '无要求';
+                break;
+            case '2':
+                $expect_family = '单亲';
+                break;
+            default:
+                $expect_family = '暂未填写';
+                break;
+        }
+        $vo['expect_family'] = $expect_family;
+
+        $this->vo = $vo;
+        $this->fetch();
+    }
+
+    //婚史
+    public function marriage_history($value){
+        $marriage = '';
+        $marriageArr = ['0' => '暂未填写', '1' => '未婚', '2' => '离异', '3' => '离异带娃'];
+        if($value){
+            $marriage = $marriageArr[$value];
+        }
+        return $marriage;
+    }
+    //结婚意愿
+    public function marriage_intention($value){
+        $intention = '';
+        $intentionArr = ['0' => '暂未填写', '1' => '计划1年结婚', '2' => '计划2年结婚', '3' => '时机成熟就结婚', '4'=>'想认真谈场恋爱'];
+        if($value){
+            $intention = $intentionArr[$value];
+        }
+        return $intention;
+    }
+    //择偶要求  学历
+    public function expect_education($value){
+        $expect_education = '';
+        $expect_educationArr = ['0' => '暂未填写', '1' => '不限学历', '2' => '中专以上', '3' => '高中以上','4'=>'大专以上','5'=>'本科以上','6'=>'研究生以上'];
+        if($value){
+            $expect_education = $expect_educationArr[$value];
+        }
+        return $expect_education;
+    }
 }
