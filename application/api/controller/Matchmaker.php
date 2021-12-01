@@ -317,38 +317,52 @@ class Matchmaker extends Base
      */
     public function getFormInfo(){
         $uid = $this->uid;
-        //子女信息
-        $children = ChildrenModel::childrenFind(['uid'=>$uid]);
-        if(empty($children)){
-            return $this->errorReturn(self::errcode_fail,'无用户资料');
+        $data = DB::name("children_form")->where(['uid'=>$uid])->find();
+        if(!empty($info)){ //表单信息
+            unset($data['create_time']);
+            unset($data['update_time']);
+        }else{
+            //子女信息
+            $children = ChildrenModel::childrenFind(['uid'=>$uid]);
+            if(empty($children)){
+                return $this->errorReturn(self::errcode_fail,'无用户资料');
+            }
+            $data = [];
+            $data['sex'] = $children['sex']; 
+            $data['age'] = date('Y') - $children['year'];
+            $data['shuxiang'] = getShuXiang($children['year']);
+            $data['xingzuo'] = get_constellation($children['year']);
+            $data['year'] = substr($children['year'],-2).'年';
+            $data['height'] = $children['height'];
+            $data['residence_province'] = $children['province']; //现居地 省份
+            $data['residence_ciity'] = $children['residence']; //现居地 城市
+            $data['work'] = $children['work'];
+            
+            // $data['education'] = UsersService::education($children['education']);
+            // $data['income'] = UsersService::income($children['income']);
+            // $data['house'] = UsersService::house($children['house']);
+            // $data['cart'] = UsersService::cart($children['cart']);
+            // $data['parents_test'] = UsersService::parents($children['parents']); //父母情况
+            // $data['bro_test'] = UsersService::bro($children['bro']); //家中排行
+
+            $data['education'] = $children['education'];
+            $data['income'] = $children['income'];
+            $data['house'] = $children['house'];
+            $data['cart'] = $children['cart'];
+            $data['parents'] = $children['parents']; //父母情况
+            $data['bro'] = $children['bro']; //家中排行
+
+
+            $data['remarks'] = $children['remarks']; //相亲说明
+
+            //择偶标准
+            $data['min_age'] = $children['min_age'];
+            $data['max_age'] = $children['max_age'];
+            $data['min_height'] = $children['min_height'];
+            $data['max_height'] = $children['max_height'];
+            $data['expect_education'] = $children['expect_education'];
+            // $data['expect_education'] = UsersService::expect_education($children['expect_education']);
         }
-        $data = [];
-        $data['sex'] = $children['sex']; 
-        $data['age'] = date('Y') - $children['year'];
-        $data['shuxiang'] = getShuXiang($children['year']);
-        $data['xingzuo'] = get_constellation($children['year']);
-        $data['year'] = substr($children['year'],-2).'年';
-        $data['height'] = $children['height'];
-        $data['residence_province'] = $children['province']; //现居地 省份
-        $data['residence_ciity'] = $children['residence']; //现居地 城市
-        $data['education'] = UsersService::education($children['education']);
-        $data['work'] = $children['work'];
-        
-        $data['income'] = UsersService::income($children['income']);
-        $data['house'] = UsersService::house($children['house']);
-        $data['cart'] = UsersService::cart($children['cart']);
-        $data['parents_test'] = UsersService::parents($children['parents']); //父母情况
-        $data['bro_test'] = UsersService::bro($children['bro']); //家中排行
-
-        $data['remarks'] = $children['remarks']; //相亲说明
-
-        //择偶标准
-        $data['min_age'] = $children['min_age'];
-        $data['max_age'] = $children['max_age'];
-        $data['min_height'] = $children['min_height'];
-        $data['max_height'] = $children['max_height'];
-        $data['expect_education'] = UsersService::expect_education($children['expect_education']);
-
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
 
