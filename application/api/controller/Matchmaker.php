@@ -394,6 +394,7 @@ class Matchmaker extends Base
         if(!$res){
             return $this->errorReturn(self::errcode_fail,'失败');
         }
-        return $this->successReturn('','成功',self::errcode_ok);
+        $data['img_url'] = 'https://pics.njweiyi6.com//210059820678edbe/ff258fcfcc33036f.jpg';
+        return $this->successReturn($data,'成功',self::errcode_ok);
     }
 }
