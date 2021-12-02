@@ -318,7 +318,7 @@ class Matchmaker extends Base
     public function getFormInfo(){
         $uid = $this->uid;
         $data = DB::name("children_form")->where(['uid'=>$uid])->find();
-        if(!empty($info)){ //表单信息
+        if(!empty($data)){ //表单信息
             unset($data['create_time']);
             unset($data['update_time']);
         }else{
@@ -382,7 +382,7 @@ class Matchmaker extends Base
         unset($params['session3rd']);//去除不要的信息,存进数据库
         unset($params['debug_uid']);
         foreach ($params as $key => $value) {
-            if(empty($value) && ($key != 'house_info' || $key != 'cart_info')){
+            if(empty($value) && ($key != 'house_info' || $key != 'cart_info' || $key != 'expect_house_info')){
                 return $this->errorReturn(self::errcode_fail,$key.'参数不能为空');
             }
         }
@@ -392,20 +392,17 @@ class Matchmaker extends Base
             }
         }
         if($params['cart'] == 1){ //已购车
+            // echo '11';
             if(empty($params['cart_info'])){
                 return $this->errorReturn(self::errcode_fail,'车子情况必填');
             }
         }
         if($params['expect_house'] == 1){ //已购车
+            // echo '2';
             if(empty($params['expect_house_info'])){
-                return $this->errorReturn(self::errcode_fail,'车子情况必填');
+                return $this->errorReturn(self::errcode_fail,'择偶标准房子情况必填');
             }
         }
-        $is_have = DB::name("children_form")->where(['uid'=>$uid])->find();
-        if($is_have){
-            return $this->errorReturn(self::errcode_fail,'资料已提交');
-        }
-        // die;
         $info = DB::name("children_form")->where(['uid'=>$uid])->find();
         if(!empty($info)){
             $params['uid'] = $uid;
