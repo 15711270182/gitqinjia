@@ -68,16 +68,17 @@ class Order extends Base
         }
         // 折算到每天是多少钱
         foreach ($product as $key => $value) {
+            $product[$key]['price'] = $value['price']/100;
             $product[$key]['day_price'] = round($value['price']/$value['num']/100, 1);
             // if($paytype == 1){
             //     $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
             // }
         }
-        $map = array();
+        $map = [];
         $map['uid'] = $uid;
-        $children = ChildrenModel::childrenFind($map);
+        $sex = ChildrenModel::getchildrenField($map,'sex');
         $list = [
-            'sex'=>$children['sex'],
+            'sex'=>$sex,
             'data'=>$product
         ];
         return $this->successReturn($list,'成功',self::errcode_ok);

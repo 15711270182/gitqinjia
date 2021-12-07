@@ -110,7 +110,7 @@ class User extends Base
                     'create_at' => time()
                 ];
                 TelCollection::tcountAdd($telcount);
-                ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
+                // ScoreService::instance()->weightScoreInc($source,21,$uid);//邀请者增加权重分
                 $binfo = UserModel::userFind(['id'=>$source]); //邀请者信息
                 $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
                 if($winfo['subscribe'] == 1){ //关注公众号 发模板
@@ -145,7 +145,7 @@ class User extends Base
                         'create_at' => time()
                     ];
                     TelCollection::tcountAdd($telcount);
-                    ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分
+                    // ScoreService::instance()->weightScoreInc($bid,21,$uid);//邀请者增加权重分
                     $binfo = UserModel::userFind(['id'=>$bid]); //邀请者信息
                     $winfo = Db::name('wechat_fans')->where(['unionid'=>$binfo['unionid']])->find();
                     if($winfo['subscribe'] == 1){ //关注公众号 发模板
@@ -212,16 +212,15 @@ class User extends Base
         $is_pair_vip = 0;
         $pair_vip_time = '';
         $qx_num = DB::name('qx_apply_user')->where(['uid'=>$uid,'apply_status'=>2])->count();
-//        $sy_num = $userinfo['pair_last_num'] - $qx_num;
         if($userinfo['is_pair_vip'] == 1 && $userinfo['pair_vip_time'] >= date('Y-m-d H:i:s')){ //牵线会员
             $is_pair_vip = 1;
             $pair_vip_time = date('Y-m-d',strtotime($userinfo['pair_vip_time']));
         }
         $list = [
-            'qx_num'=>$qx_num,
-            'sy_num'=>$userinfo['pair_last_num'],
-            'is_pair_vip' =>$is_pair_vip,
-            'pair_vip_time' =>$pair_vip_time,
+            'qx_num'=>$qx_num, //牵线次数
+            'sy_num'=>$userinfo['pair_last_num'], //牵线剩余次数
+            'is_pair_vip' =>$is_pair_vip, //是否是牵线会员
+            'pair_vip_time' =>$pair_vip_time, //牵线会员到期时间
             'subscribe'=>$subscribe,
             'operate_uid'=>$uid, //新增 操作者uid
             'paytype'=>$paytype, //用户支付类型 1月卡 2次卡
@@ -613,7 +612,7 @@ class User extends Base
                     'create_at' => time()
                 ];
                 CollectionModel::collectionAdd($params);
-                ScoreService::instance()->weightScoreInc($uid,30,$bid);
+                // ScoreService::instance()->weightScoreInc($uid,30,$bid);
             }
             return $this->successReturn('','成功',self::errcode_ok);
         }
@@ -625,11 +624,11 @@ class User extends Base
         if(!$res){
             return $this->errorReturn(self::errcode_fail,'操作失败');
         }
-        if($type == 1){ //收藏
-            ScoreService::instance()->weightScoreInc($uid,30,$bid);
-        }else{
-            ScoreService::instance()->weightScoreInc($uid,31,$bid);
-        }
+        // if($type == 1){ //收藏
+        //     ScoreService::instance()->weightScoreInc($uid,30,$bid);
+        // }else{
+        //     ScoreService::instance()->weightScoreInc($uid,31,$bid);
+        // }
         return $this->successReturn('','成功',self::errcode_ok);
     }
     /**

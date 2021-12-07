@@ -177,7 +177,7 @@ class Index extends Base
             $info_save['create_time'] = date('Y-m-d H:i:s');
             Db::name('view_info_record')->insertGetId($info_save);
             //发送访客记录模板
-            
+
         }
         $where_t['uid'] = $uid;
         $where_t['bid'] = $bid;
