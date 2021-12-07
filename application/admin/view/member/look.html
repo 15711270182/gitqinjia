@@ -158,6 +158,15 @@
                 <script>$('[name="slider"]').uploadMultipleImage();</script>
             </div>
         </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">上传认证视频:<span style="color:red">(注：请上传30M以内的视频)</span></label>
+            <label class="layui-col-xs8 think-form-group-left margin-right-0" style="width:364px">
+                <input name="video_url" value='{$children.video_url|default=""}' placeholder="请上传视频" class="layui-input">
+            </label>
+            <a class="layui-col-xs2 layui-btn think-form-group-right" data-file="btn" data-field="video_url" data-type="mp3,mp4">
+                <i class="layui-icon layui-icon-upload"></i> 上传视频
+            </a>
+        </div>
 
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 15px;">
             <legend>要求</legend>
@@ -236,7 +245,3 @@
 <script>
     window.form.render();
 </script>
-
-<style>
-    /* 支持样式代码 */
-</style>
