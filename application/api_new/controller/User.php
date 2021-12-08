@@ -944,12 +944,14 @@ class User extends Base
 
     public function test(){
         
-        $page =0;
+        $page = input('page');
+        $pageSize = input('pageSize');
         $m_num = 0;
         $field = "uid,sex,year,height,residence,education,income,bro,parents,native_place,hometown,school,work,house,cart,remarks,expect_education,max_age,max_height";
-        do {
-            $page++;
-            $userinfo =  ChildrenModel::childrenSelectPage(['status'=>1],$field,'id desc',$page, 100);
+        // do {
+        //     $page++;
+            $where = "uid > 100";
+            $userinfo =  ChildrenModel::childrenSelectPage($where,$field,'id desc',$page, $pageSize);
             if(!empty($userinfo)){
                 foreach($userinfo as $k=>$v){
                     if($v['sex']){
@@ -1010,7 +1012,7 @@ class User extends Base
                     $m_num++;
                 }
             }
-        }while($userinfo);
+        // }while($userinfo);
         echo $m_num;die;
     }
 
