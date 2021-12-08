@@ -75,7 +75,8 @@ class Index extends Base
         ChildrenModel::childrenEdit(['uid'=>$uid],['login_last_time'=>date('Y-m-d H:i:s')]);
         //是否关注公众号
         $userinfo = UserModel::userFind(['id'=>$uid]);
-        $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
+        $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at != ''";
+        $is_gz = UserModel::wxFind($where_wx);
         $is_wechat = !empty($is_gz)?1:0;
         $data['is_wechat'] = $is_wechat;
         //判断资料是否完善
