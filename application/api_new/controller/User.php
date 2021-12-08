@@ -884,7 +884,7 @@ class User extends Base
         $user['five']  = $five.$cart;
         $user['six']   = $six;
         $user['remark'] = $value['remarks'];
-        $user['auth_status'] = $value['auth_status'];
+        // $user['auth_status'] = $value['auth_status'];
         //查询用户父母的名称
         $pare = UserModel::userFind(['id'=>$value['uid']]);
         $user['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';
