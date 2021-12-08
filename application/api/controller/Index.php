@@ -55,8 +55,9 @@ class Index extends Base
         $uid = $this->uid;
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $is_vip = UsersService::isVip($userinfo);
-        // $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at != ''";
-        $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
+        $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at is not null";
+        $is_gz = UserModel::wxFind($where_wx);
+        // $is_gz = UserModel::wxFind(['unionid'=>$userinfo['unionid']]);
         $is_wechat = !empty($is_gz)?1:0;//是否关注公众号
         //判断资料是否完善
         $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
