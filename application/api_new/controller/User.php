@@ -943,67 +943,75 @@ class User extends Base
 
 
     public function test(){
+        
+        $page =0;
+        $m_num = 0;
         $field = "uid,sex,year,height,residence,education,income,bro,parents,native_place,hometown,school,work,house,cart,remarks,expect_education,max_age,max_height";
-        $list =  ChildrenModel::childrenSelect(['status'=>1],$field);
-        foreach($list as $k=>$v){
-            if($v['sex']){
-                ScoreService::instance()->fullScoreInc($v['uid'],2);
+        do {
+            $page++;
+            $userinfo =  ChildrenModel::childrenSelectPage(['status'=>1],$field,'id desc',$page, 100);
+            if(!empty($userinfo)){
+                foreach($userinfo as $k=>$v){
+                    if($v['sex']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],2);
+                    }
+                    if($v['year']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],3);
+                    }
+                    if($v['height']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],4);
+                    }
+                    if($v['residence']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],5);
+                    }
+                    if($v['education']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],6);
+                    }
+                    if($v['income']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],7);
+                    }
+                    if($v['bro']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],8);
+                    }
+                    if($v['parents']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],9);
+                    }
+                    if($v['native_place']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],10);
+                    }
+                    if($v['hometown']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],11);
+                    }
+                    if($v['school']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],12);
+                    }
+                    if($v['work']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],13);
+                    }
+                    if($v['house']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],14);
+                        
+                    }
+                    if($v['cart']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],15);
+                    }
+                    if($v['remarks']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],16);
+                    }
+                    if($v['expect_education']){
+                       ScoreService::instance()->fullScoreInc($v['uid'],17);
+                    }
+                    if($v['max_age']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],18);
+                    }
+                    if($v['max_height']){
+                        ScoreService::instance()->fullScoreInc($v['uid'],19);
+                    }
+                    $m_num++;
+                }
             }
-            if($v['year']){
-                ScoreService::instance()->fullScoreInc($v['uid'],3);
-            }
-            if($v['height']){
-                ScoreService::instance()->fullScoreInc($v['uid'],4);
-            }
-            if($v['residence']){
-                ScoreService::instance()->fullScoreInc($v['uid'],5);
-            }
-            if($v['education']){
-                ScoreService::instance()->fullScoreInc($v['uid'],6);
-            }
-            if($v['income']){
-                ScoreService::instance()->fullScoreInc($v['uid'],7);
-            }
-            if($v['bro']){
-                ScoreService::instance()->fullScoreInc($v['uid'],8);
-            }
-            if($v['parents']){
-                ScoreService::instance()->fullScoreInc($v['uid'],9);
-            }
-            if($v['native_place']){
-                ScoreService::instance()->fullScoreInc($v['uid'],10);
-            }
-            if($v['hometown']){
-                ScoreService::instance()->fullScoreInc($v['uid'],11);
-            }
-            if($v['school']){
-                ScoreService::instance()->fullScoreInc($v['uid'],12);
-            }
-            if($v['work']){
-                ScoreService::instance()->fullScoreInc($v['uid'],13);
-            }
-            if($v['house']){
-                ScoreService::instance()->fullScoreInc($v['uid'],14);
-                
-            }
-            if($v['cart']){
-                ScoreService::instance()->fullScoreInc($v['uid'],15);
-            }
-            if($v['remarks']){
-                ScoreService::instance()->fullScoreInc($v['uid'],16);
-            }
-            if($v['expect_education']){
-               ScoreService::instance()->fullScoreInc($v['uid'],17);
-            }
-            if($v['max_age']){
-                ScoreService::instance()->fullScoreInc($v['uid'],18);
-            }
-            if($v['max_height']){
-                ScoreService::instance()->fullScoreInc($v['uid'],19);
-            }
-
-        }
-        echo '11';die;
+        }while($userinfo);
+        echo $m_num;die;
     }
 
     public function test_bb(){
