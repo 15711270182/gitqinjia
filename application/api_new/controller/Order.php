@@ -57,10 +57,7 @@ class Order extends Base
     public function productList()
     {
         $uid = $this->uid;
-        $paytype = input("paytype", '', 'htmlspecialchars_decode'); //表里所有用户会员状态 默认次卡
-        if(empty($paytype)){
-           return $this->errorReturn(self::errcode_fail,'paytype参数不能为空');
-        }
+        $paytype = UserModel::userValue(['id' => $uid],'paytype');
         $field = 'id,title,type,num,price,create_at,discount,old_price';
         $product = ProductModel::productSelect(['type'=>$paytype,'source'=>1,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         if(empty($product)){
