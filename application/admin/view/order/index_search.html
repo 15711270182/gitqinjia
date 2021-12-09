@@ -31,7 +31,7 @@
             <label class="layui-form-label">支付来源</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="source">
-                    {foreach [''=>'-- 请选择 --','0'=>'小程序','1'=>'公众号','3'=>'高客单价'] as $k=>$v}
+                    {foreach [''=>'-- 请选择 --','0'=>'小程序','1'=>'公众号','2'=>'诚意金','3'=>'高客单价'] as $k=>$v}
                     {eq name='Think.get.source' value='$k.""'}
                     <option selected value="{$k}">{$v}</option>
                     {else}

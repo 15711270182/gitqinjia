@@ -315,10 +315,16 @@ class Order extends Base
             // }else
             // {
                 if ($goods['type'] == 2){
-                    if($goods['source'] == 1){
-                        $remarks = '充值次卡获得次数'.$goods['num'].'次';
-                    }else{
-                        $remarks = '支付诚意金获得次数'.$goods['num'].'次';
+                    switch ($goods['source']) {
+                        case '1':
+                            $remarks = '充值次卡获得次数'.$goods['num'].'次';
+                            break;
+                        case '2':
+                            $remarks = '支付诚意金获得次数'.$goods['num'].'次';
+                            break;
+                        default:
+                            $remarks = '充值次卡获得次数'.$goods['num'].'次';
+                            break;
                     }
                     //增加次数
                     $map = array();
