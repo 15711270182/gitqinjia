@@ -72,7 +72,7 @@ class Orderhnqx extends Base
         if(!$orderres){
             return $this->errorReturn(self::errcode_fail,'订单生成失败!');
         }
-        $notify_url = 'https://testqin.njzec.com/api/orderhnqx/orderNotify';
+        $notify_url = 'https://testqin.njzec.com/api_new/orderhnqx/orderNotify';
         //微信支付数据  请求统一下单接口
         $options = [
             'body' => '充值',

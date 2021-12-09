@@ -169,7 +169,7 @@ class Order extends Base
         }
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $openid = $userinfo['openid'];
-        $notify_url = 'https://testqin.njzec.com/api/order/orderNotify';
+        $notify_url = 'https://testqin.njzec.com/api_new/order/orderNotify';
         $options = [
             'body' => '充值',
             'out_trade_no' => $order_num,
@@ -216,18 +216,23 @@ class Order extends Base
         if(!$product){
             return $this->errorReturn(self::errcode_fail,'商品不存在!');
         }
+        if($product['source'] == 2){ //公众号支付诚意金
+            $data['source'] = 2;
+            $data['type'] = 1;
+        }else{
+            $data['source'] = 1; //次卡月卡公众号支付
+        }
         $data['order_number'] = $order_num;
         $data['uid'] = $uid;
         $data['goods_id'] = $goods_id;
         $data['payment'] = $product['price'];
         $data['create_at'] = time();
         $data['pay_time'] = time();
-        $data['source'] = 1;
         $orderres = OrderModel::orderAdd($data);
         if(!$orderres){
             return $this->errorReturn(self::errcode_fail,'订单生成失败!');
         }
-        $notify_url = 'https://testqin.njzec.com/api/order/orderNotify';
+        $notify_url = 'https://testqin.njzec.com/api_new/order/orderNotify';
         //微信支付数据  请求统一下单接口
         $options = [
             'body' => '充值',
