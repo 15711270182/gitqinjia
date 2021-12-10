@@ -101,7 +101,7 @@ class Order extends Base
         $map['status'] = 1;
         $map['is_del'] = 1;
         $map['is_ban'] = 1;
-        $cList = Db::name('children')->field("uid,auth_status,video_url")->where($map)->where("video_url <> ''")->order('id desc')->limit(4)->select();
+        $cList = Db::name('children')->field("uid,auth_status,video_url,video_cover_url")->where($map)->where("video_url <> ''")->order('id desc')->limit(4)->select();
         foreach ($cList as $key => $value) {
             $pare = UserModel::userFind(['id'=>$value['uid']],'realname,headimgurl');
             $cList[$key]['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';
