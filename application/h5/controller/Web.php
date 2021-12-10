@@ -83,6 +83,12 @@ class Web extends Controller
             $aList[$key]['realname'] = $realname.'已经完成了实名认证';
             $aList[$key]['headimgurl'] = $pare['headimgurl'];
         }
+        $is_pay = 0; //未支付
+        $oInfo = OrderModel::orderFind(['uid'=>$uid,'status'=>1,'source'=>2]);
+        if($oInfo){
+            $is_pay = 1; //已支付
+        }
+        $this->assign('is_pay',$is_pay);
         $this->assign('id',$product['id']);
         $this->assign('price',sprintf('%.2f',$product['price']/100));
         $this->assign('auth_list',$aList);
