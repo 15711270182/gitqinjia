@@ -4,6 +4,8 @@
 namespace app\h5\controller;
 
 use app\api\model\Product as ProductModel;
+use app\api_new\model\Order as OrderModel;
+use app\api_new\model\User as UserModel;
 use think\Db;
 use think\Controller;
 use app\wechat\service\WechatService;
@@ -14,6 +16,7 @@ use app\wechat\service\WechatService;
  */
 class Web extends Controller
 {
+    //公众号支付 次卡/月卡支付
     public function openVip(){
         $uid = input('uid');
         $userinfo = Db::name('userinfo')->where(['id' => $uid])->find();
@@ -49,6 +52,54 @@ class Web extends Controller
         }
         return $this->fetch('openCount');
     }
+    //支付认证诚意金 88元
+    public function openAuth(){
+        $uid = input('uid');
+        if(empty($uid)){
+            echo "<script> alert('uid参数错误') </script>";
+            die;
+        }
+        $oInfo = OrderModel::orderFind(['uid'=>$uid,'status'=>1,'source'=>2]);
+        if($oInfo){
+            echo "<script> alert('诚意金已支付') </script>";
+            die;
+        }
+        $field = 'id,title,price';
+        $product = ProductModel::productFind(['type'=>2,'source'=>2,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
+        //视频信息
+        $map = [];
+        $map['auth_status'] = 1;
+        $map['status'] = 1;
+        $map['is_del'] = 1;
+        $map['is_ban'] = 1;
+        $cList = Db::name('children')->field("uid,auth_status,video_url")->where($map)->where("video_url <> ''")->order('id desc')->limit(4)->select();
+        foreach ($cList as $key => $value) {
+            $pare = UserModel::userFind(['id'=>$value['uid']],'realname,headimgurl');
+            $cList[$key]['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';
+            $cList[$key]['headimgurl'] = $pare['headimgurl'];
+        }
+
+        //认证信息
+        $map = [];
+        $map['auth_status'] = 1;
+        $map['status'] = 1;
+        $map['is_del'] = 1;
+        $map['is_ban'] = 1;
+        $aList = Db::name('children')->field("uid")->where($map)->order('id desc')->limit(5)->select();
+        foreach ($aList as $key => $value) {
+            $pare = UserModel::userFind(['id'=>$value['uid']],'realname,headimgurl');
+            $realname = $pare['realname']?$pare['realname'].'家长':'家长';
+            $aList[$key]['realname'] = $realname.'已经完成了实名认证';
+            $aList[$key]['headimgurl'] = $pare['headimgurl'];
+        }
+        $this->assign('id',$product['id']);
+        $this->assign('price',sprintf('%.2f',$product['price']/100));
+        $this->assign('auth_list',$aList);
+        $this->assign('video_list',$cList);
+        
+        return $this->fetch('openAuth');
+    }
+
     public function stip(){
         $jssdk = WechatService::getWebJssdkSign();
         $jssdk['link'] = "pages/index/index";

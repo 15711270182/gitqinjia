@@ -48,7 +48,7 @@ class Order extends Base
 
     }
     /**
-     * @Notes:获取次卡列表
+     * @Notes:获取月卡/次卡列表
      * @Interface productList
      * @return string
      * @author: zy
@@ -67,9 +67,9 @@ class Order extends Base
         foreach ($product as $key => $value) {
             $product[$key]['price'] = $value['price']/100;
             $product[$key]['day_price'] = round($value['price']/$value['num']/100, 1);
-            // if($paytype == 1){
-            //     $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
-            // }
+            if($paytype == 1){
+                $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
+            }
         }
         $map = [];
         $map['uid'] = $uid;

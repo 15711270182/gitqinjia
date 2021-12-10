@@ -32,14 +32,41 @@ class Web extends Controller
             }
         }
         $scope = 'snsapi_userinfo';//snsapi_userinfo
-        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/web/authBack';
+        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/web/authBack?type=0';
         $url = \We::WeChatOauth(config('wechat.wechat'))->getOauthRedirect($stip, '', $scope);
         header("Location:" . $url);
         exit;
     }
+    //诚意金公众号支付授权
+    public function index_auth()
+    {
+        $this->url = $this->request->url(true);
+        $this->fans = WechatService::getWebOauthInfo($this->url);
 
+        $info = $this->fans;
+        $map['openid'] = $info['openid'];
+        $is_have = Db::name('wechat_fans')->where($map)->find();
+        if ($is_have) {
+            $unionid = $is_have['unionid'];
+            $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
+            if ($uid) {
+                $url = 'https://testqin.njzec.com/h5/web/openAuth?uid=' . $uid . '&openid=' . $map['openid'];
+                header("Location:" . $url);
+                die;
+            }else{
+                $url = 'https://testqin.njzec.com/h5/web/stip';
+                header("Location:" . $url);
+                die;
+            }
+        }
+        $scope = 'snsapi_userinfo';//snsapi_userinfo
+        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/web/authBack?type=1';
+        $url = \We::WeChatOauth(config('wechat.wechat'))->getOauthRedirect($stip, '', $scope);
+        header("Location:" . $url);
+        exit;
+    }
     //授权
-    public function authBack()
+    public function authBack($type)
     {
         $json_obj = \We::WeChatOauth(config('wechat.wechat'))->getOauthAccessToken();
         $access_token = $json_obj['access_token'];
@@ -71,10 +98,15 @@ class Web extends Controller
         $unionid = $is_have['unionid'];
         $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
         if ($uid) {
-
-            $url = 'https://testqin.njzec.com/h5/web/openVip?uid=' . $uid . '&openid=' . $openid;
-            header("Location:" . $url);
-            die;
+            if($type == 1){ //诚意金授权
+                $url = 'https://testqin.njzec.com/h5/web/openAuth?uid=' . $uid . '&openid=' . $openid;
+                header("Location:" . $url);
+                die;
+            }else{
+                $url = 'https://testqin.njzec.com/h5/web/openVip?uid=' . $uid . '&openid=' . $openid;
+                header("Location:" . $url);
+                die;
+            }
         } else {
             echo "<script> alert('请先使用我们的小程序') </script>";
             die;
