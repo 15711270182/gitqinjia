@@ -55,15 +55,6 @@ class Web extends Controller
     //支付认证诚意金 88元
     public function openAuth(){
         $uid = input('uid');
-        if(empty($uid)){
-            echo "<script> alert('uid参数错误') </script>";
-            die;
-        }
-        $oInfo = OrderModel::orderFind(['uid'=>$uid,'status'=>1,'source'=>2]);
-        if($oInfo){
-            echo "<script> alert('诚意金已支付') </script>";
-            die;
-        }
         $field = 'id,title,price';
         $product = ProductModel::productFind(['type'=>2,'source'=>2,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         //视频信息

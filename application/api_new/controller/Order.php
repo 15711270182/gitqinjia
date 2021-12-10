@@ -214,6 +214,10 @@ class Order extends Base
             return $this->errorReturn(self::errcode_fail,'商品不存在!');
         }
         if($product['source'] == 2){ //公众号支付诚意金
+            $oInfo = OrderModel::orderFind(['uid'=>$uid,'status'=>1,'source'=>2]);
+            if($oInfo){
+                return $this->errorReturn(self::errcode_fail,'诚意金已支付,请勿重复支付');
+            }
             $data['source'] = 2;
             $data['type'] = 1;
         }else{

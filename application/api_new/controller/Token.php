@@ -157,6 +157,7 @@ class Token extends Base
 
         $result = \We::WeMiniCrypt(config('wechat.miniapp'))->decode($iv, $sessionKey, $encryptedData);
         custom_log('授权获取手机号',print_r($result,true));
+        //手机号已存在 返回已授权
         return json_encode(['code' => 200, 'data' => $result]);
     }
 }
