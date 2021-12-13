@@ -24,6 +24,7 @@ use app\api\model\Relation as RelationModel;
 use app\api\model\Order as OrderModel;
 use app\api\model\Team as TeamModel;
 use app\api\model\TelCollection as TelModel;
+use app\api\controller\TencentMarketing;
 use think\Db;
 use think\Queue;
 
@@ -57,6 +58,39 @@ class User extends Base
         $is_have = ChildrenModel::childrenFind(['uid'=>$uid]);
         if($is_have){
             return $this->errorReturn(self::errcode_fail,'孩子资料已完善');
+        }
+        //投放广告数据处理
+        $aid = input('aid', '', 'htmlspecialchars_decode');
+        $click_id = input('click_id', '', 'htmlspecialchars_decode');
+        $adArr = [
+            'uid'=>$uid,
+            'aid'=>$aid,
+            'click_id'=>$click_id
+        ];
+        custom_log('投放广告数据',print_r($adArr,true));
+        if(!empty($aid) && !empty($click_id)){
+
+            $openid = UserModel::userValue(['id'=>$uid],'openid');
+            $adInfo = DB::name("ad_user")->where(['openid'=>$openid])->find();
+            if(empty($adInfo)){
+                $page_url = 'pages/home/home';
+                $ad = new TencentMarketing();
+                $adJson = $ad->user_actions_add($click_id,$page_url,$openid);
+                $adJson = json_decode($adJson,true);
+                //添加广告有效用户
+                $ad_save['uid'] = $uid;
+                $ad_save['aid'] = $aid;
+                $ad_save['click_id'] = $click_id;
+                $ad_save['openid'] = $openid;
+                $ad_save['page_url'] = $page_url;
+                $ad_save['status'] = 0;
+                if($adJson['code'] != 0){ //回传失败
+                    $ad_save['status'] = 1;
+                    $ad_save['code_error'] = $adJson['code'];
+                }
+                $ad_save['create_time'] = date('Y-m-d H:i:s');
+                DB::name("ad_user")->insertGetId($ad_save);
+            }  
         }
         //添加审核员id team_id
         $count = TeamModel::teamCount('');
@@ -999,4 +1033,5 @@ class User extends Base
             }
         }
     }
+    
 }

@@ -267,7 +267,7 @@ class Order extends Base
         custom_log('orderH5Notify','支付回调结果'.print_r($notifyInfo,true));
         if(!$notifyInfo){
             return xml(['return_code' => 'FAIL', 'return_msg' => '未知错误！']);
-        };
+        }
         //支付通知数据获取成功
         if ($notifyInfo['result_code'] == 'SUCCESS' && $notifyInfo['return_code'] == 'SUCCESS')
         {
