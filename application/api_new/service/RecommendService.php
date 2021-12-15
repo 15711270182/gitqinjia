@@ -25,7 +25,11 @@ class RecommendService
     }
 
      /**
-     * 获取首页数据列表
+     * 获取首页数据列表  
+     * 基础条件：已认证 未注销 未禁用 性别相反 
+     * 潜在条件: 城市匹配  择偶要求匹配
+     * 排序规则：登陆时间最新 已认证视频  资料完善度高
+     * 1.城市与择偶高度匹配 2.城市与其他匹配  3.非城市精准  4.非城市非精准
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
@@ -36,80 +40,299 @@ class RecommendService
         $user_info = Db::name('children')->where('uid', $uid)->find();
         if (empty($user_info)) return [];
 
-        $field = "id,uid,sex,year,work,education,income,house,cart,parents,bro,hometown,native_place,residence,school,remarks,auth_status,video_url,login_last_time";
+        $count_pageSize = $pageSize;
+        $limit = ($page - 1) * $pageSize;
+
+        $field = "";
         $order = "login_last_time desc,video_url desc,full_info desc";
         $condition['sex'] = 1;
         if($user_info['sex'] == 1){
             $condition['sex'] = 2;
         }
-        $condition['is_del'] = 1;
         $condition['auth_status'] = 1;
         $condition['status'] = 1;
         $condition['is_ban'] = 1;
-
-        $notInID = $this->hadRecommend($uid); //去除 已收藏已联系用户
-        $totalCountAll = Db::name('children')->where($condition)->where('uid', 'notin', $notInID)->count(); //已认证总条数
-        // var_dump($totalCountAll);die;
+        //获取条件  1精准  0非精准
+        $where_match = $this->getWhereMatch($uid,0); 
+        // var_dump($where_match);die;
+        $totalCountAll = Db::name('children')->where($condition)->where($where_match)->count(); //已认证总条数
         $totalPageAll = ceil($totalCountAll / $pageSize); //已认证总页数
-
-        $condition['residence'] = $user_info['residence'];
-        $totalCount = Db::name('children')->where($condition)->where('uid', 'notin', $notInID)->count(); //区域匹配总条数
-        $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
 
         $data = [];
         $data['totalCountAll'] = $totalCountAll;
         $data['totalPageAll'] = $totalPageAll;
 
-        $limit = ($page - 1) * $pageSize;
-        if(empty($totalCount)){ //无需匹配城市
-            $list = $this->getDataList($condition,$notInID,$field,$order,$limit,$pageSize);
-            $data['list'] = $list;
-            return $data;
-        }
-        //匹配城市  3种情况  小于  等于  大于
-        if($page < $totalPage){ //查询匹配的城市
-            $list = $this->getDataList($condition,$notInID,$field,$order,$limit,$pageSize,1);
-            $data['list'] = $list;
-            return $data;
-        }
-        $lastCount = 0;
-        if($page == $totalPage){ //查看匹配的城市是否足够
-            $list = ChildrenModel::getSelect($condition,$notInID,$field,$order,$limit,$pageSize,1);
-            $count = count($list);
-            $lastCount = $pageSize - $count;
-            if($lastCount){
-                $list_nomatch = ChildrenModel::getSelect($condition,$notInID,$field,$order,0,$lastCount,0);
-                $list = array_merge($list, $list_nomatch);
+        //区域条件
+        $condition['residence'] = $user_info['residence'];
+        $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
+        $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
+        // var_dump($totalCount); 
+
+        $where_match = $this->getWhereMatch($uid,1); 
+
+
+        /**
+        *   区域无数据 不匹配区域的情况下   (1.非区域精准查询  2.非区域非精准查询 )
+        */
+        if(empty($totalCount)){
+            $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+            $matchCount = count($totalMatchList);
+            $count_match = $count_pageSize - $matchCount;
+            // var_dump($count_match);
+            if($count_match == 0){ //非区域精准条件 无需补全 直接返回
+                $re_list = $this->getDataList($totalMatchList);
+                $data['list'] = $re_list;
+                return $data;
             }
-            cache('uid_'.$uid,$lastCount);
-            $re_list = [];
-            if($list){
-                foreach ($list as $key => $value) {
-                    $re_list[$key] = $this->userchange($value);
-                }
+            //非区域非精准
+            $where_match = $this->getWhereMatch($uid,0);
+            if($count_match != $pageSize){
+                $limit = 0;
+                $pageSize = $count_match;
             }
+            $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+            $list = array_merge($totalMatchList, $totalOtherList);
+            // var_dump(count($list));
+
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
+            return $data;
+
+        }
+        /**
+        *   区域有数据 匹配区域的情况下   1.区域精准    2.区域非精准  3.非区域精准   4.非区域非精准
+        */
+        $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        // var_dump($totalMatchList);die;
+        $matchCount = count($totalMatchList);
+        $count_match = $count_pageSize - $matchCount;
+        if($count_match == 0){ //有区域精准条件 无需补全 直接返回
+            $re_list = $this->getDataList($totalMatchList);
             $data['list'] = $re_list;
             return $data;
         }
-        if($page > $totalPage){ //查询不匹配的城市
-            $lastCount = cache('uid_'.$uid);
-            $page = ($page - $totalPage - 1)*$pageSize + $lastCount; 
-            // var_dump($page);
-            $list = $this->getDataList($condition,$notInID,$field,$order,$page,$pageSize,0);
-            $data['list'] = $list;
+        //精准匹配数据不全/无精准数据 查询区域下其他数据
+        $where_match = $this->getWhereMatch($uid,0);
+        if($count_match != $pageSize){
+            $limit = 0;
+            $pageSize = $count_match;
+        }
+        $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        $otherCount = count($totalOtherList);
+        // var_dump($otherCount);
+        $count_other = $count_pageSize - $matchCount - $otherCount;
+        // var_dump($count_other);
+        if($count_other == 0){
+            $list = array_merge($totalMatchList, $totalOtherList);
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
             return $data;
         }
+
+        //列表中 其他数据不全 补全非区域精准
+        if($count_other != $pageSize){
+            $limit = 0;
+            $pageSize = $count_other;
+        }
+        $where_match = $this->getWhereMatch($uid,1);
+        $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+        $noCitymCount = count($totalNoCitymList);
+        $count_city = $count_pageSize - $matchCount - $otherCount - $noCitymCount;
+        // var_dump($count_city);
+        if($count_city == 0){
+            $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList);
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
+            return $data;
+        }
+        //非区域 非精准
+        if($count_city != $pageSize){
+            $limit = 0;
+            $pageSize = $count_city;
+        }
+        // var_dump($limit);
+        // var_dump($pageSize);
+        $where_match = $this->getWhereMatch($uid,0);
+        $totalNoCityList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+        $noCityCount = count($totalNoCityList);
+        // var_dump($noCityCount);
+        $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList,$totalNoCityList);
+        // var_dump(count($list));
+        $re_list = $this->getDataList($list);
+        $data['list'] = $re_list;
+        return $data;
     }
-    public function getDataList($condition,$notInID,$field,$order,$page,$pageSize,$residence = 0)
+
+    //数据处理
+    public function getDataList($list)
     {
-        $list = ChildrenModel::getSelect($condition,$notInID,$field,$order,$page,$pageSize,$residence);
         $re_list = [];
-        if($list){
-            foreach ($list as $key => $value) {
-                $re_list[$key] = $this->userchange($value);
-            }
+        foreach ($list as $key => $value) {
+            $re_list[$key] = $this->userchange($value);
         }
         return $re_list;
+    }
+
+    /**
+     * 获取,精准匹配条件
+     * @param $uid      用户id
+     * @return string   用户id字符串
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getWhereMatch($uid,$is_match = 0)
+    {
+        if($is_match == 1){  //高配
+            $where_match = $this->getHeightMatch($uid);
+        }else{ //低配
+            $where_match = $this->getLowMatch($uid);
+        }
+        return $where_match;
+    }
+
+     /**
+     * 根据用户要求匹配条件
+     * @param $uid      children表中 uid
+     * @param $num      推荐数目
+     * @return array    返回匹配列表
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    protected function getHeightMatch($uid)
+    {
+        $where_match = "is_del = 1";
+        $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
+        if($notIn_id){
+            $notIn_id = implode(',', $notIn_id);
+            $where_match .= " and uid not in({$notIn_id})";
+        }
+        $field = "year,height,education,expect_education,min_age,max_age,min_height,max_height";
+        $user_info = Db::name('children')->field($field)->where(['uid'=>$uid])->find();
+        //学历要求
+        $education = $user_info['education'];
+        if ($user_info['expect_education']){
+            $education = $user_info['expect_education'];
+        }
+        $where_match .= " and education = {$education}";
+        //年龄要求 选择择偶年龄 不限 18岁起  未选择 按子女的年龄相符
+        if ($user_info['min_age'] == 999){ //年龄最小不限
+            $min_age = 18;
+            $max_year = $this->getYearByAge($min_age);
+        }else{
+            if($user_info['min_age'] > 0 ){
+                $max_year = $this->getYearByAge($user_info['min_age']);
+            }else{
+                $max_year = $user_info['year']+2;
+            }
+        }
+        // 最大年龄
+        if($user_info['max_age'] == 999){ //年龄最大不限
+            $max_age = 45;
+            $min_year = $this->getYearByAge($max_age);
+        }else{
+            if($user_info['max_age'] > 0){
+                 $min_year = $this->getYearByAge($user_info['max_age']);
+            }else{
+                 $min_year =  $user_info['year']-2;
+            }
+        }
+        $where_match .= " and year between '{$min_year}' and '{$max_year}'";
+        // 身高条件
+        if ($user_info['min_height'] == 0 || $user_info['min_height'] == 999){
+            $min_height = 150;
+        }else{
+            $min_height = $user_info['min_height'];
+        }
+        if ($user_info['max_height'] == 0 || $user_info['max_height'] == 999){
+            $max_height = 190;
+        }else{
+            $max_height = $user_info['max_height'];
+        }
+        $where_match .= " and height between '{$min_height}' and '{$max_height}'";
+
+        return $where_match;
+    }
+
+    /**
+     * 根据用户要求放宽条件
+     * @param $uid      children表中 uid
+     * @param $num      推荐数目
+     * @return array    返回匹配列表
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    protected function getLowMatch($uid)
+    {
+        $where_match = "is_del = 1";
+        $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
+        if($notIn_id){
+            $notIn_id = implode(',', $notIn_id);
+            $where_match .= " and uid not in({$notIn_id})";
+        }
+        $field = "year,height,education,expect_education,min_age,max_age,min_height,max_height";
+        $user_info = Db::name('children')->field($field)->where(['uid'=>$uid])->find();
+        //年龄要求
+        if ($user_info['min_age'] == 999) {
+            $min_age = 18;
+        }else{
+            if($user_info['min_age'] > 0){
+                $min_age = $user_info['min_age'];
+            }else{
+                $getAgeMin = $this->getYearAge($user_info['year']);
+                $min_age = $getAgeMin - 10;
+            }
+        }
+        if ($user_info['max_age'] === 999){
+            $max_age = 45;
+        }else{
+            if($user_info['max_age'] > 0){
+                $max_age = $user_info['max_age'];
+            }else{
+                $getAgeMax = $this->getYearAge($user_info['year']);
+                $max_age = $getAgeMax + 10;
+            }
+        }
+        // 身高条件
+        if ($user_info['min_height'] == 0 || $user_info['min_height'] == 999){
+            $min_height = 150;
+        }else{
+            $min_height = $user_info['min_height'];
+        }
+        if ($user_info['max_height'] == 0 || $user_info['max_height'] == 999){
+            $max_height = 190;
+        }else{
+            $max_height = $user_info['max_height'];
+        }
+
+        $eduction = $user_info['expect_education'];
+        $age_condition = [
+            'min_age' => $min_age,
+            'max_age' => $max_age
+        ];
+        $height_condition = [
+            'min_height' => $min_height,
+            'max_height' => $max_height
+        ];
+        // 要求条件
+        $request_condition = $this->getRequire($age_condition, $height_condition, $eduction);
+
+        // 学历
+        if ($request_condition['education']){
+            $where_match .= " and education >= '{$request_condition['education']}'";
+        }
+        // 年龄
+        if ($request_condition['year']){
+            $where_match .= " and year between '{$request_condition['year']['min_year']}' and '{$request_condition['year']['max_year']}'";
+        }
+        // 身高
+        if ($request_condition['height']){
+            $where_match .= " and height between '{$request_condition['height']['min_height']}' and '{$request_condition['height']['max_height']}'";
+        }
+        // var_dump($where_match);
+        return $where_match;
     }
     /**
      * 获取,已收藏,已联系的 记录,将不予推荐
@@ -149,7 +372,6 @@ class RecommendService
     */
     public function userchange($value)
     {
-
         $education = UsersService::education($value['education']);//学历
         $income = UsersService::income($value['income']);//收入
         if($income){
@@ -221,4 +443,90 @@ class RecommendService
 
         return $user;
     }
+
+   
+   /**
+     * 根据要求,生成匹配条件
+     * @param array $age_condition          年龄条件范围
+     * @param array $height_condition       身高条件范围
+     * @param int $eduction_condition       学历
+     * @return array
+     */
+    protected function getRequire($age_condition, $height_condition, $eduction_condition)
+    {
+        $require = array();
+        $age = $this->getAge($age_condition['min_age'], $age_condition['max_age']);
+        $year['min_year'] = $this->getYearByAge($age['max_age']);
+        $year['max_year'] = $this->getYearByAge($age['min_age']);
+        $height = $this->getHeight($height_condition['min_height'], $height_condition['max_height']);
+        $require['age'] = $age;
+        $require['year'] = $year;
+        $require['height'] = $height;
+        $require['education'] = $this->getEducation($eduction_condition);
+        return $require;
+    }
+    /**
+     * 放宽学历要求
+     * @param $education
+     * @return int
+     */
+    protected function getEducation($education)
+    {
+        return $education - 1;
+    }
+
+    /**
+     * 放宽年龄要求
+     * @param $min_age 最低年龄要求
+     * @param $max_age 最高年龄要求
+     * @param int $age 默认放宽年龄为 1 岁
+     * @return array
+     */
+    protected function getAge($min_age, $max_age, $age=1)
+    {
+        $age_arr = [];
+        $age_arr['min_age'] = $min_age - $age;
+        $age_arr['max_age'] = $max_age + $age;
+        return $age_arr;
+    }
+
+    /**
+     * 放宽身高要求
+     * @param $min_height   最低身高要求
+     * @param $max_height   最高身高要求
+     * @param int $height   默认放宽身高为 5 cm
+     * @return array
+     */
+    protected function getHeight($min_height, $max_height, $height=5)
+    {
+        $height_arr = [];
+        $height_arr['min_height'] = $min_height - $height;
+        $height_arr['max_height'] = $max_height + $height;
+        return $height_arr;
+    }
+    /**
+     * 根据年龄获取出生年份
+     * @param $age
+     * @return false|string
+     */
+    public function getYearByAge($age)
+    {
+        return date('Y') - $age;
+    }
+
+    //将生日转化为年龄
+    public function getYearAge($birthday){
+         $age = strtotime($birthday);
+         if($age === false){
+          return false;
+         }
+         list($y1,$m1,$d1) = explode("-",date("Y-m-d",$age));
+         $now = strtotime("now");
+         list($y2,$m2,$d2) = explode("-",date("Y-m-d",$now));
+         $age = $y2 - $y1;
+         if((int)($m2.$d2) < (int)($m1.$d1))
+          $age -= 1;
+         return $age;
+    }
+
 }

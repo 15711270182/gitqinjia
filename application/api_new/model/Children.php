@@ -90,10 +90,10 @@ class Children extends Model
         return Db::name('children')->where($where)->setDec($field,$count);
     }
     //处理数据
-    public static function getSelect($condition = [],$notInID = '',$field = '',$order='',$page = '',$pageSize = '',$residence = 0){
+    public static function getSelect($condition = [],$where_match = '',$field = '',$order='',$page = '',$pageSize = '',$residence = 0){
         $query = Db::name('children');
-        if($notInID){
-            $query->where('uid', 'notin', $notInID);
+        if($where_match){
+            $query->where($where_match);
         }
         if($residence == 0){ //无需匹配城市
            $residence = $condition['residence'];

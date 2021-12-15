@@ -59,20 +59,6 @@ class Index extends Base
         
         $rec = new RecommendService();
         $data = $rec->getRecommend($uid,$page,$pageSize);
-        //添加登录记录 修改登陆时间
-        $time = date('Y-m-d H:i:s');
-        $recordInfo = Db::name('login_record')->where(['uid'=>$uid])->find();
-        if(empty($recordInfo)){
-            $record_add['uid'] = $uid;
-            $record_add['count'] = 1;
-            $record_add['create_time'] = $time;
-            Db::name('login_record')->insertGetId($record_add);
-        }else{
-            $record_save['count'] = $recordInfo['count'] + 1;
-            $record_save['update_time'] = $time;
-            Db::name('login_record')->where(['uid'=>$uid])->update($record_save);
-        }
-        ChildrenModel::childrenEdit(['uid'=>$uid],['login_last_time'=>date('Y-m-d H:i:s')]);
         //是否关注公众号
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at is not null";
@@ -239,6 +225,37 @@ class Index extends Base
         $b_find = ChildrenModel::childrenFind(['uid'=>$bid]);
         if(empty($b_find['remarks']) || empty($b_find['expect_education']) || empty($b_find['min_age']) || empty($b_find['min_height'])){
             $this->sendMessageBid($uid,$bid);
+        }else{
+            $b_userinfo = UserModel::userFind(['id'=>$bid]);
+            $where_x = [];
+            $where_x['unionid'] = $b_userinfo['unionid'];
+            $where_x['subscribe'] = 1;
+            $mini_user = UserModel::wxFind($where_x);
+            if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                $create_at = ChildrenModel::getchildrenField(['uid'=>$bid],'create_at');
+                $nickname = !empty($userinfo['nickname'])?$userinfo['nickname']:'微信用户';
+                $date = date('Y-m-d H:i:s',$create_at);
+                $openid = $mini_user['openid'];
+                $tip = '某家长刚查看了您的资料,对您资料比较感兴趣';
+                $remark = '进入小程序查看';
+                $temp_id = 'pFlGp3GAYyMdxQLoBXg18B-WLbW5hBA4GvqmsNZoIKo';
+                $arr = array();
+                $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                $arr['keyword1'] = array('value'=>$nickname,'color'=>'#0000ff');
+                $arr['keyword2'] = array('value'=>$date,'color'=>'#0000ff');
+                $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                $param = [
+                    'touser'=>$openid,
+                    'template_id'=>$temp_id,
+                    'page'=>'pages/editProfile/editProfile',
+                    'data'=>$arr,
+                    'miniprogram' => [
+                        'pagepath'=>'pages/editProfile/editProfile',
+                        'appid'=>'wx70d65d2170dbacd7',
+                    ],
+                ];
+                $this->shiwuSendMsg($param);
+            }
         }
         //子女信息
         $userinfo = UserModel::userFind(['id'=>$bid]);

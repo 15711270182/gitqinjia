@@ -6,6 +6,8 @@
  * Time: 13:45
  */
 namespace app\api_new\controller;
+
+use app\api_new\model\Children as ChildrenModel;
 use app\api_new\service\UsersService;
 use app\wechat\service\WechatService;
 use think\Controller;
@@ -35,6 +37,23 @@ class Base extends Controller
                 if (!$user) {
                     echo $this->errorReturn(self::errcode_login_fail);
                     die;
+                }
+                //添加登录记录 修改登陆时间
+                $time = date('Y-m-d H:i:s');
+                $recordInfo = Db::name('login_record')->where(['uid'=>$user['uid']])->find();
+                if(empty($recordInfo)){
+                    $record_add['uid'] = $user['uid'];
+                    $record_add['count'] = 1;
+                    $record_add['create_time'] = $time;
+                    Db::name('login_record')->insertGetId($record_add);
+                }else{
+                    $record_save['count'] = $recordInfo['count'] + 1;
+                    $record_save['update_time'] = $time;
+                    Db::name('login_record')->where(['uid'=>$user['uid']])->update($record_save);
+                }
+                $cInfo = ChildrenModel::childrenCount(['uid'=>$user['uid']]);
+                if(!empty($cInfo)){
+                    ChildrenModel::childrenEdit(['uid'=>$user['uid']],['login_last_time'=>date('Y-m-d H:i:s')]);
                 }
                 $this->uid = $user['uid'];
                 $this->unionid = $user['unionid'];
