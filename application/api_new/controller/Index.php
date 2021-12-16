@@ -58,7 +58,7 @@ class Index extends Base
         $pageSize = input('pageSize', 10, 'intval');
         
         $rec = new RecommendService();
-        $data = $rec->getRecommend($uid,$page,$pageSize);
+        $data = $rec->getRecommendNew($uid,$page,$pageSize);
         //是否关注公众号
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at is not null";

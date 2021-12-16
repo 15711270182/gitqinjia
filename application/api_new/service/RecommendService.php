@@ -163,6 +163,144 @@ class RecommendService
         return $data;
     }
 
+
+     /**
+     * 获取首页数据列表  
+     * 基础条件：已认证 未注销 未禁用 性别相反 
+     * 潜在条件: 城市匹配  择偶要求匹配
+     * 排序规则：登陆时间最新 已认证视频  资料完善度高
+     * 1.城市与择偶高度匹配 2.城市与其他匹配  3.非城市精准  4.非城市非精准
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     * @throws \think\Exception
+     */
+    public function getRecommendNew($uid,$page,$pageSize)
+    {
+        $user_info = Db::name('children')->where('uid', $uid)->find();
+        if (empty($user_info)) return [];
+
+        $count_pageSize = $pageSize;
+        $limit = ($page - 1) * $pageSize;
+
+        $field = "";
+        $order = "login_last_time desc,video_url desc,full_info desc";
+        $condition['sex'] = 1;
+        if($user_info['sex'] == 1){
+            $condition['sex'] = 2;
+        }
+        $condition['auth_status'] = 1;
+        $condition['status'] = 1;
+        $condition['is_ban'] = 1;
+
+        
+        $residence = str_replace(['省','市'],'',$user_info['residence']);
+        $switch = DB::name('city_switch')->where(['city'=>$residence])->value('is_show');
+        if($switch == 1){ //只展示该区域数据
+            $condition['residence'] = $user_info['residence'];
+            $where_match = $this->getWhereMatch($uid,0);
+            $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
+            $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
+            // var_dump($totalCount);die;
+            $data = [];
+            $data['totalCountAll'] = $totalCount;
+            $data['totalPageAll'] = $totalPage;
+
+            //精准
+            $where_match = $this->getWhereMatch($uid,1); 
+            $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+            // var_dump($totalMatchList);die;
+            $matchCount = count($totalMatchList);
+            $count_match = $count_pageSize - $matchCount;
+            if($count_match == 0){ //有区域精准条件 无需补全
+                $re_list = $this->getDataList($totalMatchList);
+                $data['list'] = $re_list;
+                return $data;
+            }
+            //非精准
+            $not_id_arr = array_column($totalMatchList, 'uid');
+            // var_dump($not_id_arr);
+            $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
+            if($count_match != $pageSize){
+                $limit = 0;
+                $pageSize = $count_match;
+            }
+
+            $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+            $list = array_merge($totalMatchList, $totalOtherList);
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
+            return $data;
+
+        }
+        //不完全展示该区域
+        $where_match = $this->getWhereMatch($uid,0); //获取条件  1精准  2非精准 0全部
+        $totalCountAll = Db::name('children')->where($condition)->where($where_match)->count(); //已认证总条数
+        $totalPageAll = ceil($totalCountAll / $pageSize); //已认证总页数
+
+        $data = [];
+        $data['totalCountAll'] = $totalCountAll;
+        $data['totalPageAll'] = $totalPageAll;
+        //区域条件
+        $condition['residence'] = $user_info['residence'];
+        $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
+        $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
+        $where_match = $this->getWhereMatch($uid,1); 
+        //区域无数据 不匹配区域的情况下 直接查询
+        if(empty($totalCount)){
+            $where_match = $this->getWhereMatch($uid,0);
+            $list = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
+            return $data;
+
+        }
+        // 区域有数据 匹配区域的情况下   1.区域精准    2.区域非精准  3.非区域查询
+        $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        // var_dump($totalMatchList);die;
+        $matchCount = count($totalMatchList);
+        $count_match = $count_pageSize - $matchCount;
+        if($count_match == 0){ //有区域精准条件 无需补全 直接返回
+            $re_list = $this->getDataList($totalMatchList);
+            $data['list'] = $re_list;
+            return $data;
+        }
+        //精准匹配数据不全/无精准数据 查询区域下其他数据
+        $not_id_arr = array_column($totalMatchList, 'uid');
+        // var_dump($not_id_arr);
+        $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
+        if($count_match != $pageSize){
+            $limit = 0;
+            $pageSize = $count_match;
+        }
+
+        $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        $otherCount = count($totalOtherList);
+        // var_dump($otherCount);
+        $count_other = $count_pageSize - $matchCount - $otherCount;
+        // var_dump($count_other);
+        if($count_other == 0){
+            $list = array_merge($totalMatchList, $totalOtherList);
+            $re_list = $this->getDataList($list);
+            $data['list'] = $re_list;
+            return $data;
+        }
+
+        //列表中 其他数据不全 补全非区域
+        if($count_other != $pageSize){
+            $limit = 0;
+            $pageSize = $count_other;
+        }
+        $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+        $noCitymCount = count($totalNoCitymList);
+        $count_city = $count_pageSize - $matchCount - $otherCount - $noCitymCount;
+        $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList);
+        // var_dump($list);die;
+        $re_list = $this->getDataList($list);
+        $data['list'] = $re_list;
+        return $data;
+    }
+
     //数据处理
     public function getDataList($list)
     {
@@ -181,12 +319,21 @@ class RecommendService
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public function getWhereMatch($uid,$is_match = 0)
+    public function getWhereMatch($uid,$is_match = 0,$not_id_arr = array())
     {
         if($is_match == 1){  //高配
             $where_match = $this->getHeightMatch($uid);
-        }else{ //低配
-            $where_match = $this->getLowMatch($uid);
+        }elseif($is_match == 2){ //低配
+            $where_match = $this->getLowMatch($uid,$not_id_arr);
+        }else{
+            $where_match = "is_del = 1";
+            $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
+            $new_not_id_arr = array_merge($notIn_id, $not_id_arr);
+            array_unique($new_not_id_arr);
+            if($notIn_id){
+                $notIn_id = implode(',', $new_not_id_arr);
+                $where_match .= " and uid not in({$notIn_id})";
+            }
         }
         return $where_match;
     }
@@ -264,12 +411,14 @@ class RecommendService
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    protected function getLowMatch($uid)
+    protected function getLowMatch($uid,$not_id_arr)
     {
         $where_match = "is_del = 1";
         $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
+        $new_not_id_arr = array_merge($notIn_id, $not_id_arr);
+        array_unique($new_not_id_arr);
         if($notIn_id){
-            $notIn_id = implode(',', $notIn_id);
+            $notIn_id = implode(',', $new_not_id_arr);
             $where_match .= " and uid not in({$notIn_id})";
         }
         $field = "year,height,education,expect_education,min_age,max_age,min_height,max_height";
