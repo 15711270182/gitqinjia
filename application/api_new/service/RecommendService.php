@@ -323,7 +323,7 @@ class RecommendService
     {
         if($is_match == 1){  //高配
             $where_match = $this->getHeightMatch($uid);
-        }elseif($is_match == 2){ //低配
+        }elseif($is_match == 2){ //低配 条件放宽
             $where_match = $this->getLowMatch($uid,$not_id_arr);
         }else{
             $where_match = "is_del = 1";
@@ -667,7 +667,7 @@ class RecommendService
     public function getYearAge($birthday){
          $age = strtotime($birthday);
          if($age === false){
-          return false;
+            return false;
          }
          list($y1,$m1,$d1) = explode("-",date("Y-m-d",$age));
          $now = strtotime("now");
