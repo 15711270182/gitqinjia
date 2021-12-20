@@ -109,6 +109,7 @@ class Token extends Base
 
             return $this->successReturn($session3rd, '成功', self::errcode_ok);
         }
+        $data['paytype'] = 2; //默认次数
         $data['openid'] = $openid;
         $data['appid'] = config('wechat.miniapp.appid');
         $data['add_time'] = time();
