@@ -55,8 +55,53 @@ class Hnqx extends Controller
         header("Location:" . $url);
         exit;
     }
+    //公众号会员支付授权  - 不跳小程序
+    public function index_new()
+    {
+        $money = input('money');
+        if(empty($money)){
+             echo "<script> alert('支付价格不能为空') </script>";
+             die;
+        }
+        $this->url = $this->request->url(true);
+        $this->fans = WechatService::getWebOauthInfo($this->url);
 
-    //公众号会员支付授权 新版测试
+        $info = $this->fans;
+        $map['openid'] = $info['openid'];
+        $is_have = Db::name('wechat_fans')->where($map)->find();
+        if ($is_have) {
+            $unionid = $is_have['unionid'];
+            $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
+            if ($uid) {
+                $json_data['uid'] = $uid;
+                $json_data['openid'] =  $info['openid'];
+                $json_data['price'] = $money;
+                $temp = $json_data;
+                ksort($temp);
+                reset($temp);
+                $tempStr = "";
+                foreach ($temp as $key => $value) {
+                    $tempStr .= $key . "=" . $value . "&";
+                }
+                $tempStr = substr($tempStr, 0, -1);
+                $json_data['signature'] = md5($tempStr);
+
+                $url = 'https://testqin.njzec.com/h5/hnqx/openVip_new?json_data='.json_encode($json_data);
+                header("Location:" . $url);
+                die;
+            }else{
+                $url = 'https://testqin.njzec.com/h5/hnqx/stip';
+                header("Location:" . $url);
+                die;
+            }
+        }
+        $scope = 'snsapi_userinfo';//snsapi_userinfo
+        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/hnqx/authBack';
+        $url = \We::WeChatOauth(config('wechat.wechat'))->getOauthRedirect($stip, '', $scope);
+        header("Location:" . $url);
+        exit;
+    }
+    //公众号会员支付授权 新版测试  填写用户资料功能
     public function test()
     {
         $money = input('money');

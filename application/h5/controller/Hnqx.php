@@ -39,6 +39,31 @@ class Hnqx extends Controller
         $this->assign('dat',$jssdk);
         return $this->fetch('openVip');
     }
+    public function openVip_new(){
+        $json_data = input('json_data');
+        $data = json_decode($json_data,true);
+        $newArr['uid'] = $data['uid'];
+        $newArr['openid'] = $data['openid'];
+        $newArr['price'] = $data['price'];
+        $temp = $newArr;
+        ksort($temp);
+        reset($temp);
+        $tempStr = "";
+        foreach ($temp as $key => $value) {
+            $tempStr .= $key . "=" . $value . "&";
+        }
+        $tempStr = substr($tempStr, 0, -1);
+        $signature = md5($tempStr);
+        if($signature != $data['signature']){
+             echo "<script> alert('签名错误') </script>";
+             die;
+        }
+        $jssdk = WechatService::getWebJssdkSign();
+        $jssdk['link'] = "https://testqin.njzec.com/web/hnqx/index_new?money=".$newArr['price'];
+        $this->assign('data',$newArr);
+        $this->assign('dat',$jssdk);
+        return $this->fetch('openVip_new');
+    }
     //新版收银台 测试
     public function pay(){
         $json_data = input('json_data');
