@@ -96,7 +96,7 @@ class Hnqx extends Controller
     }
     public function stip(){
         $jssdk = WechatService::getWebJssdkSign();
-        $jssdk['link'] = "pages/index/index";
+        $jssdk['link'] = "pages/home/home";
         $jssdk['username'] = config('wechat.miniapp.original_id');
         $this->assign('dat',$jssdk);
         return $this->fetch('stip');
