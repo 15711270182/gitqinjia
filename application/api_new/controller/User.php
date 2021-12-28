@@ -24,6 +24,7 @@ use app\api_new\model\Relation as RelationModel;
 use app\api_new\model\Order as OrderModel;
 use app\api_new\model\Team as TeamModel;
 use app\api_new\model\TelCollection as TelModel;
+use app\api_new\controller\TencentMarketing;
 use WeChat\Contracts\Tools;
 use think\Db;
 use think\Queue;

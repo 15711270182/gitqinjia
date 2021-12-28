@@ -96,7 +96,7 @@ class Index extends Base
         }
         $data['info_exp_status'] = $info_exp_status;
 
-        $field_a = 'auth_status,id_name,id_number';
+        $field_a = 'auth_status,id_name,id_number,search_auth';
         $ccInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_a);
         //实名认证状态   1已实名  2未支付未实名  3已支付未填写身份信息  4 已支付人脸未通过
         switch ($ccInfo['auth_status']) {
@@ -117,6 +117,7 @@ class Index extends Base
                 }
                 break;
         }
+        $data['search_auth'] = $ccInfo['search_auth'];
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
