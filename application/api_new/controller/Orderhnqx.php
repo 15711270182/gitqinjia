@@ -131,20 +131,20 @@ class Orderhnqx extends Base
             $data = [];
             $data['is_pair_vip'] = 1;
             //1元，1条红线，有效期3天  1599元，10条红线，有效期6个月  1999元，20条红线，有效期12个月
-            if($orderInfo['payment'] == 100){
-                $time = time() + 3*24*3600;
-                $pair_last_num = 1;
-            }elseif($orderInfo['payment'] == 159900){
-                $time = time() + 30*6*24*3600;
-                $pair_last_num = 10;
-            }else{
-                $time = time() + 30*12*24*3600;
-                $pair_last_num = 20;
-            }
-            $data['pair_vip_time'] = date('Y-m-d H:i:s',$time);
-            $data['pair_last_num'] = $pair_last_num;
+            // if($orderInfo['payment'] == 100){
+            //     $time = time() + 3*24*3600;
+            //     $pair_last_num = 1;
+            // }elseif($orderInfo['payment'] == 159900){
+            //     $time = time() + 30*6*24*3600;
+            //     $pair_last_num = 10;
+            // }else{
+            //     $time = time() + 30*12*24*3600;
+            //     $pair_last_num = 20;
+            // }
+            // $data['pair_vip_time'] = date('Y-m-d H:i:s',$time);
+            // $data['pair_last_num'] = $pair_last_num;
 
-            UserModel::userEdit(['id'=>$orderInfo['uid']],$data);
+            // UserModel::userEdit(['id'=>$orderInfo['uid']],$data);
 
             return xml(['return_code' => 'SUCCESS', 'return_msg' => '处理成功！']);
         }

@@ -129,20 +129,20 @@ class Orderhnqx extends Base
            //修改订单状态
             OrderModel::orderEdit($o_data,['status'=>1,'pay_time'=>time()]);
             $data = [];
-            $data['is_pair_vip'] = 1;
-            //1元，1条红线，有效期3天  1599元，10条红线，有效期6个月  1999元，20条红线，有效期12个月
-            if($orderInfo['payment'] == 100){
-                $time = time() + 3*24*3600;
-                $pair_last_num = 1;
-            }elseif($orderInfo['payment'] == 159900){
-                $time = time() + 30*6*24*3600;
-                $pair_last_num = 10;
-            }else{
-                $time = time() + 30*12*24*3600;
-                $pair_last_num = 20;
-            }
-            $data['pair_vip_time'] = date('Y-m-d H:i:s',$time);
-            $data['pair_last_num'] = $pair_last_num;
+            // $data['is_pair_vip'] = 1;
+            // //1元，1条红线，有效期3天  1599元，10条红线，有效期6个月  1999元，20条红线，有效期12个月
+            // if($orderInfo['payment'] == 100){
+            //     $time = time() + 3*24*3600;
+            //     $pair_last_num = 1;
+            // }elseif($orderInfo['payment'] == 159900){
+            //     $time = time() + 30*6*24*3600;
+            //     $pair_last_num = 10;
+            // }else{
+            //     $time = time() + 30*12*24*3600;
+            //     $pair_last_num = 20;
+            // }
+            // $data['pair_vip_time'] = date('Y-m-d H:i:s',$time);
+            // $data['pair_last_num'] = $pair_last_num;
 
             UserModel::userEdit(['id'=>$orderInfo['uid']],$data);
 
