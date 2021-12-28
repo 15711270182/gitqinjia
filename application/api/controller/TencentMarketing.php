@@ -52,7 +52,7 @@ class TencentMarketing
                                     'wechat_openid' => $wechat_open_id,
                                     'wechat_app_id' => $this->wechat_app_id
                                 ),
-                            'action_type' => 'QUEST',
+                            'action_type' => 'REGISTER',
                             // 'channel' => 'CHANNEL_NATURAL',
                             'trace' =>
                                 array(
