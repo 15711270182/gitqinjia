@@ -134,6 +134,7 @@ class Matchmaker extends Base
             'minheight'=>$height[0],
             'maxheight'=>$height[1],
             'education'=>$education,
+            'salary'=>$salary,
             'uid'=>$user_sn,
             'marriage_type'=>$marriage_type,
             'house_type'=>$house_type,
