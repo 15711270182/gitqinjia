@@ -90,7 +90,7 @@ class Children extends Model
         return Db::name('children')->where($where)->setDec($field,$count);
     }
     //处理数据
-    public static function getSelect($condition = [],$where_match = '',$field = '',$order='',$page = '',$pageSize = '',$residence = 0){
+    public static function getSelect($condition = [],$where_match = '',$field = '',$order='',$page = '',$pageSize = '',$residence = 0,$is_match = 0){
         $query = Db::name('children');
         if($where_match){
             $query->where($where_match);
@@ -101,6 +101,11 @@ class Children extends Model
            $query->where('residence', 'notin', $residence);
         }
         $list = $query->where($condition)->field($field)->order($order)->limit($page,$pageSize)->select();
+        if(!empty($list)){
+            foreach ($list as $key => $value) {
+                $list[$key]['is_match'] = $is_match;
+            }
+        }
         return $list;
     }
 }

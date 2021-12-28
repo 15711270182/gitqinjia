@@ -208,7 +208,7 @@ class RecommendService
 
             //精准
             $where_match = $this->getWhereMatch($uid,1); 
-            $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+            $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
             // var_dump($totalMatchList);die;
             $matchCount = count($totalMatchList);
             $count_match = $count_pageSize - $matchCount;
@@ -226,7 +226,7 @@ class RecommendService
                 $pageSize = $count_match;
             }
 
-            $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+            $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
             $list = array_merge($totalMatchList, $totalOtherList);
             $re_list = $this->getDataList($list);
             $data['list'] = $re_list;
@@ -249,14 +249,14 @@ class RecommendService
         //区域无数据 不匹配区域的情况下 直接查询
         if(empty($totalCount)){
             $where_match = $this->getWhereMatch($uid,0);
-            $list = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+            $list = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0,0);
             $re_list = $this->getDataList($list);
             $data['list'] = $re_list;
             return $data;
 
         }
         // 区域有数据 匹配区域的情况下   1.区域精准    2.区域非精准  3.非区域查询
-        $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
         // var_dump($totalMatchList);die;
         $matchCount = count($totalMatchList);
         $count_match = $count_pageSize - $matchCount;
@@ -274,7 +274,7 @@ class RecommendService
             $pageSize = $count_match;
         }
 
-        $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1);
+        $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
         $otherCount = count($totalOtherList);
         // var_dump($otherCount);
         $count_other = $count_pageSize - $matchCount - $otherCount;
@@ -291,7 +291,7 @@ class RecommendService
             $limit = 0;
             $pageSize = $count_other;
         }
-        $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0);
+        $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0,0);
         $noCitymCount = count($totalNoCitymList);
         $count_city = $count_pageSize - $matchCount - $otherCount - $noCitymCount;
         $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList);
@@ -306,6 +306,7 @@ class RecommendService
     {
         $re_list = [];
         foreach ($list as $key => $value) {
+
             $re_list[$key] = $this->userchange($value);
         }
         return $re_list;
@@ -589,7 +590,7 @@ class RecommendService
         $user['user_sex'] = $pare['sex'];
         $user['user_status'] = $pare['status'];
         $user['sex'] = $value['sex'];
-
+        $user['is_match'] = $value['is_match'];
         return $user;
     }
 
