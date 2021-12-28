@@ -87,7 +87,39 @@ class User extends Base
         if(isset($params['remarks']) && !empty($params['remarks'])){
             ScoreService::instance()->editFullInc($uid,'remarks'); 
         }
-        
+        //投放广告数据处理
+        $aid = input('aid', '', 'htmlspecialchars_decode');
+        $click_id = input('click_id', '', 'htmlspecialchars_decode');
+        $adArr = [
+            'uid'=>$uid,
+            'aid'=>$aid,
+            'click_id'=>$click_id
+        ];
+        custom_log('投放广告数据',print_r($adArr,true));
+        if(!empty($aid) && !empty($click_id)){
+
+            $openid = UserModel::userValue(['id'=>$uid],'openid');
+            $adInfo = DB::name("ad_user")->where(['openid'=>$openid])->find();
+            if(empty($adInfo)){
+                $page_url = 'pages/home/home';
+                $ad = new TencentMarketing();
+                $adJson = $ad->user_actions_add($click_id,$page_url,$openid);
+                $adJson = json_decode($adJson,true);
+                //添加广告有效用户
+                $ad_save['uid'] = $uid;
+                $ad_save['aid'] = $aid;
+                $ad_save['click_id'] = $click_id;
+                $ad_save['openid'] = $openid;
+                $ad_save['page_url'] = $page_url;
+                $ad_save['status'] = 0;
+                if($adJson['code'] != 0){ //回传失败
+                    $ad_save['status'] = 1;
+                    $ad_save['code_error'] = $adJson['code'];
+                }
+                $ad_save['create_time'] = date('Y-m-d H:i:s');
+                DB::name("ad_user")->insertGetId($ad_save);
+            }  
+        }
         //如果来源不为空且没有被其他人推荐过 给推荐者增加次数 并添加来源relation 添加 查看手机号次数流水记录 tel_count
         $count = RelationModel::relationFind(['uid'=>$uid]);
         if(!empty($source)){

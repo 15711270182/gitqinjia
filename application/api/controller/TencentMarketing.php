@@ -53,7 +53,7 @@ class TencentMarketing
                                     'wechat_app_id' => $this->wechat_app_id
                                 ),
                             'action_type' => 'QUEST',
-                            'channel' => 'CHANNEL_NATURAL',
+                            // 'channel' => 'CHANNEL_NATURAL',
                             'trace' =>
                                 array(
                                     'click_id' => $click_id

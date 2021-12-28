@@ -79,6 +79,13 @@ class Matchmaker extends Base
         $education = input("education",'');
         $salary = input("salary",'');
         $page = input('page') ?: '1';
+        
+        $user_sn = input("user_sn",'');
+        $marriage_type = input("marriage_type",'');//婚史
+        $house_type = input("house_type",''); //房子情况
+        $industry = input("industry",''); //职业
+        $industry_type = input("industry_type",''); //单位性质
+        $is_auth = input("is_auth",''); 
         if(empty($ask_age)){
             return $this->errorReturn(self::errcode_fail,'ask_age参数不能为空');
         }
@@ -127,7 +134,12 @@ class Matchmaker extends Base
             'minheight'=>$height[0],
             'maxheight'=>$height[1],
             'education'=>$education,
-            'salary'=>$salary
+            'uid'=>$user_sn,
+            'marriage_type'=>$marriage_type,
+            'house_type'=>$house_type,
+            'industry_type'=>$industry_type,
+            'industry'=>$industry,
+            'is_auth'=>$is_auth
         ];
         $queryData = $service->doRequest('apinew/v1/query/lists?page='.$page,$json); // 发起接口请求
         if(empty($queryData)){
