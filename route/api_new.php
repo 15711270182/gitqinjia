@@ -13,6 +13,7 @@ Route::group('api_new/token',function(){
 });
 
 Route::group('api_new/index',function(){
+    Route::any('home_video', 'api_new/index/home_video'); //首页视频认证用户列表
     Route::any('home', 'api_new/index/home'); //首页登录推荐数据
     Route::any('getuserlist', 'api_new/index/getuserlist'); //首页未登录拉取用户信息
 
