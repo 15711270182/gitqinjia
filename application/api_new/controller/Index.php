@@ -171,28 +171,41 @@ class Index extends Base
             $where_x['subscribe'] = 1;
             $mini_user = UserModel::wxFind($where_x);
             if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
-                $create_at = ChildrenModel::getchildrenField(['uid'=>$bid],'create_at');
-                
+
+                $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'sex,year,residence');
+                if($uuInfo['sex'] == 1){
+                    $sex = '男';
+                }elseif($uuInfo['sex'] == 2){
+                    $sex = '女';
+                }else{
+                    $sex = '未知';
+                }
+                $age = 0;
+                if($uuInfo['year']){
+                    $age = date('Y') - $uuInfo['year'];
+                }
+                $thing2 = $sex.' '.$age.'岁';
+                $residence = !empty($uuInfo['residence'])?$uuInfo['residence']:'未知';
+
                 $nickname = UserModel::userValue(['id'=>$uid],'nickname');
                 $nickname = !empty($nickname)?$nickname:'匿名用户';
 
-                $date = date('Y-m-d H:i:s',$create_at);
                 $openid = $mini_user['openid'];
-                $tip = '有位家长访问了您的资料,对您比较感兴趣';
-                $remark = '进入小程序查看';
-                $temp_id = 'pFlGp3GAYyMdxQLoBXg18B-WLbW5hBA4GvqmsNZoIKo';
+                // $tip = '访客到访通知';
+                // $remark = '进入小程序查看';
+                $temp_id = 'NAMegZlVO-dXkEpYPIgfnBk5eEqKtE76R46zHypH2NU';
                 $arr = array();
-                $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
-                $arr['keyword1'] = array('value'=>$nickname,'color'=>'#0000ff');
-                $arr['keyword2'] = array('value'=>$date,'color'=>'#0000ff');
-                $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                $arr['thing1'] = array('value'=>$nickname,'color'=>'#FF0000');
+                $arr['thing2'] = array('value'=>$thing2,'color'=>'#0000ff');
+                $arr['thing3'] = array('value'=>$residence,'color'=>'#0000ff');
+                $arr['thing4'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
                 $param = [
                     'touser'=>$openid,
                     'template_id'=>$temp_id,
-                    'page'=>'pages/editProfile/editProfile',
+                    'page'=>'pages/home/home',
                     'data'=>$arr,
                     'miniprogram' => [
-                        'pagepath'=>'pages/editProfile/editProfile',
+                        'pagepath'=>'pages/home/home',
                         'appid'=>'wx70d65d2170dbacd7',
                     ],
                 ];
