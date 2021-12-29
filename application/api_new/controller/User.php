@@ -446,17 +446,13 @@ class User extends Base
         }
         $update['id_name'] = $id_name;
         $update['id_number'] = $id_number;
-        // $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
-        // if(!$res){
-        //     return $this->errorReturn(self::errcode_fail,'失败');
-        // }
         // 微信打款
         $trade_no = md5(uniqid(mt_rand(), true));
         $openid = UserModel::userValue(['id'=>$uid],'openid');
         $amount = 0.30;
         $desc = '实名认证';
-        $WePay = \We::WePayTransfers(config('wechat.wechat'));
-        return $WePay->create([
+        $WePay = \We::WePayTransfers(config('wechat.auth'));
+        $result_pay = $WePay->create([
             'partner_trade_no' => $trade_no,
             'openid'           => $openid,
             'check_name'       => 'FORCE_CHECK',
@@ -465,7 +461,6 @@ class User extends Base
             'desc'             => $desc,
             'spbill_create_ip' => request()->ip(),
         ]);
-        $result_pay = $WePay->wePay($trade_no, $openid, $id_name, $amount, $desc);
         $result_code = $result_pay['result_code'];
         // 添加打款记录
         $insert_map = [];
