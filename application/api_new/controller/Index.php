@@ -44,47 +44,32 @@ use WeChat\Product;
  */
 class Index extends Base
 {
-    public function aa(){
-        $uid = '4393';
-        $bid = '218';
-        //发送访客记录模板
-        $b_userinfo = UserModel::userFind(['id'=>$bid]);
-        $where_x = [];
-        $where_x['unionid'] = $b_userinfo['unionid'];
-        $where_x['subscribe'] = 1;
-        $mini_user = UserModel::wxFind($where_x);
-        if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
-
-            $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
-            $phone = substr_cut_phone($uuInfo['phone']);
-
-            $nickname = UserModel::userValue(['id'=>$uid],'nickname');
-            $nickname = !empty($nickname)?$nickname:'匿名用户';
-
-            $openid = $mini_user['openid'];
-            $tip = '访客来访提醒';
-            $remark = '点击进入"完美亲家"小程序';
-            $temp_id = 'xVzOzhbKvh4lQSUeizI9M0rdQzeTiuQ7s3hnDme1_mA';
-            $arr = array();
-            $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
-            $arr['keyword1'] = array('value'=>$nickname,'color'=>'#FF0000');
-            $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
-            $arr['keyword3'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
-            $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-            $param = [
-                'touser'=>$openid,
-                'template_id'=>$temp_id,
-                'page'=>'pages/home/home',
-                'data'=>$arr,
-                'miniprogram' => [
-                    'pagepath'=>'pages/home/home',
-                    'appid'=>'wx70d65d2170dbacd7',
-                ],
-            ];
-            $res = $this->shiwuSendMsg($param);
-            var_dump($res);die;
+    /**
+     * @Notes:首页视频认证用户 登录情况下
+     * @Interface home_video
+     * @return string
+     * @author: zy
+     * @Time: 2021/12 /03
+     */
+    public function home_video(){
+        $uid = $this->uid;
+        $user_info = Db::name('children')->where('uid', $uid)->find();
+        if (empty($user_info)){
+            return $this->errorReturn(self::errcode_fail,'孩子资料未完善');
         }
-        echo '111';die;
+        $sex = 1;
+        if($user_info['sex'] == 1){
+            $sex = 2;
+        }
+        $residence = $user_info['residence'];
+        $where = "sex = {$sex} and auth_status = 1 and status = 1 and is_ban = 1 and is_del = 1 and video_url != '' and residence like '{$residence}%'";
+        $list = ChildrenModel::childrenSelect($where);
+        if(empty($list)){
+            return $this->successReturn([],'暂无数据',self::errcode_ok);
+        }
+        $rec = new RecommendService();
+        $new_list = $rec->getDataList($list);
+        return $this->successReturn($new_list,'成功',self::errcode_ok);
     }
     /**
      * @Notes:首页推荐 登录情况下

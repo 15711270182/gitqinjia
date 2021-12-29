@@ -327,7 +327,7 @@ class RecommendService
         }elseif($is_match == 2){ //低配 条件放宽
             $where_match = $this->getLowMatch($uid,$not_id_arr);
         }else{
-            $where_match = "is_del = 1";
+            $where_match = "is_del = 1 and video_url = ''";
             $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
             $new_not_id_arr = array_merge($notIn_id, $not_id_arr);
             array_unique($new_not_id_arr);
@@ -350,7 +350,7 @@ class RecommendService
      */
     protected function getHeightMatch($uid)
     {
-        $where_match = "is_del = 1";
+        $where_match = "is_del = 1 and video_url = ''";
         $notIn_id = $this->hadRecommend($uid); //去除 已收藏已联系用户
         if($notIn_id){
             $notIn_id = implode(',', $notIn_id);
@@ -590,7 +590,7 @@ class RecommendService
         $user['user_sex'] = $pare['sex'];
         $user['user_status'] = $pare['status'];
         $user['sex'] = $value['sex'];
-        $user['is_match'] = $value['is_match'];
+        $user['is_match'] = isset($value['is_match'])?$value['is_match']:0;
         return $user;
     }
 
