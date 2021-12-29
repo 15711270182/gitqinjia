@@ -134,7 +134,17 @@ function msubstr($str, $start = 0, $length, $charset = "utf-8", $suffix = true)
     }
     return $slice;
 }
-
+/**
+ * 截取手机号前3位,隐藏中间用*代替 保留4位
+ * @param string $phone_num 手机号
+ * @return string 格式化后的手机号
+ */
+function substr_cut_phone($phone_num){
+    $prefix2 = substr($phone_num,0,3);
+    $suffix2 = substr($phone_num,-4,4);
+    $string2 = $prefix2." **** ".$suffix2;
+    return $string2;
+}
 /**
  * 创建多级文件夹目录
  * @param unknown $path

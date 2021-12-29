@@ -44,6 +44,48 @@ use WeChat\Product;
  */
 class Index extends Base
 {
+    public function aa(){
+        $uid = '4393';
+        $bid = '218';
+        //发送访客记录模板
+        $b_userinfo = UserModel::userFind(['id'=>$bid]);
+        $where_x = [];
+        $where_x['unionid'] = $b_userinfo['unionid'];
+        $where_x['subscribe'] = 1;
+        $mini_user = UserModel::wxFind($where_x);
+        if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+
+            $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
+            $phone = substr_cut_phone($uuInfo['phone']);
+
+            $nickname = UserModel::userValue(['id'=>$uid],'nickname');
+            $nickname = !empty($nickname)?$nickname:'匿名用户';
+
+            $openid = $mini_user['openid'];
+            $tip = '访客来访提醒';
+            $remark = '点击进入"完美亲家"小程序';
+            $temp_id = 'xVzOzhbKvh4lQSUeizI9M0rdQzeTiuQ7s3hnDme1_mA';
+            $arr = array();
+            $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+            $arr['keyword1'] = array('value'=>$nickname,'color'=>'#FF0000');
+            $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+            $arr['keyword3'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+            $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+            $param = [
+                'touser'=>$openid,
+                'template_id'=>$temp_id,
+                'page'=>'pages/home/home',
+                'data'=>$arr,
+                'miniprogram' => [
+                    'pagepath'=>'pages/home/home',
+                    'appid'=>'wx70d65d2170dbacd7',
+                ],
+            ];
+            $res = $this->shiwuSendMsg($param);
+            var_dump($res);die;
+        }
+        echo '111';die;
+    }
     /**
      * @Notes:首页推荐 登录情况下
      * @Interface home
@@ -172,33 +214,22 @@ class Index extends Base
             $mini_user = UserModel::wxFind($where_x);
             if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
 
-                $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'sex,year,residence');
-                if($uuInfo['sex'] == 1){
-                    $sex = '男';
-                }elseif($uuInfo['sex'] == 2){
-                    $sex = '女';
-                }else{
-                    $sex = '未知';
-                }
-                $age = 0;
-                if($uuInfo['year']){
-                    $age = date('Y') - $uuInfo['year'];
-                }
-                $thing2 = $sex.' '.$age.'岁';
-                $residence = !empty($uuInfo['residence'])?$uuInfo['residence']:'未知';
+                $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
+                $phone = substr_cut_phone($uuInfo['phone']);
 
                 $nickname = UserModel::userValue(['id'=>$uid],'nickname');
                 $nickname = !empty($nickname)?$nickname:'匿名用户';
 
                 $openid = $mini_user['openid'];
-                // $tip = '访客到访通知';
-                // $remark = '进入小程序查看';
-                $temp_id = 'NAMegZlVO-dXkEpYPIgfnBk5eEqKtE76R46zHypH2NU';
+                $tip = '访客来访提醒';
+                $remark = '点击进入"完美亲家"小程序';
+                $temp_id = 'xVzOzhbKvh4lQSUeizI9M0rdQzeTiuQ7s3hnDme1_mA';
                 $arr = array();
-                $arr['thing1'] = array('value'=>$nickname,'color'=>'#FF0000');
-                $arr['thing2'] = array('value'=>$thing2,'color'=>'#0000ff');
-                $arr['thing3'] = array('value'=>$residence,'color'=>'#0000ff');
-                $arr['thing4'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+                $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                $arr['keyword1'] = array('value'=>$nickname,'color'=>'#FF0000');
+                $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+                $arr['keyword3'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+                $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
                 $param = [
                     'touser'=>$openid,
                     'template_id'=>$temp_id,
@@ -209,7 +240,7 @@ class Index extends Base
                         'appid'=>'wx70d65d2170dbacd7',
                     ],
                 ];
-                $this->shiwuSendMsg($param);
+                $res = $this->shiwuSendMsg($param);
             }
         }
         $where_t['uid'] = $uid;
