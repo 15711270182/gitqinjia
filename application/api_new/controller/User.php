@@ -426,6 +426,13 @@ class User extends Base
         if(empty($id_name) || empty($id_number)){
             return $this->errorReturn(self::errcode_fail,'参数不能为空');
         }
+        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
+        if($cInfo['auth_status'] == 1){
+            return $this->errorReturn(self::errcode_fail,'已实名,请勿重复提交');
+        }
+        if ($id_name == $cInfo['id_name'] || $id_number == $cInfo['id_number']){
+            return $this->errorReturn(self::errcode_fail,'该身份信息已存在!');
+        }
 
         $url = 'http://op.juhe.cn/idcard/query';
         $data['idcard'] = $id_number;
@@ -437,17 +444,59 @@ class User extends Base
         if ($result['error_code'] != 0){
             return $this->errorReturn(self::errcode_fail,$result['reason']);
         }
-        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
-        if($cInfo['auth_status'] == 1){
-            return $this->errorReturn(self::errcode_fail,'已实名,请勿重复提交');
-        }
         $update['id_name'] = $id_name;
         $update['id_number'] = $id_number;
-        $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
-        if(!$res){
-            return $this->errorReturn(self::errcode_fail,'失败');
+        // $res = ChildrenModel::childrenEdit(['uid'=>$uid],$update);
+        // if(!$res){
+        //     return $this->errorReturn(self::errcode_fail,'失败');
+        // }
+        // 微信打款
+        $trade_no = md5(uniqid(mt_rand(), true));
+        $openid = UserModel::userValue(['id'=>$uid],'openid');
+        $amount = 0.30;
+        $desc = '实名认证';
+        $WePay = \We::WePayTransfers(config('wechat.wechat'));
+        return $WePay->create([
+            'partner_trade_no' => $trade_no,
+            'openid'           => $openid,
+            'check_name'       => 'FORCE_CHECK',
+            're_user_name'     => $id_name,
+            'amount'           => $amount * 100,
+            'desc'             => $desc,
+            'spbill_create_ip' => request()->ip(),
+        ]);
+        $result_pay = $WePay->wePay($trade_no, $openid, $id_name, $amount, $desc);
+        $result_code = $result_pay['result_code'];
+        // 添加打款记录
+        $insert_map = [];
+        $insert_map['uid'] = $uid;
+        $insert_map['openid'] = $openid;
+        $insert_map['trade_no'] = $trade_no;
+        $insert_map['amount'] = $amount;
+        $insert_map['desc'] = $desc;
+        $insert_map['create_time'] = date('Y-m-d H:i:m', time());
+        $insert_map['status'] = $result_code;
+
+        if ($result_code == 'SUCCESS'){
+            $insert_map['mchid'] = $result_pay['mchid'];
+            $insert_map['payment_no'] = $result_pay['payment_no'];
+            $insert_map['payment_time'] = $result_pay['payment_time'];
+            //添加记录
+            DB::name('orders_shiming')->insertGetId($insert_map);
+            $update['auth_status'] = 1;
+            ChildrenModel::childrenEdit(['uid'=>$uid],$update);
+            return $this->successReturn('','实名成功',self::errcode_ok);
+            
         }
-        return $this->successReturn('','成功',self::errcode_ok);
+        $insert_map['err_code'] = $result_pay['err_code'];
+        $insert_map['err_code_des'] = $result_pay['err_code_des'];
+        DB::name('orders_shiming')->insertGetId($insert_map);
+        $update['id_name'] = '';
+        $update['id_number'] = '';
+        $update['auth_status'] = 0;
+        ChildrenModel::childrenEdit(['uid'=>$uid],$update);
+        return $this->errorReturn(self::errcode_fail,'实名失败');
+        
     }
     /**
      * @Notes:人脸认证结果
