@@ -173,7 +173,7 @@ class Index extends Base
             if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
                 $create_at = ChildrenModel::getchildrenField(['uid'=>$bid],'create_at');
                 
-                $nickname = UserModel::userValue(['id'=>$uid,'nickname']);
+                $nickname = UserModel::userValue(['id'=>$uid],'nickname');
                 $nickname = !empty($nickname)?$nickname:'匿名用户';
 
                 $date = date('Y-m-d H:i:s',$create_at);
