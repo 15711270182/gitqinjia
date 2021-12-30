@@ -58,8 +58,8 @@ class Order extends Base
     {
         $uid = $this->uid;
         $paytype = UserModel::userValue(['id' => $uid],'paytype');
-        $field = 'id,title,type,num,price,create_at,discount,old_price';
-        $product = ProductModel::productSelect(['type'=>$paytype,'source'=>1,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
+        $field = 'id,title,type,num,price,create_at,discount,old_price,source';
+        $product = ProductModel::productSelect(['type'=>$paytype,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         if(empty($product)){
             return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
@@ -69,6 +69,9 @@ class Order extends Base
             $product[$key]['day_price'] = round($value['price']/$value['num']/100, 1);
             if($paytype == 1){
                 $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
+            }
+            if($value['source'] == 2){
+                unset($product[$key]);
             }
         }
         $map = [];

@@ -33,13 +33,16 @@ class Web extends Controller
         if(empty($sex)){
             $sex = 1;
         }
-        $field = 'id,title,type,num,price,create_at,discount,old_price';
+        $field = 'id,title,type,num,price,create_at,discount,old_price,source';
         $product = ProductModel::productSelect(['type'=>$paytype,'is_show'=>'1','is_del'=>'1'],$field,'sort desc');
         // 折算到每天是多少钱
         foreach ($product as $key => $value) {
             $product[$key]['day_price'] = round($value['price']/$value['num']/100, 1);
             if($paytype == 1){
                 $product[$key]['month_price'] = round($value['price']/($value['num']/30)/100, 1);
+            }
+            if($value['source'] == 2){
+                unset($product[$key]);
             }
         }
         $this->assign('sex',$sex);
