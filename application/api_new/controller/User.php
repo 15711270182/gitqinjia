@@ -426,12 +426,15 @@ class User extends Base
         if(empty($id_name) || empty($id_number)){
             return $this->errorReturn(self::errcode_fail,'参数不能为空');
         }
+        $data_error = [];
+        $data_error['status1'] = 0;
+        $data_error['statu2'] = 0;
         $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
         if($cInfo['auth_status'] == 1){
-            return $this->errorReturn(self::errcode_fail,'已实名,请勿重复提交');
+            return $this->errorReturn(self::errcode_fail,'已实名,请勿重复提交',$data_error);
         }
         if ($id_name == $cInfo['id_name'] || $id_number == $cInfo['id_number']){
-            return $this->errorReturn(self::errcode_fail,'该身份信息已存在!');
+            return $this->errorReturn(self::errcode_fail,'该身份信息已存在!',$data_error);
         }
 
         $url = 'http://op.juhe.cn/idcard/query';
@@ -442,7 +445,7 @@ class User extends Base
         $tools = new Tools();
         $result = json_decode($tools->get($url, $data), true);
         if ($result['error_code'] != 0){
-            return $this->errorReturn(self::errcode_fail,$result['reason']);
+            return $this->errorReturn(self::errcode_fail,$result['reason'],$data_error);
         }
         $update['id_name'] = $id_name;
         $update['id_number'] = $id_number;
@@ -480,6 +483,9 @@ class User extends Base
             DB::name('orders_shiming')->insertGetId($insert_map);
             $update['auth_status'] = 1;
             ChildrenModel::childrenEdit(['uid'=>$uid],$update);
+            $data_error = [];
+            $data_error['status1'] = 1;
+            $data_error['statu2'] = 1;
             return $this->successReturn('','实名成功',self::errcode_ok);
             
         }
@@ -490,7 +496,10 @@ class User extends Base
         $update['id_number'] = '';
         $update['auth_status'] = 0;
         ChildrenModel::childrenEdit(['uid'=>$uid],$update);
-        return $this->errorReturn(self::errcode_fail,'实名失败');
+        $data_error = [];
+        $data_error['status1'] = 1;
+        $data_error['statu2'] = 0;
+        return $this->errorReturn(self::errcode_fail,'抱歉!认证失败',$data_error);
         
     }
     /**

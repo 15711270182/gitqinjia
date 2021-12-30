@@ -53,7 +53,10 @@ class Index extends Base
      */
     public function home_video(){
         $uid = $this->uid;
-        $user_info = Db::name('children')->where('uid', $uid)->find();
+        $page = input('page', 1, 'intval');
+        $pageSize = input('pageSize', 10, 'intval');
+
+        $user_info = Db::name('children')->where(['uid'=>$uid])->find();
         if (empty($user_info)){
             return $this->errorReturn(self::errcode_fail,'孩子资料未完善');
         }
@@ -63,13 +66,22 @@ class Index extends Base
         }
         $residence = $user_info['residence'];
         $where = "sex = {$sex} and auth_status = 1 and status = 1 and is_ban = 1 and is_del = 1 and video_url != '' and residence like '{$residence}%'";
-        $list = ChildrenModel::childrenSelect($where);
+        $list = ChildrenModel::childrenSelectPage($where,'','id desc',$page,$pageSize);
+        $totalCount = Db::name('children')->where($where)->count();
+        $totalPage = ceil($totalCount / $pageSize);
+        $data = [];
+        $data['totalCount'] = $totalCount;
+        $data['totalPage'] = $totalPage;
         if(empty($list)){
-            return $this->successReturn([],'暂无数据',self::errcode_ok);
+            $data['list'] = [];
+            return $this->successReturn($data,'暂无数据',self::errcode_ok);
+            // return $this->errorReturn(self::errcode_fail,'暂无数据');
         }
         $rec = new RecommendService();
         $new_list = $rec->getDataList($list);
-        return $this->successReturn($new_list,'成功',self::errcode_ok);
+
+        $data['list'] = $new_list;
+        return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
      * @Notes:首页推荐 登录情况下
