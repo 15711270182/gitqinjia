@@ -220,7 +220,7 @@ class RecommendService
                 return $data;
             }
             //所有精准的数据 uid 排除
-            $jzDataList = ChildrenModel::getSelect($condition,$where_match,'uid',$order,'','',1,2);
+            $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
             //非精准
             $not_id_arr = array_column($jzDataList, 'uid');
             // var_dump($not_id_arr);
@@ -270,7 +270,7 @@ class RecommendService
             return $data;
         }
         //所有精准的数据 uid 排除
-        $jzDataList = ChildrenModel::getSelect($condition,$where_match,'uid',$order,'','',1,2);
+        $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
         //精准匹配数据不全/无精准数据 查询区域下其他数据
         $not_id_arr = array_column($jzDataList, 'uid');
         // var_dump($not_id_arr);

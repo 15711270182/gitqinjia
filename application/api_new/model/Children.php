@@ -100,11 +100,7 @@ class Children extends Model
            unset($condition['residence']);
            $query->where('residence', 'notin', $residence);
         }
-        if(!empty($page) && !empty($pageSize)){
-            $list = $query->where($condition)->field($field)->order($order)->limit($page,$pageSize)->select();
-        }else{
-            $list = $query->where($condition)->field($field)->order($order)->select();
-        }
+        $list = $query->where($condition)->field($field)->order($order)->limit($page,$pageSize)->select();
         // var_dump(Db::name('children')->getLastsql());die;
         if(!empty($list)){
             foreach ($list as $key => $value) {
@@ -113,4 +109,25 @@ class Children extends Model
         }
         return $list;
     }
+    //处理数据
+    public static function getSelectJz($condition = [],$where_match = '',$field = '',$order='',$residence = 0,$is_match = 0){
+        $query = Db::name('children');
+        if($where_match){
+            $query->where($where_match);
+        }
+        if($residence == 0){ //无需匹配城市
+           $residence = $condition['residence'];
+           unset($condition['residence']);
+           $query->where('residence', 'notin', $residence);
+        }
+        $list = $query->where($condition)->field($field)->order($order)->select();
+        // var_dump(Db::name('children')->getLastsql());die;
+        if(!empty($list)){
+            foreach ($list as $key => $value) {
+                $list[$key]['is_match'] = $is_match;
+            }
+        }
+        return $list;
+    }
+
 }
