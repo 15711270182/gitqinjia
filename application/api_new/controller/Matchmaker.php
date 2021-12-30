@@ -74,6 +74,7 @@ class Matchmaker extends Base
 
         // 年龄 身高 学历 年薪
         $uid = $this->uid;
+        $search_sex = input("sex",'');
         $ask_age = input("ask_age",'');
         $ask_height = input("ask_height",'');
         $education = input("education",'');
@@ -99,16 +100,21 @@ class Matchmaker extends Base
             return $this->errorReturn(self::errcode_fail,'salary参数不能为空');
         }
         $sex = ChildrenModel::getchildrenField(['uid'=>$uid],'sex');
-        $new_sex = 1;
-        if($sex == 1){
-           $new_sex = 2;
+        if(!empty($search_sex)){
+            $new_sex = $search_sex;
+        }else{
+            $new_sex = 1;
+            if($sex == 1){
+               $new_sex = 2;
+            }
         }
+        
         $age = explode('到',$ask_age);
         $height = explode('到',$ask_height);
         //添加搜索日志
         if($page == 1){
             $searchLog['uid'] = $uid;
-            $searchLog['sex'] = $sex;
+            $searchLog['sex'] = $new_sex;
             $searchLog['minage'] = $age[0];
             $searchLog['maxage'] = $age[1];
             $searchLog['minheight'] = $height[0];
