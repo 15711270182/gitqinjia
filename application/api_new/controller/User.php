@@ -428,7 +428,7 @@ class User extends Base
         }
         $data_error = [];
         $data_error['status1'] = 0;
-        $data_error['statu2'] = 0;
+        $data_error['status2'] = 0;
         $cInfo = ChildrenModel::childrenFind(['uid'=>$uid]);
         if($cInfo['auth_status'] == 1){
             return $this->errorReturn(self::errcode_fail,'已实名,请勿重复提交',$data_error);
@@ -485,8 +485,8 @@ class User extends Base
             ChildrenModel::childrenEdit(['uid'=>$uid],$update);
             $data_error = [];
             $data_error['status1'] = 1;
-            $data_error['statu2'] = 1;
-            return $this->successReturn('','实名成功',self::errcode_ok);
+            $data_error['status2'] = 1;
+            return $this->successReturn($data_error,'实名成功',self::errcode_ok);
             
         }
         $insert_map['err_code'] = $result_pay['err_code'];
@@ -498,7 +498,7 @@ class User extends Base
         ChildrenModel::childrenEdit(['uid'=>$uid],$update);
         $data_error = [];
         $data_error['status1'] = 1;
-        $data_error['statu2'] = 0;
+        $data_error['status2'] = 0;
         return $this->errorReturn(self::errcode_fail,'抱歉!认证失败',$data_error);
         
     }
