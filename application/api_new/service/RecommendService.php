@@ -199,6 +199,7 @@ class RecommendService
         if($switch == 1){ //只展示该区域数据
             $condition['residence'] = $user_info['residence'];
             $where_match = $this->getWhereMatch($uid,0);
+            // var_dump($where_match);die;
             $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
             $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
             // var_dump($totalCount);die;
@@ -208,8 +209,9 @@ class RecommendService
 
             //精准
             $where_match = $this->getWhereMatch($uid,1); 
+            // var_dump($where_match);
             $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
-            // var_dump($totalMatchList);die;
+            // var_dump(count($totalMatchList));
             $matchCount = count($totalMatchList);
             $count_match = $count_pageSize - $matchCount;
             if($count_match == 0){ //有区域精准条件 无需补全
@@ -217,8 +219,10 @@ class RecommendService
                 $data['list'] = $re_list;
                 return $data;
             }
+            //所有精准的数据 uid 排除
+            $jzDataList = ChildrenModel::getSelect($condition,$where_match,'uid',$order,'','',1,2);
             //非精准
-            $not_id_arr = array_column($totalMatchList, 'uid');
+            $not_id_arr = array_column($jzDataList, 'uid');
             // var_dump($not_id_arr);
             $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
             if($count_match != $pageSize){
@@ -265,8 +269,10 @@ class RecommendService
             $data['list'] = $re_list;
             return $data;
         }
+        //所有精准的数据 uid 排除
+        $jzDataList = ChildrenModel::getSelect($condition,$where_match,'uid',$order,'','',1,2);
         //精准匹配数据不全/无精准数据 查询区域下其他数据
-        $not_id_arr = array_column($totalMatchList, 'uid');
+        $not_id_arr = array_column($jzDataList, 'uid');
         // var_dump($not_id_arr);
         $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
         if($count_match != $pageSize){

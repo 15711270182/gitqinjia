@@ -100,7 +100,12 @@ class Children extends Model
            unset($condition['residence']);
            $query->where('residence', 'notin', $residence);
         }
-        $list = $query->where($condition)->field($field)->order($order)->limit($page,$pageSize)->select();
+        if(!empty($page) && !empty($pageSize)){
+            $list = $query->where($condition)->field($field)->order($order)->limit($page,$pageSize)->select();
+        }else{
+            $list = $query->where($condition)->field($field)->order($order)->select();
+        }
+        // var_dump(Db::name('children')->getLastsql());die;
         if(!empty($list)){
             foreach ($list as $key => $value) {
                 $list[$key]['is_match'] = $is_match;
