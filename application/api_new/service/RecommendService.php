@@ -184,7 +184,7 @@ class RecommendService
         $limit = ($page - 1) * $pageSize;
 
         $field = "";
-        $order = "login_last_time desc,video_url desc,full_info desc";
+        $order = "login_last_time desc,full_info desc,id desc";
         $condition['sex'] = 1;
         if($user_info['sex'] == 1){
             $condition['sex'] = 2;
