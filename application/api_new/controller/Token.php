@@ -51,6 +51,7 @@ class Token extends Base
                 $userInfo = UserModel::userFind(['openid' => $openid],'id as uid,openid,unionid');
                 if(!$userInfo){
                     $data = [];
+                    $data['paytype'] = 2; //默认次数
                     $data['openid'] = $openid;
                     $data['unionid'] = $unionid;
                     $data['appid'] = config('wechat.miniapp.appid');

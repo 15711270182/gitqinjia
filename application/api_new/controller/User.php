@@ -453,7 +453,7 @@ class User extends Base
         $trade_no = md5(uniqid(mt_rand(), true));
         $openid = UserModel::userValue(['id'=>$uid],'openid');
         $amount = 0.30;
-        $desc = '实名认证';
+        $desc = '完美亲家 - 实名认证';
         $WePay = \We::WePayTransfers(config('wechat.auth'));
         $result_pay = $WePay->create([
             'partner_trade_no' => $trade_no,

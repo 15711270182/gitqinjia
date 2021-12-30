@@ -137,7 +137,7 @@ class Index extends Base
 
         $field_a = 'auth_status,id_name,id_number,search_auth';
         $ccInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_a);
-        //实名认证状态   1已实名  2未支付未实名  3已支付未填写身份信息  4 已支付人脸未通过
+        //实名认证状态   1已实名  2未支付未实名  3已支付未填写身份信息  4 已支付人脸未通过（暂无）
         switch ($ccInfo['auth_status']) {
             case '1':
                 $data['auth_status'] = 1;
