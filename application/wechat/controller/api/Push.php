@@ -393,16 +393,16 @@ class Push extends Controller
         private
         function updateFansinfo($subscribe = true)
         {
-            custom_log('关注公众号',print_r($subscribe,true));
+            custom_log('111',333);
             if ($subscribe) {
             
                 $user = WechatService::WeChatUser()->getUserInfo($this->openid);
-                custom_log('关注公众号-用户信息',print_r($user,true));
                 $map = array();
                 $map['openid'] = $this->openid;
-                $is_have = db::name('wechat_fans')->where($where)->find();
+                $is_have = db::name('wechat_fans')->where($map)->find();
                 if (!$is_have) 
                 {
+                    custom_log('关注公众号-首次',print_r($user,true));
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
@@ -424,29 +424,28 @@ class Push extends Controller
 
                         // ScoreService::instance()->weightScoreInc($userinfo['id'],28);
                     }
-                    
-                }else{
-                    if(empty($is_have['subscribe_at'])){  //表里有数据  但是没关注 也算收关
-
-                         //首次关注 松三次机会
+                    return $res = FansService::set(array_merge($user, ['subscribe' => '1', 'appid' => $this->appid]));
+                }
+                if(empty($is_have['subscribe_at'])){
+                    custom_log('关注公众号-首次2',print_r($user,true));
+                    //首次关注 松三次机会
+                    $map = array();
+                    $map['unionid'] = $user['unionid'];
+                    $userinfo = db::name('userinfo')->where($map)->find();
+                    if ($userinfo) 
+                    {
                         $map = array();
-                        $map['unionid'] = $user['unionid'];
-                        $userinfo = db::name('userinfo')->where($map)->find();
-                        if ($userinfo) 
-                        {
-                            $map = array();
-                            $map['id'] = $userinfo['id'];
-                            db::name('userinfo')->where($map)->setInc('count',3);
-                            //添加增加记录
-                            $params = [
-                                'uid' => $userinfo['id'],
-                                'type' => 1,
-                                'count' => 3,
-                                'remarks' => '关注公众号增加3次',
-                                'create_at' => time()
-                            ];
-                            Db::name('tel_count')->strict(false)->insertGetId($params);
-                        }
+                        $map['id'] = $userinfo['id'];
+                        db::name('userinfo')->where($map)->setInc('count',3);
+                        //添加增加记录
+                        $params = [
+                            'uid' => $userinfo['id'],
+                            'type' => 1,
+                            'count' => 3,
+                            'remarks' => '关注公众号增加3次',
+                            'create_at' => time()
+                        ];
+                        Db::name('tel_count')->strict(false)->insertGetId($params);
                     }
                 }
                 return $res = FansService::set(array_merge($user, ['subscribe' => '1', 'appid' => $this->appid]));
