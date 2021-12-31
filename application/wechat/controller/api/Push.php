@@ -393,7 +393,7 @@ class Push extends Controller
         private
         function updateFansinfo($subscribe = true)
         {
-            custom_log('关注公众号',$subscribe);
+            custom_log('关注公众号',print_r($subscribe,true));
             if ($subscribe) {
             
                 $user = WechatService::WeChatUser()->getUserInfo($this->openid);
