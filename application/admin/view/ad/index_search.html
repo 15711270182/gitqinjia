@@ -1,0 +1,50 @@
+<fieldset>
+
+    <legend>条件搜索</legend>
+
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">用户uid</label>
+            <div class="layui-input-inline">
+                <input name="uid" value="{$Think.get.uid|default=''}" placeholder="请输入用户id" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input name="phone" value="{$Think.get.phone|default=''}" placeholder="请输入手机号" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">回传状态</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="status">
+                    {foreach [''=>'-- 不限 --','0'=>'成功','1'=>'失败'] as $k=>$v}
+                    {eq name='Think.get.status' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_time" value="{$Think.get.create_time|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+
+</fieldset>
+
+<script>form.render()</script>

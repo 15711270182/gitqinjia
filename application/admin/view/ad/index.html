@@ -1,0 +1,43 @@
+{extend name='main'}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='ad/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>创建时间</th>
+            <th class='text-center nowrap'>用户uid</th>
+            <th class='text-center nowrap'>头像</th>
+            <th class='text-center nowrap'>昵称</th>
+            <th class='text-center nowrap'>城市</th>
+            <th class='text-center nowrap'>手机号</th>
+            <th class='text-center nowrap'>广告id</th>
+            <th class='text-center nowrap'>点击id</th>
+            <th class='text-center nowrap'>回传状态</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='text-center nowrap'>{$vo.status}{$vo.create_time|default=''}</td>
+            <td class='text-center nowrap'>{$vo.uid|default='-'}</td>
+            <td class='text-center nowrap'><img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top"></td>
+            <td class='text-center nowrap'>{$vo.nickname|default='-'}</td>
+            <td class='text-center nowrap'>{$vo.residence|default=0}</td>
+            <td class='text-center nowrap'>{$vo.phone|default=0}</td>
+            <td class='text-center nowrap'>{$vo.aid|default=0}</td>
+            <td class='text-center nowrap'>{$vo.click_id|default=0}</td>
+            <td class='text-center nowrap'>{if $vo.status == 1}失败{else/}成功{/if}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+
+{/block}

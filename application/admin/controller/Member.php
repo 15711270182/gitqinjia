@@ -175,7 +175,7 @@ class Member extends Controller
         if($is_vip == 2){
             $where .= " and u.endtime < '{$time}'";
         }
-        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,
+        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,c.auth_status,
         c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status,c.weight_score,c.remarks_text,(select count(*) from tel_collection t where t.bid = c.uid and t.status=1) as look_tel";
         $equal = 'u.id#id,u.nickname#nickname,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house,c.hometown#hometown';
         $this->_query($this->table)

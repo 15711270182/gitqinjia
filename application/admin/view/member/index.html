@@ -16,6 +16,7 @@
             <!--<th class='text-center nowrap'>剩余牵线数</th>-->
             <th class='text-center nowrap'>剩余查看号码数</th>
             <th class='text-center nowrap'>邀请人(ID)</th>
+            <th class='text-center nowrap'>是否实名</th>
             <th class='text-center nowrap'>操作</th>
             <th class='text-center nowrap'>是否完善资料</th>
             <th class='text-center nowrap'>被访问记录</th>
@@ -59,6 +60,7 @@
             <td class='text-center nowrap' title="查看记录" style="cursor: pointer;color: #00a0e9;" data-title="查看号码记录" data-modal='{:url("telCountInfo")}?id={$vo.id}'>{$vo.count|default=0}</td>
             <!--<td class='text-center nowrap'>{$vo.relation_id}</td>-->
             <td class='text-center nowrap'>{if !empty($vo.relation_id)}{$vo.relation_name}({$vo.relation_id}){else/}{/if}</td>
+            <td class='text-center nowrap'>{if $vo.auth_status == 1}已实名{else/}未实名{/if}</td>
             <td class='text-center nowrap'>
                 <a class="layui-btn layui-btn-normal layui-btn-sm" data-title="子女详情" data-modal='{:url("look")}?id={$vo.id}'>子女详情</a>
                 {eq name='vo.team_status' value='1'}
