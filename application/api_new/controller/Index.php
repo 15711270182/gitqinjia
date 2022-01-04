@@ -305,13 +305,15 @@ class Index extends Base
                     $mini_user = UserModel::wxFind($where_x);
                     if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
                         $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
-                        $phone = substr_cut_phone($uuInfo['phone']);
+                        
                         $nickname = UserModel::userValue(['id'=>$uid],'nickname');
-                        if(!empty($nickname)){
+                        $nickname = !empty($nickname)?$nickname:'匿名用户';
+                        if(!empty($uuInfo['phone'])){
+                            $phone = substr_cut_phone($uuInfo['phone']);
                             $page = 'pages/details/details?id='.$uid;
                             $pagepath = 'pages/details/details?id='.$uid;
                         }else{
-                            $nickname = '匿名用户';
+                            $phone = '暂未填写';
                             $page = 'pages/home/home';
                             $pagepath = 'pages/home/home';
                         }
