@@ -270,6 +270,7 @@ class Member extends Controller
         $map = ['uid' => $id];
         $realname = Db::name('userinfo')->where(['id'=>$id])->value('realname');
         $pair_last_num = Db::name('userinfo')->where(['id'=>$id])->value('pair_last_num');
+        $count = Db::name('userinfo')->where(['id'=>$id])->value('count');
         $is_vip = Db::name('userinfo')->where(['id'=>$id])->value('is_vip');
         $endtime = Db::name('userinfo')->where(['id'=>$id])->value('endtime');
         $Children = Db::name('Children')->where($map)->find();
@@ -340,6 +341,7 @@ class Member extends Controller
         $this->is_vip = $is_vip;
         $this->endtime = date('Y-m-d H:i:s',$endtime);
         $this->slider = $slider;
+        $this->count = $count;
         $this->pair_last_num = $pair_last_num;
         $this->realname = $realname;
         $this->sex_list = $sex_list;
@@ -383,10 +385,12 @@ class Member extends Controller
         if(isset($params['pair_last_num'])){
             $save_user['pair_last_num'] = $params['pair_last_num'];
         }
+        $save_user['count'] = $params['count'];
         $save_user['realname'] = $realname;
         $save_user['update_time'] = date('Y-m-d H:i::s');
         $uid = DB::name('children')->where(['id'=>$id])->value('uid');
         $res1 = DB::name('userinfo')->where(['id'=>$uid])->update($save_user);
+        unset($params['count']);
         //头像
         $slider = $this->request->post('slider');
         $img_arr = [];

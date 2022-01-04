@@ -29,7 +29,7 @@
             </label>
             <label class="layui-col-xs3 relative">
                 <span class="color-green">出生年份:</span>
-                <input name="year" required class="layui-input" placeholder="请输入身高" value="{$children.year|default=''}">
+                <input name="year" required class="layui-input" placeholder="请输入出生年份" value="{$children.year|default=''}">
             </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
@@ -150,7 +150,12 @@
                 <textarea class="layui-textarea" name="remarks">{$children.remarks|default=''}</textarea>
             </label>
         </div>
-
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">修改剩余次数:</span>
+                 <input name="count" class="layui-input" placeholder="修改剩余次数" value="{$count}">
+            </label>
+        </div>
         <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs11 relative">上传个人图片:</label>
             <div class="layui-input-inline margin-right-0" style="width:800px">
