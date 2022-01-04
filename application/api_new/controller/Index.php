@@ -241,10 +241,10 @@ class Index extends Base
                 $param = [
                     'touser'=>$openid,
                     'template_id'=>$temp_id,
-                    'page'=>'pages/home/home',
+                    'page'=>'pages/details/details?id='.$uid,
                     'data'=>$arr,
                     'miniprogram' => [
-                        'pagepath'=>'pages/home/home',
+                        'pagepath'=>'pages/details/details?id='.$uid,
                         'appid'=>'wx70d65d2170dbacd7',
                     ],
                 ];

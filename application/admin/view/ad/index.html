@@ -22,7 +22,7 @@
         <tbody>
         {foreach $list as $key=>$vo}
         <tr data-dbclick>
-            <td class='text-center nowrap'>{$vo.status}{$vo.create_time|default=''}</td>
+            <td class='text-center nowrap'>{$vo.create_time|default=''}</td>
             <td class='text-center nowrap'>{$vo.uid|default='-'}</td>
             <td class='text-center nowrap'><img data-tips-image style="width:60px;height:60px;border-radius:50%;" src="{$vo.headimgurl|default=''}" onerror="$(this).remove()" class="margin-right-5 text-top"></td>
             <td class='text-center nowrap'>{$vo.nickname|default='-'}</td>
