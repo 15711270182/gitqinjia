@@ -227,12 +227,17 @@ class User extends Base
         $subscribe = Db::name('wechat_fans')->where(['unionid'=>$unionid])->value('subscribe');
         $subscribe = !empty($subscribe)?1:0;
         $userinfo = UserModel::userFind(['id'=>$uid]);
-        if($nickname != $userinfo['nickname']){
-            UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname]);
+        if(!empty($nickname)){
+            if($nickname != $userinfo['nickname']){
+                UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname]);
+            }
         }
-        if($headimgurl != $userinfo['headimgurl']){
-            UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl]);
+        if(!empty($headimgurl)){
+            if($headimgurl != $userinfo['headimgurl']){
+                UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl]);
+            }
         }
+        
         //数据转化
         $data = $this->userchange($children);
         $data['is_vip'] = 0;
