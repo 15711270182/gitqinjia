@@ -229,12 +229,14 @@ class User extends Base
         $userinfo = UserModel::userFind(['id'=>$uid]);
         if(!empty($nickname)){
             if($nickname != $userinfo['nickname']){
-                UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname]);
+                UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname,'share_get_poster'=>'']);
+                cache('shareposter-'.$uid,NULL);
             }
         }
         if(!empty($headimgurl)){
             if($headimgurl != $userinfo['headimgurl']){
-                UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl]);
+                UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl,,'share_get_poster'=>'']);
+                cache('shareposter-'.$uid,NULL);
             }
         }
         
