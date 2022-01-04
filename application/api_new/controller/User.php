@@ -235,7 +235,7 @@ class User extends Base
         }
         if(!empty($headimgurl)){
             if($headimgurl != $userinfo['headimgurl']){
-                UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl,,'share_get_poster'=>'']);
+                UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl,'share_get_poster'=>'']);
                 cache('shareposter-'.$uid,NULL);
             }
         }
