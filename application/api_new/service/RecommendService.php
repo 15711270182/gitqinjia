@@ -733,7 +733,7 @@ class RecommendService
         //查询用户父母的名称
         $pare = UserModel::userFind(['id'=>$value['uid']]);
         $user['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';
-        $user['headimgurl'] = $pare['headimgurl'];
+        $user['headimgurl'] = !empty($pare['headimgurl'])?$pare['headimgurl']:'https://pics.njzec.com/default.png';
         $user['user_sex'] = $pare['sex'];
         $user['user_status'] = $pare['status'];
         $user['sex'] = $value['sex'];
