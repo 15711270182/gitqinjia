@@ -84,7 +84,7 @@ class Index extends Base
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
     /**
-     * @Notes:首页推荐 登录情况下
+     * @Notes:首页推荐 登录情况下  已认证
      * @Interface home
      * @return string
      * @author: zy
@@ -170,6 +170,86 @@ class Index extends Base
         // }
         return $this->successReturn($data,'成功',self::errcode_ok);
     }
+
+    /**
+     * @Notes:首页推荐 登录情况下  未认证
+     * @Interface home_unauthorized
+     * @return string
+     * @author: zy
+     * @Time: 2022/01/04
+     */
+    public function home_unauthorized()
+    {
+        $uid = $this->uid;
+        $page = input('page', 1, 'intval');
+        $pageSize = input('pageSize', 10, 'intval');
+        
+        $rec = new RecommendService();
+        $data = $rec->getRecommendNewUnAuth($uid,$page,$pageSize);
+        //是否关注公众号
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at is not null";
+        $is_gz = UserModel::wxFind($where_wx);
+        $is_wechat = !empty($is_gz)?1:0;
+        $data['is_wechat'] = $is_wechat;
+        //判断资料是否完善
+        $field_c = 'native_place,education,work,income,school,house,cart,expect_education,parents,bro,min_age,min_height';
+        $cInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_c);
+        $info = array_values($cInfo);
+        $info_status = 1; //资料完善
+        foreach($info as $k=>$v){
+            if(empty($v)){
+                 $info_status = 0; //资料未完善
+                 break;
+            }
+        }
+        if($info_status == 1){
+            $realname = UserModel::userValue(['id'=>$uid],'realname');
+            if(empty($realname)){
+                $info_status = 0; //资料未完善
+            }
+        }
+        $data['info_status'] = $info_status;
+        //判断择偶标准相亲说明是否完善
+        $field_e = 'remarks,expect_education,min_age,min_height';
+        $eInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_e);
+        $eInfo = array_values($eInfo);
+        $info_exp_status = 1; //资料完善
+        foreach($eInfo as $k=>$v){
+            if(empty($v)){
+                 $info_exp_status = 0; //资料未完善
+                 break;
+            }
+        }
+        $data['info_exp_status'] = $info_exp_status;
+
+        $field_a = 'auth_status,id_name,id_number,search_auth';
+        $ccInfo = ChildrenModel::childrenFind(['uid'=>$uid],$field_a);
+        //实名认证状态   1已实名  2未支付未实名  3已支付未填写身份信息  4 已支付人脸未通过（暂无）
+        switch ($ccInfo['auth_status']) {
+            case '1':
+                $data['auth_status'] = 1;
+                break;
+            default:
+                //判断88是否支付
+                $oInfo = OrderModel::orderFind(['uid'=>$uid,'status'=>1,'source'=>2]);
+                if($oInfo){
+                    if(empty($ccInfo['id_name']) && empty($ccInfo['id_number'])){
+                        $data['auth_status'] = 3;
+                    }else{
+                        $data['auth_status'] = 4;
+                    }
+                }else{
+                    $data['auth_status'] = 2;
+                }
+                break;
+        }
+        $data['search_auth'] = $ccInfo['search_auth'];
+        //取用户需要的支付的类型 1:购买会员 2：购买次数
+        $paytype = $userinfo['paytype'];
+        $data['paytype'] = $paytype;
+        return $this->successReturn($data,'成功',self::errcode_ok);
+    }
     /**
      * @Notes:首页未登录情况下拉取用户信息
      * @Interface getuserlist
@@ -204,7 +284,6 @@ class Index extends Base
         if(empty($bid)){
             return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
         }
-
         $children = ChildrenModel::childrenFind(['uid'=>$bid]);
         if(empty($children)){
             return $this->errorReturn(self::errcode_fail);
@@ -215,7 +294,7 @@ class Index extends Base
             $info_save['bid'] = $bid;
             $info_save['create_time'] = date('Y-m-d H:i:s');
             Db::name('view_info_record')->insertGetId($info_save);
-            if($uid != '354' || $uid != '1234' || $uid != '677' || $uid != '2210'){
+            if($uid != 354 && $uid != 1234 && $uid != 677 && $uid != 2210){
                 $cache_bid = cache($uid.'_look_'.$bid);
                 if(empty($cache_bid)){ //缓存没有  推送模板
                     //发送访客记录模板
