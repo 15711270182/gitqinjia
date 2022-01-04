@@ -442,7 +442,7 @@ class Index extends Base
         //子女信息
         $userinfo = UserModel::userFind(['id'=>$bid]);
         $children['realname'] = $userinfo['realname'];
-        $children['headimgurl'] = $userinfo['headimgurl'];
+        $children['headimgurl'] = !empty($userinfo['headimgurl'])?$userinfo['headimgurl']:'https://pics.njzec.com/default.png';
         $children['sui'] = date('Y') - $children['year'];
         $children['shuxiang'] = getShuXiang($children['year']);
         $children['year'] = substr($children['year'],-2).'年';
@@ -1027,7 +1027,7 @@ class Index extends Base
         $user['first'] = isset($xing)?$xing.'家长':'家长';
         $user['two'] = $two;
         $user['three'] = substr($three,0,3).' '.substr($three,3,4).' '.substr($three,7,4);
-        $user['four'] = $userinfo['headimgurl'];
+        $user['four'] = !empty($userinfo['headimgurl'])?$userinfo['headimgurl']:'https://pics.njzec.com/default.png';
         return $user;
     }
     /**

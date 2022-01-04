@@ -298,7 +298,7 @@ class User extends Base
         }
         $userinfo = UserModel::userFind(['id'=>$uid]);
         $children['realname'] = $userinfo['realname'];
-        $children['headimgurl'] = $userinfo['headimgurl'];
+        $children['headimgurl'] = !empty($userinfo['headimgurl'])?$userinfo['headimgurl']:'https://pics.njzec.com/default.png';
         $children['sex_test'] = $children['sex']==1?'男':'女';
         $children['phone'] = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $children['phone']);
         $children['education_test'] = UsersService::education($children['education']);
@@ -982,7 +982,7 @@ class User extends Base
         //查询用户父母的名称
         $pare = UserModel::userFind(['id'=>$value['uid']]);
         $user['realname'] = $pare['realname']?$pare['realname'].'家长':'家长';
-        $user['headimgurl'] = $pare['headimgurl'];
+        $user['headimgurl'] = !empty($pare['headimgurl'])?$pare['headimgurl']:'https://pics.njzec.com/default.png';
         $user['user_sex'] = $pare['sex'];
         $user['user_status'] = $pare['status'];
         $user['sex'] = $value['sex'];
