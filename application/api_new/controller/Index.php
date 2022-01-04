@@ -204,6 +204,7 @@ class Index extends Base
         if(empty($bid)){
             return $this->errorReturn(self::errcode_fail,'bid参数不能为空');
         }
+
         $children = ChildrenModel::childrenFind(['uid'=>$bid]);
         if(empty($children)){
             return $this->errorReturn(self::errcode_fail);
@@ -214,41 +215,55 @@ class Index extends Base
             $info_save['bid'] = $bid;
             $info_save['create_time'] = date('Y-m-d H:i:s');
             Db::name('view_info_record')->insertGetId($info_save);
-            //发送访客记录模板
-            $b_userinfo = UserModel::userFind(['id'=>$bid]);
-            $where_x = [];
-            $where_x['unionid'] = $b_userinfo['unionid'];
-            $where_x['subscribe'] = 1;
-            $mini_user = UserModel::wxFind($where_x);
-            if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+            if($uid != '354' || $uid != '1234' || $uid != '677' || $uid != '2210'){
+                $cache_bid = cache($uid.'_look_'.$bid);
+                if(empty($cache_bid)){ //缓存没有  推送模板
+                    //发送访客记录模板
+                    $b_userinfo = UserModel::userFind(['id'=>$bid]);
+                    $where_x = [];
+                    $where_x['unionid'] = $b_userinfo['unionid'];
+                    $where_x['subscribe'] = 1;
+                    $mini_user = UserModel::wxFind($where_x);
+                    if($mini_user && $mini_user['status'] == 1){ //用户关注 非注销 发送模板消息
+                        $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
+                        $phone = substr_cut_phone($uuInfo['phone']);
+                        $nickname = UserModel::userValue(['id'=>$uid],'nickname');
+                        if(!empty($nickname)){
+                            $page = 'pages/details/details?id='.$uid;
+                            $pagepath = 'pages/details/details?id='.$uid;
+                        }else{
+                            $nickname = '匿名用户';
+                            $page = 'pages/home/home';
+                            $pagepath = 'pages/home/home';
+                        }
 
-                $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
-                $phone = substr_cut_phone($uuInfo['phone']);
-
-                $nickname = UserModel::userValue(['id'=>$uid],'nickname');
-                $nickname = !empty($nickname)?$nickname:'匿名用户';
-
-                $openid = $mini_user['openid'];
-                $tip = '访客来访提醒';
-                $remark = '点击进入"完美亲家"小程序';
-                $temp_id = 'xVzOzhbKvh4lQSUeizI9M0rdQzeTiuQ7s3hnDme1_mA';
-                $arr = array();
-                $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
-                $arr['keyword1'] = array('value'=>$nickname,'color'=>'#FF0000');
-                $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
-                $arr['keyword3'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
-                $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
-                $param = [
-                    'touser'=>$openid,
-                    'template_id'=>$temp_id,
-                    'page'=>'pages/details/details?id='.$uid,
-                    'data'=>$arr,
-                    'miniprogram' => [
-                        'pagepath'=>'pages/details/details?id='.$uid,
-                        'appid'=>'wx70d65d2170dbacd7',
-                    ],
-                ];
-                $res = $this->shiwuSendMsg($param);
+                        $openid = $mini_user['openid'];
+                        $tip = '访客来访提醒';
+                        $remark = '点击进入"完美亲家"小程序';
+                        $temp_id = 'xVzOzhbKvh4lQSUeizI9M0rdQzeTiuQ7s3hnDme1_mA';
+                        $arr = array();
+                        $arr['first'] = array('value'=>$tip,'color'=>'#FF0000');
+                        $arr['keyword1'] = array('value'=>$nickname,'color'=>'#FF0000');
+                        $arr['keyword2'] = array('value'=>$phone,'color'=>'#0000ff');
+                        $arr['keyword3'] = array('value'=>date('Y-m-d H:i:s'),'color'=>'#0000ff');
+                        $arr['remark'] = array('value'=>$remark,'color'=>'#0000ff');
+                        $param = [
+                            'touser'=>$openid,
+                            'template_id'=>$temp_id,
+                            'page'=>$page,
+                            'data'=>$arr,
+                            'miniprogram' => [
+                                'pagepath'=>$pagepath,
+                                'appid'=>'wx70d65d2170dbacd7',
+                            ],
+                        ];
+                        $res = $this->shiwuSendMsg($param);
+                        if($res == true){
+                            //24小时之内 查看过的人只发一次
+                            cache($uid.'_look_'.$bid,$bid,24*3600);
+                        }
+                    }
+                }
             }
         }
         $where_t['uid'] = $uid;
