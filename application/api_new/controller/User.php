@@ -216,6 +216,8 @@ class User extends Base
     public function meInformation()
     {
         $uid = $this->uid;
+        $nickname = input("nickname", '', 'htmlspecialchars_decode');
+        $headimgurl = input("headimgurl", '', 'htmlspecialchars_decode');
         $field = 'uid,sex,year,height,residence,native_place,hometown,education,work,income,remarks,house,cart,school,parents,bro,balance,auth_status';
         $children = ChildrenModel::childrenFind(['uid'=>$uid],$field);
         if(empty($children)){
@@ -224,9 +226,15 @@ class User extends Base
         $unionid = UserModel::userValue(['id'=>$uid],'unionid');
         $subscribe = Db::name('wechat_fans')->where(['unionid'=>$unionid])->value('subscribe');
         $subscribe = !empty($subscribe)?1:0;
+        $userinfo = UserModel::userFind(['id'=>$uid]);
+        if($nickname != $userinfo['nickname']){
+            UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname]);
+        }
+        if($headimgurl != $userinfo['headimgurl']){
+            UserModel::userEdit(['id'=>$uid],['headimgurl'=>$headimgurl]);
+        }
         //数据转化
         $data = $this->userchange($children);
-        $userinfo = UserModel::userFind(['id'=>$uid]);
         $data['is_vip'] = 0;
         $data['endtime'] = '';
         if($userinfo['is_vip'] == 1 && $userinfo['endtime'] >= time()){

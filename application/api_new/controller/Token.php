@@ -132,8 +132,8 @@ class Token extends Base
     public function checkLoginStatus()
     {
         $session3rd = input("session3rd", '', 'htmlspecialchars_decode');
-        $nickname = input("nickname", '', 'htmlspecialchars_decode');
-        $headimgurl = input("headimgurl", '', 'htmlspecialchars_decode');
+        // $nickname = input("nickname", '', 'htmlspecialchars_decode');
+        // $headimgurl = input("headimgurl", '', 'htmlspecialchars_decode');
         $info = cache(config('wechat.miniapp.appid') . '_SESSION__' . $session3rd);
         if (empty($info)) {
             return $this->errorReturn(self::errcode_login_fail, '用户登陆失效');
@@ -141,12 +141,12 @@ class Token extends Base
         if (!array_key_exists('openid', $info) || empty($info)) {
             return $this->errorReturn(self::errcode_login_fail, '用户登陆失效,需重新登陆');
         }
-        if(isset($info['uid'])){
-            $update = [];
-            $update['nickname'] = $nickname;
-            $update['headimgurl'] = $headimgurl;
-            UserModel::userEdit(['id'=>$info['uid']],$update);
-        }
+        // if(isset($info['uid'])){
+        //     $update = [];
+        //     $update['nickname'] = $nickname;
+        //     $update['headimgurl'] = $headimgurl;
+        //     UserModel::userEdit(['id'=>$info['uid']],$update);
+        // }
         return $this->successReturn('', '登陆有效', self::errcode_ok);
     }
 
