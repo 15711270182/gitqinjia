@@ -218,6 +218,7 @@ class User extends Base
         $uid = $this->uid;
         $nickname = input("nickname", '', 'htmlspecialchars_decode');
         $headimgurl = input("headimgurl", '', 'htmlspecialchars_decode');
+        $switch_auth = input("switch_auth", '', 'htmlspecialchars_decode');
         $field = 'uid,sex,year,height,residence,native_place,hometown,education,work,income,remarks,house,cart,school,parents,bro,balance,auth_status';
         $children = ChildrenModel::childrenFind(['uid'=>$uid],$field);
         if(empty($children)){
@@ -227,6 +228,9 @@ class User extends Base
         $subscribe = Db::name('wechat_fans')->where(['unionid'=>$unionid])->value('subscribe');
         $subscribe = !empty($subscribe)?1:0;
         $userinfo = UserModel::userFind(['id'=>$uid]);
+        if($switch_auth == 2){ //弹框开关关闭
+            UserModel::userEdit(['id'=>$uid],['switch_auth'=>0]);
+        }
         if(!empty($nickname)){
             if($nickname != $userinfo['nickname']){
                 UserModel::userEdit(['id'=>$uid],['nickname'=>$nickname,'share_get_poster'=>'']);
