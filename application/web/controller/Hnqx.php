@@ -23,6 +23,7 @@ class Hnqx extends Controller
         $info = $this->fans;
         $map['openid'] = $info['openid'];
         $is_have = Db::name('wechat_fans')->where($map)->find();
+        custom_log('公众号支付',print_r($is_have,true));
         if ($is_have) {
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
