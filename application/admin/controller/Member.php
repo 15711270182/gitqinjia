@@ -175,7 +175,7 @@ class Member extends Controller
         if($is_vip == 2){
             $where .= " and u.endtime < '{$time}'";
         }
-        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,c.auth_status,
+        $field = "u.pair_last_num,u.id,u.nickname,u.headimgurl,u.is_vip,u.add_time,u.endtime,u.count,u.status,u.switch_auth,c.expect_education,c.min_age,c.min_height,c.id as cid,c.phone,c.auth_status,
         c.sex as xingbie,c.is_ban,c.year,c.province,c.residence,c.team_status,c.weight_score,c.remarks_text,(select count(*) from tel_collection t where t.bid = c.uid and t.status=1) as look_tel";
         $equal = 'u.id#id,u.nickname#nickname,c.phone#phone,c.sex#sex,u.status#status,c.education#education,c.year#year,c.team_status#team_status,c.cart#cart,c.house#house,c.hometown#hometown';
         $this->_query($this->table)
@@ -268,11 +268,19 @@ class Member extends Controller
     {
         $id = input("id", '', 'htmlspecialchars_decode');
         $map = ['uid' => $id];
-        $realname = Db::name('userinfo')->where(['id'=>$id])->value('realname');
-        $pair_last_num = Db::name('userinfo')->where(['id'=>$id])->value('pair_last_num');
-        $count = Db::name('userinfo')->where(['id'=>$id])->value('count');
-        $is_vip = Db::name('userinfo')->where(['id'=>$id])->value('is_vip');
-        $endtime = Db::name('userinfo')->where(['id'=>$id])->value('endtime');
+        // $realname = Db::name('userinfo')->where(['id'=>$id])->value('realname');
+        // $pair_last_num = Db::name('userinfo')->where(['id'=>$id])->value('pair_last_num');
+        // $count = Db::name('userinfo')->where(['id'=>$id])->value('count');
+        // $is_vip = Db::name('userinfo')->where(['id'=>$id])->value('is_vip');
+        // $endtime = Db::name('userinfo')->where(['id'=>$id])->value('endtime');
+        $field_u = 'realname,pair_last_num,count,is_vip,endtime,switch_auth';
+        $uuInfo = Db::name('userinfo')->field($field_u)->where(['id'=>$id])->find();
+        $realname = $uuInfo['realname'];
+        $pair_last_num = $uuInfo['pair_last_num'];
+        $count = $uuInfo['count'];
+        $is_vip = $uuInfo['is_vip'];
+        $endtime = $uuInfo['endtime'];
+        $switch_auth = $uuInfo['switch_auth'];
         $Children = Db::name('Children')->where($map)->find();
         if ($Children['sex'] == 1){
             $Children['sex_name'] = '男';
@@ -344,6 +352,7 @@ class Member extends Controller
         $this->count = $count;
         $this->pair_last_num = $pair_last_num;
         $this->realname = $realname;
+        $this->switch_auth = $switch_auth;
         $this->sex_list = $sex_list;
         $this->children = $Children;
         $this->car_list = $car_list;
@@ -387,10 +396,12 @@ class Member extends Controller
         }
         $save_user['count'] = $params['count'];
         $save_user['realname'] = $realname;
+        $save_user['switch_auth'] = $params['switch_auth'];
         $save_user['update_time'] = date('Y-m-d H:i::s');
         $uid = DB::name('children')->where(['id'=>$id])->value('uid');
         $res1 = DB::name('userinfo')->where(['id'=>$uid])->update($save_user);
         unset($params['count']);
+        unset($params['switch_auth']);
         //头像
         $slider = $this->request->post('slider');
         $img_arr = [];

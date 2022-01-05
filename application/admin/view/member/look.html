@@ -157,6 +157,20 @@
             </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs11 relative">
+                <span class="color-green">是否弹框授权:</span>
+                <select class="layui-select" name="switch_auth" lay-search>
+                    {foreach ['0' => '否', '1' => '是'] as $k => $v}
+                    {if $switch_auth eq $k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
             <label class="layui-col-xs11 relative">上传个人图片:</label>
             <div class="layui-input-inline margin-right-0" style="width:800px">
                 <input name="slider" type="hidden" value="{$slider|default=''}">
