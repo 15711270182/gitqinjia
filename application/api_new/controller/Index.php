@@ -100,6 +100,7 @@ class Index extends Base
         $data = $rec->getRecommendNew($uid,$page,$pageSize);
         //是否关注公众号
         $userinfo = UserModel::userFind(['id'=>$uid]);
+        $data['switch_auth'] = $userinfo['switch_auth'];
         $where_wx = "unionid = '{$userinfo['unionid']}' and subscribe_at is not null";
         $is_gz = UserModel::wxFind($where_wx);
         $is_wechat = !empty($is_gz)?1:0;

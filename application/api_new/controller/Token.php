@@ -105,6 +105,8 @@ class Token extends Base
         $data['province'] = $user_data['province'];
         $data['city'] = $user_data['city'];
         $data['unionid'] = $unionid;
+        $data['openid'] = $openid;
+        $data['switch_auth'] = 0;
         // $is_have = UserModel::userFind(['openid' => $openid]);
         $is_have = UserModel::userFind(['unionid' => $unionid]);
         if ($is_have) {
