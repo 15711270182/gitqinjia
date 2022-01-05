@@ -51,7 +51,7 @@ class Token extends Base
                 if(empty($is_have['openid'])){
                     $save_jm = [];
                     $save_jm['openid'] = $openid;
-                    UserModel::userEdit(['id' => $is_have['id']]);
+                    UserModel::userEdit(['id' =>$is_have['id']],$save_jm);
                 }
             }
             $result['member']  = TokenService::get($result['openid'],config('wechat.miniapp.appid'));
