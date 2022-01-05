@@ -46,6 +46,14 @@ class Token extends Base
         $unionid = isset($result['unionid']) ? $result['unionid'] : '';
         //检测静默授权
         if (empty($rawData) || empty($signature) || empty($encryptedData) || empty($iv)) {
+            $is_have = UserModel::userFind(['unionid' => $unionid]);
+            if($is_have){ //公众号支付的用户 无openid
+                if(empty($is_have['openid'])){
+                    $save_jm = [];
+                    $save_jm['openid'] = $openid;
+                    UserModel::userEdit(['id' => $is_have['id']]);
+                }
+            }
             $result['member']  = TokenService::get($result['openid'],config('wechat.miniapp.appid'));
             if(!$result['member']){
                 $userInfo = UserModel::userFind(['openid' => $openid],'id as uid,openid,unionid');
@@ -97,7 +105,8 @@ class Token extends Base
         $data['province'] = $user_data['province'];
         $data['city'] = $user_data['city'];
         $data['unionid'] = $unionid;
-        $is_have = UserModel::userFind(['openid' => $openid]);
+        // $is_have = UserModel::userFind(['openid' => $openid]);
+        $is_have = UserModel::userFind(['unionid' => $unionid]);
         if ($is_have) {
             UserModel::userEdit(['id' => $is_have['id']],$data);
             $data = [];

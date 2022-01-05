@@ -26,28 +26,30 @@ class Hnqx extends Controller
         if ($is_have) {
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
-            if ($uid) {
-                $json_data['uid'] = $uid;
-                $json_data['openid'] =  $info['openid'];
-                $json_data['price'] = $money;
-                $temp = $json_data;
-                ksort($temp);
-                reset($temp);
-                $tempStr = "";
-                foreach ($temp as $key => $value) {
-                    $tempStr .= $key . "=" . $value . "&";
-                }
-                $tempStr = substr($tempStr, 0, -1);
-                $json_data['signature'] = md5($tempStr);
-
-                $url = 'https://testqin.njzec.com/h5/hnqx/openVip?json_data='.json_encode($json_data);
-                header("Location:" . $url);
-                die;
-            }else{
-                $url = 'https://testqin.njzec.com/h5/hnqx/stip';
-                header("Location:" . $url);
-                die;
+            if(empty($uid)){
+                $data = [];
+                $data['paytype'] = 2; //默认次数
+                $data['unionid'] = $unionid;
+                $data['appid'] = config('wechat.miniapp.appid');
+                $data['add_time'] = time();
+                $uid = Db::name('userinfo')->insertGetId($data);
             }
+            $json_data['uid'] = $uid;
+            $json_data['openid'] =  $info['openid'];
+            $json_data['price'] = $money;
+            $temp = $json_data;
+            ksort($temp);
+            reset($temp);
+            $tempStr = "";
+            foreach ($temp as $key => $value) {
+                $tempStr .= $key . "=" . $value . "&";
+            }
+            $tempStr = substr($tempStr, 0, -1);
+            $json_data['signature'] = md5($tempStr);
+
+            $url = 'https://testqin.njzec.com/h5/hnqx/openVip?json_data='.json_encode($json_data);
+            header("Location:" . $url);
+            die;
         }
         $scope = 'snsapi_userinfo';//snsapi_userinfo
         $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/hnqx/authBack';
