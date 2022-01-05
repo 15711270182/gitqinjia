@@ -295,7 +295,7 @@ class Index extends Base
             $info_save['bid'] = $bid;
             $info_save['create_time'] = date('Y-m-d H:i:s');
             Db::name('view_info_record')->insertGetId($info_save);
-            if($uid != 354 && $uid != 1234 && $uid != 677 && $uid != 2210){
+            if($uid != 354 && $uid != 1234 && $uid != 677 && $uid != 2210 && $uid != 1001){
                 $cache_bid = cache($uid.'_look_'.$bid);
                 if(empty($cache_bid)){ //缓存没有  推送模板
                     //发送访客记录模板
