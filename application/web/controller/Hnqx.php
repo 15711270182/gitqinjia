@@ -24,7 +24,7 @@ class Hnqx extends Controller
         $map['openid'] = $info['openid'];
         $is_have = Db::name('wechat_fans')->where($map)->find();
         custom_log('公众号支付',print_r($is_have,true));
-        if ($is_have) {
+        if ($is_have && !empty($is_have['unionid'])) {
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
             if(empty($uid)){
@@ -53,7 +53,7 @@ class Hnqx extends Controller
             die;
         }
         $scope = 'snsapi_userinfo';//snsapi_userinfo
-        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/hnqx/authBack';
+        $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/hnqx/authBack?money='.$money;
         $url = \We::WeChatOauth(config('wechat.wechat'))->getOauthRedirect($stip, '', $scope);
         header("Location:" . $url);
         exit;
@@ -154,6 +154,8 @@ class Hnqx extends Controller
     //授权
     public function authBack()
     {
+        $money = input('money');
+        custom_log('公众号授权',print_r($money,true));
         $json_obj = \We::WeChatOauth(config('wechat.wechat'))->getOauthAccessToken();
         $access_token = $json_obj['access_token'];
         $openid = $json_obj['openid'];
@@ -183,15 +185,39 @@ class Hnqx extends Controller
         }
         $unionid = $is_have['unionid'];
         $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
-        if ($uid) {
-
-            $url = 'https://testqin.njzec.com/h5/hnqx/openVip?uid=' . $uid . '&openid=' . $openid;
-            header("Location:" . $url);
-            die;
-        } else {
-            echo "<script> alert('请先使用我们的小程序') </script>";
-            die;
+        if(empty($uid)){
+            $data = [];
+            $data['paytype'] = 2; //默认次数
+            $data['unionid'] = $unionid;
+            $data['appid'] = config('wechat.miniapp.appid');
+            $data['add_time'] = time();
+            $uid = Db::name('userinfo')->insertGetId($data);
         }
+        $json_data['uid'] = $uid;
+        $json_data['openid'] =  $openid;
+        $json_data['price'] = $money;
+        $temp = $json_data;
+        ksort($temp);
+        reset($temp);
+        $tempStr = "";
+        foreach ($temp as $key => $value) {
+            $tempStr .= $key . "=" . $value . "&";
+        }
+        $tempStr = substr($tempStr, 0, -1);
+        $json_data['signature'] = md5($tempStr);
+
+        $url = 'https://testqin.njzec.com/h5/hnqx/openVip?json_data='.json_encode($json_data);
+        header("Location:" . $url);
+        die;
+        // if ($uid) {
+
+        //     $url = 'https://testqin.njzec.com/h5/hnqx/openVip?uid=' . $uid . '&openid=' . $openid;
+        //     header("Location:" . $url);
+        //     die;
+        // } else {
+        //     echo "<script> alert('请先使用我们的小程序') </script>";
+        //     die;
+        // }
     }
 
 
