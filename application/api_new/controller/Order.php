@@ -357,25 +357,27 @@ class Order extends Base
                     custom_log('payorder','支付'.print_r($res,true));
                 }
             // }
-            //判断该用户是否有邀请人 如有 奖励邀请人40% 添加明细
-            $rInfo = Relation::relationFind(['uid'=>$orderInfo['uid']]);
-            custom_log('test111','代理id'.print_r($rInfo,true));
-            if(!empty($rInfo)){
-                //添加明细
-                $awards_money = $orderInfo['payment']*0.4;
-                $nickname = UserModel::userValue(['id'=>$orderInfo['uid']],'nickname');
-                $remark = '好友'.$nickname.'支付'.($orderInfo['payment']/100).'元,获得奖励'.($awards_money/100).'元' ;
-                $aw_add['uid'] = $orderInfo['uid'];
-                $aw_add['bid'] = $rInfo['bid'];
-                $aw_add['oid'] = $orderInfo['id'];
-                $aw_add['pay_time'] = date('Y-m-d H:i:s',$orderInfo['pay_time']);
-                $aw_add['total_money'] = $orderInfo['payment'];
-                $aw_add['awards_money'] = $awards_money;
-                $aw_add['order_type'] = $goods['type'];
-                $aw_add['create_time'] = date('Y-m-d H:i:s');
-                $aw_add['remark'] = $remark;
-                DB::name('invite_awards')->insertGetId($aw_add);
-                DB::name('children')->where(['uid'=>$rInfo['bid']])->setInc('balance',$awards_money);
+            //判断该用户是否有邀请人 如有 奖励邀请人40% 添加明细  不包括诚意金
+            if($orderInfo['source'] != 2){
+                $rInfo = Relation::relationFind(['uid'=>$orderInfo['uid']]);
+                custom_log('test111','代理id'.print_r($rInfo,true));
+                if(!empty($rInfo)){
+                    //添加明细
+                    $awards_money = $orderInfo['payment']*0.4;
+                    $nickname = UserModel::userValue(['id'=>$orderInfo['uid']],'nickname');
+                    $remark = '好友'.$nickname.'支付'.($orderInfo['payment']/100).'元,获得奖励'.($awards_money/100).'元' ;
+                    $aw_add['uid'] = $orderInfo['uid'];
+                    $aw_add['bid'] = $rInfo['bid'];
+                    $aw_add['oid'] = $orderInfo['id'];
+                    $aw_add['pay_time'] = date('Y-m-d H:i:s',$orderInfo['pay_time']);
+                    $aw_add['total_money'] = $orderInfo['payment'];
+                    $aw_add['awards_money'] = $awards_money;
+                    $aw_add['order_type'] = $goods['type'];
+                    $aw_add['create_time'] = date('Y-m-d H:i:s');
+                    $aw_add['remark'] = $remark;
+                    DB::name('invite_awards')->insertGetId($aw_add);
+                    DB::name('children')->where(['uid'=>$rInfo['bid']])->setInc('balance',$awards_money);
+                }
             }
             
             return xml(['return_code' => 'SUCCESS', 'return_msg' => '处理成功！']);

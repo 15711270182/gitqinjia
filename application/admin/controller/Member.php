@@ -93,16 +93,26 @@ class Member extends Controller
         $where = "u.unionid <> ''";
         if($type_c){
             switch ($content) { //内容筛选
-                case '1':$where .= " and u.id = {$type_c}";break;
+                case '1':
+                        if(is_numeric($type_c)){
+                            $where .= " and u.id = {$type_c}";
+                        }else{
+                            $this->error('请输入正确的格式,不支持中文');
+                        }
+                        break;
                 case '2':$where .= " and u.nickname like '%{$type_c}%'";break;
                 case '3':$where .= " and c.phone = {$type_c}";break;
                 case '4':
-                    $uid = DB::name('relation')->where(['bid'=>$type_c])->column('uid');
-                    if(!empty($uid)){
-                        $uid = implode(',',$uid);
-                        $where .=" and u.id in ({$uid})";
+                    if(is_numeric($type_c)){
+                        $uid = DB::name('relation')->where(['bid'=>$type_c])->column('uid');
+                        if(!empty($uid)){
+                            $uid = implode(',',$uid);
+                            $where .=" and u.id in ({$uid})";
+                        }else{
+                            $where .=" and u.id  = ''";
+                        }
                     }else{
-                        $where .=" and u.id  = ''";
+                        $this->error('请输入正确的格式,不支持中文');
                     }
                     break;
                 default:break;

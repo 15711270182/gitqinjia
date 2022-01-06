@@ -196,40 +196,47 @@ class RecommendService
         
         $residence = str_replace(['省','市'],'',$user_info['residence']);
         $switch = DB::name('city_switch')->where(['city'=>$residence])->value('is_show');
-        if($switch == 1){ //只展示该区域数据
+        if($switch == 1){ //开关 只展示该区域数据
             $condition['residence'] = $user_info['residence'];
             $where_match = $this->getWhereMatch($uid,0);
-            // var_dump($where_match);die;
             $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
             $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
-            // var_dump($totalCount);die;
+            
             $data = [];
             $data['totalCountAll'] = $totalCount;
             $data['totalPageAll'] = $totalPage;
-
-            //精准
+            //区域精准
             $where_match = $this->getWhereMatch($uid,1); 
-            // var_dump($where_match);
             $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
-            // var_dump(count($totalMatchList));
+            // var_dump(count($totalMatchList));die;
             $matchCount = count($totalMatchList);
             $count_match = $count_pageSize - $matchCount;
-            if($count_match == 0){ //有区域精准条件 无需补全
+            if($count_match == 0){ //区域精准条件 无需补全
                 $re_list = $this->getDataList($totalMatchList);
                 $data['list'] = $re_list;
                 return $data;
             }
-            //所有精准的数据 uid 排除
+            //所有精准的数据 排除  计算精准的最后一页需补全的值
+            $lastLimit = 0;
+            $lastCount = 0;
+            $not_id_arr = [];
             $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
-            //非精准
-            $not_id_arr = array_column($jzDataList, 'uid');
+            if(!empty($jzDataList)){
+                $lastLimit = ceil(count($jzDataList) / $count_pageSize); //精准数据总页数 
+                $lastCount = ($lastLimit * $count_pageSize) - count($jzDataList); //需补全的值
+                // var_dump(count($lastCount));
+                $not_id_arr = array_column($jzDataList, 'uid');
+            }
             // var_dump($not_id_arr);
             $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
-            if($count_match != $pageSize){
+            if($count_match != $count_pageSize){
                 $limit = 0;
-                $pageSize = $count_match;
+            }else{
+                $limit = ($page - $lastLimit - 1) * $count_pageSize + $lastCount; 
             }
-
+            $pageSize = $count_match;
+            // var_dump($limit);
+            // var_dump($pageSize);
             $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
             $list = array_merge($totalMatchList, $totalOtherList);
             $re_list = $this->getDataList($list);
@@ -237,7 +244,7 @@ class RecommendService
             return $data;
 
         }
-        //不完全展示该区域
+        //不完全展示该区域 
         $where_match = $this->getWhereMatch($uid,0); //获取条件  1精准  2非精准 0全部
         $totalCountAll = Db::name('children')->where($condition)->where($where_match)->count(); //已认证总条数
         $totalPageAll = ceil($totalCountAll / $pageSize); //已认证总页数
@@ -245,7 +252,7 @@ class RecommendService
         $data = [];
         $data['totalCountAll'] = $totalCountAll;
         $data['totalPageAll'] = $totalPageAll;
-        //区域条件
+        //区域条件  
         $condition['residence'] = $user_info['residence'];
         $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
         $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
@@ -261,6 +268,7 @@ class RecommendService
         }
         // 区域有数据 匹配区域的情况下   1.区域精准    2.区域非精准  3.非区域查询
         $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
+        // var_dump(DB::name('children')->getLastsql());
         // var_dump($totalMatchList);die;
         $matchCount = count($totalMatchList);
         $count_match = $count_pageSize - $matchCount;
@@ -269,18 +277,27 @@ class RecommendService
             $data['list'] = $re_list;
             return $data;
         }
-        //所有精准的数据 uid 排除
+        //所有精准的数据 排除 精准最后一页是否需要补数据值
+        $lastLimit = 0;
+        $lastCount = 0;
+        $not_id_arr = [];
         $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
-        //精准匹配数据不全/无精准数据 查询区域下其他数据
-        $not_id_arr = array_column($jzDataList, 'uid');
-        // var_dump($not_id_arr);
-        $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
-        if($count_match != $pageSize){
-            $limit = 0;
-            $pageSize = $count_match;
+        if(!empty($jzDataList)){
+            $lastLimit = ceil(count($jzDataList) / $count_pageSize); //精准数据总页数
+            $lastCount = ($lastLimit * $count_pageSize) - count($jzDataList); //补全的值
+            // var_dump(count($lastCount));
+            $not_id_arr = array_column($jzDataList, 'uid');
         }
+        $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
+        if($count_match != $count_pageSize){
+            $limit = 0;
+        }else{
+            $limit = ($page - $lastLimit - 1)*$count_pageSize + $lastCount; 
+        }
+        $pageSize = $count_match;
 
         $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
+        // var_dump(DB::name('children')->getLastsql());
         $otherCount = count($totalOtherList);
         // var_dump($otherCount);
         $count_other = $count_pageSize - $matchCount - $otherCount;
@@ -291,17 +308,24 @@ class RecommendService
             $data['list'] = $re_list;
             return $data;
         }
-
+        //区域总页数 最后一条需要补得数据值
+        $CityLastCount = ($totalPage * $count_pageSize) - $totalCount;
+        // var_dump($CityLastCount);
+        $CityLastLimit = $totalPage;
+        // var_dump($CityLastLimit);
         //列表中 其他数据不全 补全非区域
-        if($count_other != $pageSize){
+        if($count_other != $count_pageSize){
             $limit = 0;
-            $pageSize = $count_other;
+        }else{
+            $limit = ($page - $CityLastLimit - 1)*$count_pageSize + $CityLastCount; 
         }
+        $pageSize = $count_other;
+        // var_dump($limit);
+        // var_dump($pageSize);
         $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0,0);
         $noCitymCount = count($totalNoCitymList);
         $count_city = $count_pageSize - $matchCount - $otherCount - $noCitymCount;
         $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList);
-        // var_dump($list);die;
         $re_list = $this->getDataList($list);
         $data['list'] = $re_list;
         return $data;
@@ -338,40 +362,47 @@ class RecommendService
         
         $residence = str_replace(['省','市'],'',$user_info['residence']);
         $switch = DB::name('city_switch')->where(['city'=>$residence])->value('is_show');
-        if($switch == 1){ //只展示该区域数据
+        if($switch == 1){ //开关 只展示该区域数据
             $condition['residence'] = $user_info['residence'];
             $where_match = $this->getWhereMatch($uid,0);
-            // var_dump($where_match);die;
             $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
             $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
-            // var_dump($totalCount);die;
+            
             $data = [];
             $data['totalCountAll'] = $totalCount;
             $data['totalPageAll'] = $totalPage;
-
-            //精准
+            //区域精准
             $where_match = $this->getWhereMatch($uid,1); 
-            // var_dump($where_match);
             $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
-            // var_dump(count($totalMatchList));
+            // var_dump(count($totalMatchList));die;
             $matchCount = count($totalMatchList);
             $count_match = $count_pageSize - $matchCount;
-            if($count_match == 0){ //有区域精准条件 无需补全
+            if($count_match == 0){ //区域精准条件 无需补全
                 $re_list = $this->getDataList($totalMatchList);
                 $data['list'] = $re_list;
                 return $data;
             }
-            //所有精准的数据 uid 排除
+            //所有精准的数据 排除  计算精准的最后一页需补全的值
+            $lastLimit = 0;
+            $lastCount = 0;
+            $not_id_arr = [];
             $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
-            //非精准
-            $not_id_arr = array_column($jzDataList, 'uid');
+            if(!empty($jzDataList)){
+                $lastLimit = ceil(count($jzDataList) / $count_pageSize); //精准数据总页数 
+                $lastCount = ($lastLimit * $count_pageSize) - count($jzDataList); //需补全的值
+                // var_dump(count($lastCount));
+                $not_id_arr = array_column($jzDataList, 'uid');
+            }
             // var_dump($not_id_arr);
             $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
-            if($count_match != $pageSize){
+            if($count_match != $count_pageSize){
                 $limit = 0;
-                $pageSize = $count_match;
+            }else{
+                $limit = ($page - $lastLimit - 1) * $count_pageSize + $lastCount; 
             }
-
+            $pageSize = $count_match;
+            // var_dump($limit);
+            // var_dump($pageSize);
             $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
             $list = array_merge($totalMatchList, $totalOtherList);
             $re_list = $this->getDataList($list);
@@ -379,7 +410,7 @@ class RecommendService
             return $data;
 
         }
-        //不完全展示该区域
+        //不完全展示该区域 
         $where_match = $this->getWhereMatch($uid,0); //获取条件  1精准  2非精准 0全部
         $totalCountAll = Db::name('children')->where($condition)->where($where_match)->count(); //已认证总条数
         $totalPageAll = ceil($totalCountAll / $pageSize); //已认证总页数
@@ -387,7 +418,7 @@ class RecommendService
         $data = [];
         $data['totalCountAll'] = $totalCountAll;
         $data['totalPageAll'] = $totalPageAll;
-        //区域条件
+        //区域条件  
         $condition['residence'] = $user_info['residence'];
         $totalCount = Db::name('children')->where($condition)->where($where_match)->count(); //区域匹配总条数
         $totalPage = ceil($totalCount / $pageSize); //区域匹配总页数
@@ -403,6 +434,7 @@ class RecommendService
         }
         // 区域有数据 匹配区域的情况下   1.区域精准    2.区域非精准  3.非区域查询
         $totalMatchList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,2);
+        // var_dump(DB::name('children')->getLastsql());
         // var_dump($totalMatchList);die;
         $matchCount = count($totalMatchList);
         $count_match = $count_pageSize - $matchCount;
@@ -411,18 +443,27 @@ class RecommendService
             $data['list'] = $re_list;
             return $data;
         }
-        //所有精准的数据 uid 排除
+        //所有精准的数据 排除 精准最后一页是否需要补数据值
+        $lastLimit = 0;
+        $lastCount = 0;
+        $not_id_arr = [];
         $jzDataList = ChildrenModel::getSelectJz($condition,$where_match,'uid',$order,1,2);
-        //精准匹配数据不全/无精准数据 查询区域下其他数据
-        $not_id_arr = array_column($jzDataList, 'uid');
-        // var_dump($not_id_arr);
-        $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
-        if($count_match != $pageSize){
-            $limit = 0;
-            $pageSize = $count_match;
+        if(!empty($jzDataList)){
+            $lastLimit = ceil(count($jzDataList) / $count_pageSize); //精准数据总页数
+            $lastCount = ($lastLimit * $count_pageSize) - count($jzDataList); //补全的值
+            // var_dump(count($lastCount));
+            $not_id_arr = array_column($jzDataList, 'uid');
         }
+        $where_match = $this->getWhereMatch($uid,0,$not_id_arr);
+        if($count_match != $count_pageSize){
+            $limit = 0;
+        }else{
+            $limit = ($page - $lastLimit - 1)*$count_pageSize + $lastCount; 
+        }
+        $pageSize = $count_match;
 
         $totalOtherList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,1,0);
+        // var_dump(DB::name('children')->getLastsql());
         $otherCount = count($totalOtherList);
         // var_dump($otherCount);
         $count_other = $count_pageSize - $matchCount - $otherCount;
@@ -433,17 +474,24 @@ class RecommendService
             $data['list'] = $re_list;
             return $data;
         }
-
+        //区域总页数 最后一条需要补得数据值
+        $CityLastCount = ($totalPage * $count_pageSize) - $totalCount;
+        // var_dump($CityLastCount);
+        $CityLastLimit = $totalPage;
+        // var_dump($CityLastLimit);
         //列表中 其他数据不全 补全非区域
-        if($count_other != $pageSize){
+        if($count_other != $count_pageSize){
             $limit = 0;
-            $pageSize = $count_other;
+        }else{
+            $limit = ($page - $CityLastLimit - 1)*$count_pageSize + $CityLastCount; 
         }
+        $pageSize = $count_other;
+        // var_dump($limit);
+        // var_dump($pageSize);
         $totalNoCitymList = ChildrenModel::getSelect($condition,$where_match,$field,$order,$limit,$pageSize,0,0);
         $noCitymCount = count($totalNoCitymList);
         $count_city = $count_pageSize - $matchCount - $otherCount - $noCitymCount;
         $list = array_merge($totalMatchList, $totalOtherList, $totalNoCitymList);
-        // var_dump($list);die;
         $re_list = $this->getDataList($list);
         $data['list'] = $re_list;
         return $data;
