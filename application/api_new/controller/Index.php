@@ -479,6 +479,9 @@ class Index extends Base
             $children['phone'] = '家长电话';
             $children['is_telcollection'] = 1;
         }
+        if(!empty($children['remarks'])){
+            $children['remarks'] = checkStr($children['remarks']);
+        }
         $children['is_me'] = 1;//不是自己
         $is_vip = UsersService::isVip($userinfo);
         $children['is_vip'] = $is_vip;

@@ -60,7 +60,7 @@ class User extends Base
         if($is_have){
             return $this->errorReturn(self::errcode_fail,'孩子资料已完善');
         }
-        //添加审核员id team_id
+        // 添加审核员id team_id
         $count = TeamModel::teamCount('');
         $params['team_id'] = rand(1,$count);
         $params['uid'] = $uid;
@@ -86,6 +86,11 @@ class User extends Base
             ScoreService::instance()->editFullInc($uid,'income'); 
         }
         if(isset($params['remarks']) && !empty($params['remarks'])){
+            //判断相亲说明是否有手机号 微信号
+            $check = checkStrphone($params['remarks']);
+            if($check == false){
+                return $this->errorReturn(self::errcode_fail,'手机号或者微信号属于敏感字,请重新填写');
+            }
             ScoreService::instance()->editFullInc($uid,'remarks'); 
         }
         //投放广告数据处理

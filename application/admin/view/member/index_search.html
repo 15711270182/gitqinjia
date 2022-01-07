@@ -51,10 +51,6 @@
                     {/foreach}
                 </select>
             </div>
-        </div>
-
-         <div class="layui-form-item layui-inline">
-
             <label class="layui-form-label">学历</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="education">
@@ -67,6 +63,11 @@
                     {/foreach}
                 </select>
             </div>
+        </div>
+
+         <div class="layui-form-item layui-inline">
+
+            
             <label class="layui-form-label">车产</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="cart">
@@ -115,32 +116,6 @@
                     {/foreach}
                 </select>
             </div>
-         </div>
-         <div class="layui-form-item layui-inline">
-            <label class="layui-form-label">居住地</label>
-            <div class="layui-input-inline">
-                <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
-
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select class="layui-select block full-width residence" lay-ignore name="residence" lay-filter="residence">
-
-                </select>
-            </div>
-            <label class="layui-form-label">家乡</label>
-            <div class="layui-input-inline">
-                <select class="layui-select" name="hometown" lay-filter ="hometown" id="hometown" lay-search>
-                        <option value="">请选择</option>
-                       {foreach $provinces as $k=>$v}
-                        {if isset($hometown) and $hometown eq $v}
-                        <option selected value="{$v}">{$v}</option>
-                        {else}
-                        <option value="{$v}">{$v}</option>
-                        {/if}
-                        {/foreach}
-                 </select>
-            </div>
             <label class="layui-form-label">电话审核</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="team_status">
@@ -167,6 +142,34 @@
             </div>
          </div>
          <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">居住地</label>
+            <div class="layui-input-inline">
+                <select class="layui-select block full-width province" lay-ignore name="province" lay-filter="province">
+
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select class="layui-select block full-width residence" lay-ignore name="residence" lay-filter="residence">
+
+                </select>
+            </div>
+            <label class="layui-form-label">家乡</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="hometown" lay-filter ="hometown" id="hometown" lay-search>
+                        <option value="">请选择</option>
+                       {foreach $provinces as $k=>$v}
+                        {if isset($hometown) and $hometown eq $v}
+                        <option selected value="{$v}">{$v}</option>
+                        {else}
+                        <option value="{$v}">{$v}</option>
+                        {/if}
+                        {/foreach}
+                 </select>
+            </div>
+            
+            
+      <!--    </div>
+         <div class="layui-form-item layui-inline"> -->
             <label class="layui-form-label">年龄</label>
             <div class="layui-input-inline">
                 <input name="age_min" value="{$age_min|default=''}" placeholder="年龄开始" class="layui-input">
