@@ -176,23 +176,68 @@ class Invite extends Controller
         $id = input('uid');
         $balance = input('balance');
         $tx_money = input('tx_money');
+        $remark = input('remark');
         if($tx_money >($balance/100)){
             $this->error('提现金额不能大于余额');
         }
-        $add['uid'] = $id;
-        $add['bid'] = $id;
-        $add['pay_time'] = date('Y-m-d H:i:s');
-        $add['total_money'] = $balance;
-        $add['awards_money'] = $tx_money*100;
-        $add['status'] = 2;
-        $add['remark'] = '用户提现';
-        $add['create_time'] = date('Y-m-d H:i:s');
-        $res1 = Db::name('invite_awards')->insertGetId($add);
-        $res2 = Db::name('children')->where(['uid'=>$id])->setDec('balance',$add['awards_money']);
-        $res3 = Db::name('children')->where(['uid'=>$id])->setInc('withdrawn_amount',$add['awards_money']);
-        if($res1 && $res2 && $res3){
-             $this->success('操作成功','javascript:history.back()');
+        if($tx_money < 0.3){
+            $this->error('提现金额不能小于0.3');
+        }  
+     
+        // 微信打款
+        $trade_no = md5(uniqid(mt_rand(), true));
+        $openid = DB::name('userinfo')->where(['id'=>$id])->value('openid');
+        $WePay = \We::WePayTransfers(config('wechat.auth'));
+        // var_dump($openid);die;
+        $result_pay = $WePay->create([
+            'partner_trade_no' => $trade_no,
+            'openid'           => $openid,
+            'check_name'       => 'NO_CHECK',
+            'amount'           => $tx_money * 100,
+            'desc'             => $remark,
+            'spbill_create_ip' => request()->ip(),
+        ]);
+        $result_code = $result_pay['result_code'];
+        // var_dump($result_pay);die;
+        // $result_code = 'SUCCESS';
+        // 添加打款记录
+        $insert_map = [];
+        $insert_map['uid'] = $id;
+        $insert_map['openid'] = $openid;
+        $insert_map['trade_no'] = $trade_no;
+        $insert_map['amount'] = $tx_money;
+        $insert_map['desc'] = $remark;
+        $insert_map['create_time'] = date('Y-m-d H:i:m', time());
+        $insert_map['status'] = $result_code;
+        $insert_map['source'] = 1; //打款类型  邀请奖励
+        if ($result_code == 'SUCCESS'){
+            $insert_map['mchid'] = $result_pay['mchid'];
+            $insert_map['payment_no'] = $result_pay['payment_no'];
+            $insert_map['payment_time'] = $result_pay['payment_time'];
+            //添加记录
+            $res = DB::name('orders_payment')->insertGetId($insert_map);
+            // var_dump($res);die;
+            $add_map = [];
+            $add_map['uid'] = $id;
+            $add_map['bid'] = $id;
+            $add_map['pay_time'] = date('Y-m-d H:i:s');
+            $add_map['total_money'] = $balance;
+            $add_map['awards_money'] = $tx_money*100;
+            $add_map['status'] = 2; //提现
+            $add_map['remark'] = $remark;
+            $add_map['create_time'] = date('Y-m-d H:i:s');
+            $res1 = Db::name('invite_awards')->insertGetId($add_map);
+            $res2 = Db::name('children')->where(['uid'=>$id])->setDec('balance',$add_map['awards_money']);
+            $res3 = Db::name('children')->where(['uid'=>$id])->setInc('withdrawn_amount',$add_map['awards_money']);
+            if($res && $res1 && $res2 && $res3){
+
+                $this->success('提现成功','javascript:history.back()');
+            }   
         }
-         $this->error('提现失败');
+        $insert_map['err_code'] = $result_pay['err_code'];
+        $insert_map['err_code_des'] = $result_pay['err_code_des'];
+        DB::name('orders_payment')->insertGetId($insert_map);
+        $this->error('提现失败');
+       
     }
 }

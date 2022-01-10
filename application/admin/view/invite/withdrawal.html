@@ -30,7 +30,13 @@
         <div class="layui-form-item">
             <label class="layui-form-label">提现金额</label>
             <div class="layui-input-block">
-               <input name="tx_money" required value='' class="layui-input">
+               <input name="tx_money" required value='' class="layui-input" placeholder="提现金额不能低于0.3">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+               <input name="remark" required value="{$vo.remark|default='完美亲家邀请奖励'}" class="layui-input">
             </div>
         </div>
     </div>
