@@ -226,7 +226,7 @@ class Push extends Controller
 
         list($table, $field, $value) = explode('#', $rule . '##');
 
-        custom_log("推送","rule" . print_r($rule, true));
+        custom_log("推送","rule_" . print_r($rule, true));
 
         $data = Db::name($table)->where([$field => $value])->find();
         if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
@@ -236,10 +236,8 @@ class Push extends Controller
         switch (strtolower($data['type'])) {
             case 'keys':
                 $content = empty($data['content']) ? $data['name'] : $data['content'];
-                custom_log("推送","关键字内容" . print_r($content, true));
                 return $this->keys("wechat_keys#keys#{$content}", $isLast, $isCustom);
             case 'text':
-                custom_log("推送","关键字文本" . print_r($data['content'], true));
                 return $this->sendMessage('text', ['content' => $data['content']], $isCustom);
             case 'customservice':
 
@@ -271,6 +269,9 @@ class Push extends Controller
                 if (!($mediaId = MediaService::upload($data['video_url'], 'video', $videoData))) return false;
                 return $this->sendMessage('video', ['media_id' => $mediaId, 'title' => $data['video_title'], 'description' => $data['video_desc']], $isCustom);
             case 'card':
+                    if($data['keys'] == 1){
+                        custom_log("推送","关键字内容_1");
+                    }
                     if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])){
                          custom_log('card_data',print_r($data,true));
                          return false;
