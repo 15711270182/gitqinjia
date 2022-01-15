@@ -123,8 +123,8 @@ class Push extends Controller
             }
             $this->fromOpenid = $this->receive['tousername'];
             // text, event, image, location
-            custom_log("推送","openid" . print_r($this->openid, true));
-            custom_log("推送","fromOpenid" . print_r($this->fromOpenid, true));
+            custom_log("推送","openid_" . print_r($this->openid, true));
+            custom_log("推送","fromOpenid_" . print_r($this->fromOpenid, true));
             if (method_exists($this, ($method = $this->receive['msgtype']))) {
                 if (is_string(($result = $this->$method()))) return $result;
             }
@@ -226,6 +226,8 @@ class Push extends Controller
 
         list($table, $field, $value) = explode('#', $rule . '##');
 
+        custom_log("推送","rule" . print_r($rule, true));
+
         $data = Db::name($table)->where([$field => $value])->find();
         if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
             return $isLast ? false : $this->keys('wechat_keys#keys#default', true, $isCustom);
@@ -237,8 +239,10 @@ class Push extends Controller
                 custom_log("推送","关键字内容" . print_r($content, true));
                 return $this->keys("wechat_keys#keys#{$content}", $isLast, $isCustom);
             case 'text':
+                custom_log("推送","关键字文本" . print_r($data['content'], true));
                 return $this->sendMessage('text', ['content' => $data['content']], $isCustom);
             case 'customservice':
+
                 return $this->sendMessage('customservice', ['content' => $data['content']], false);
             case 'voice':
                 if (empty($data['voice_url']) || !($mediaId = MediaService::upload($data['voice_url'], 'voice'))) return false;
