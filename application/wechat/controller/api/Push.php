@@ -123,6 +123,8 @@ class Push extends Controller
             }
             $this->fromOpenid = $this->receive['tousername'];
             // text, event, image, location
+            custom_log("推送","openid" . print_r($this->openid, true));
+            custom_log("推送","fromOpenid" . print_r($this->fromOpenid, true));
             if (method_exists($this, ($method = $this->receive['msgtype']))) {
                 if (is_string(($result = $this->$method()))) return $result;
             }
@@ -232,6 +234,7 @@ class Push extends Controller
         switch (strtolower($data['type'])) {
             case 'keys':
                 $content = empty($data['content']) ? $data['name'] : $data['content'];
+                custom_log("推送","关键字内容" . print_r($content, true));
                 return $this->keys("wechat_keys#keys#{$content}", $isLast, $isCustom);
             case 'text':
                 return $this->sendMessage('text', ['content' => $data['content']], $isCustom);
