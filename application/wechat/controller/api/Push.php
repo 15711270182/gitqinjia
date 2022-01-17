@@ -225,11 +225,6 @@ class Push extends Controller
     {
         list($table, $field, $value) = explode('#', $rule . '##');
 
-        $data = Db::name($table)->where([$field => $value])->find();
-        if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
-            return $isLast ? false : $this->keys('wechat_keys#keys#default', true, $isCustom);
-        }
-
         $rule_arr = explode('#', $rule . '##');
         custom_log("推送","rule_" . print_r($rule_arr, true));
         if(!empty($rule_arr)){
@@ -238,6 +233,13 @@ class Push extends Controller
                 $this->addKeysRecord($this->openid,$rule_arr[2]);
             }
         }
+        
+        $data = Db::name($table)->where([$field => $value])->find();
+        if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
+            return $isLast ? false : $this->keys('wechat_keys#keys#default', true, $isCustom);
+        }
+
+        
         switch (strtolower($data['type'])) {
             case 'keys':
                 $content = empty($data['content']) ? $data['name'] : $data['content'];
