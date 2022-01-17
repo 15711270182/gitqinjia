@@ -428,16 +428,23 @@ class Push extends Controller
             if ($subscribe) {
                 
                 $user = WechatService::WeChatUser()->getUserInfo($this->openid);
+
+                //关注公众号 推送消息
+                if(isset($user['unionid'])){
+                    $Wxservice = new Wxservice();
+                    $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                }
+
                 $map = array();
                 $map['openid'] = $this->openid;
                 $is_have = db::name('wechat_fans')->where($map)->find();
                 if (!$is_have) 
                 {
                     custom_log('关注公众号-首次',print_r($user,true));
-                    if($user['unionid']){
-                        $Wxservice = new Wxservice();
-                        $Wxservice->addTaskRecord($this->openid,$user['unionid']);
-                    }
+                    // if($user['unionid']){
+                    //     $Wxservice = new Wxservice();
+                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    // }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
@@ -463,10 +470,10 @@ class Push extends Controller
                 }
                 if(empty($is_have['subscribe_at'])){
                     custom_log('关注公众号-首次2',print_r($user,true));
-                    if($user['unionid']){
-                        $Wxservice = new Wxservice();
-                        $Wxservice->addTaskRecord($this->openid,$user['unionid']);
-                    }
+                    // if($user['unionid']){
+                    //     $Wxservice = new Wxservice();
+                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    // }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
@@ -486,12 +493,6 @@ class Push extends Controller
                         ];
                         Db::name('tel_count')->strict(false)->insertGetId($params);
                     }
-                }else{ //非首次关注
-                     custom_log('关注公众号-首次','非首次'.print($user,true));
-
-                    $Wxservice = new Wxservice();
-                    $Wxservice->taskPush($this->openid,$user['unionid']);
-
                 }
                 return $res = FansService::set(array_merge($user, ['subscribe' => '1', 'appid' => $this->appid]));
 
