@@ -121,10 +121,11 @@ class Wxservice
                 custom_log("第一天推送", "成功_" . $openid);
                 $rData = Db::name('task_had_reply_record')->where(['openid'=>$openid])->find();
                 if(empty($rData)){
+                    $uid = Db::name('userinfo')->where(['unionid'=>$unionid])->value('id');
                     //添加第一天的推送记录
-                    $record_insert['openid'] = $openid;
+                    $record_insert['openid']  = $openid;
                     $record_insert['unionid'] = $unionid;
-                    $record_insert['uid']     = '4960';
+                    $record_insert['uid']     = !empty($uid)?$uid:0;
                     $record_insert['create_time']   = date('Y-m-d H:i:s');
                     Db::name('task_had_reply_record')->insertGetId($record_insert);
                 }  
