@@ -86,9 +86,9 @@ class Wxservice
             "touser" => $openid,
             "msgtype" => "text",
             "text" => [
-                "content" => '亲爱的家长您好，您是否在为孩子找一个合适的伴侣而烦恼呢？
-我们完美亲家是一个家长帮孩子脱单的平台。通过手机就能接触到更多适合孩子的人， 
-所有用户均为实名认证，效率高，诚意高，脱单快，安全可靠。您离孩子脱单只差一步了哦，
+                "content" => '亲爱的家长您好,您是否在为孩子找一个合适的伴侣而烦恼呢？
+我们完美亲家是一个家长帮孩子脱单的平台。通过手机就能接触到更多适合孩子的人,
+所有用户均为实名认证,效率高,诚意高,脱单快,安全可靠。您离孩子脱单只差一步了哦,
 快去看看亲家的资料吧',
             ],
         ];
@@ -111,12 +111,15 @@ class Wxservice
             ],
         ];
         $sendRes1 = $this->sendKfMessage($send1);
-        $sendRes2 = $this->sendKfMessage($send2);
-        $sendRes3 = $this->sendKfMessage($send3);
+        
         // $sendRes1 = 1;
         // $sendRes2 = 1;
         // $sendRes3 = 1;
-        if($sendRes1 && $sendRes2 && $sendRes3){
+        if($sendRes1){
+            $sendRes2 = $this->sendKfMessage($send2);
+            if($sendRes2){
+                $sendRes3 = $this->sendKfMessage($send3);
+            }
             custom_log("第一天推送", "成功_" . $openid);
             $rData = Db::name('task_had_reply_record')->where(['openid'=>$openid])->find();
             if(empty($rData)){
