@@ -288,6 +288,17 @@ class Push extends Controller
                             Db::name('task_had_reply_record')->where($where_r)->update($rUpdate);
                         }
                     }
+                    //添加回复记录
+                    $unionid = Db::name('wechat_fans')->where(['openid'=>$openid])->value('unionid');
+                    $uid = Db::name('userinfo')->where(['unionid'=>$unionid])->value('id');
+                    $keys_record = [];
+                    $keys_record['openid'] = $openid;
+                    $keys_record['unionid'] = $unionid;
+                    $keys_record['uid'] = !empty($uid)?$uid:0;
+                    $keys_record['reply_content'] = $data['keys'];
+                    $keys_record['create_time'] = date('Y-m-d H:i:s');
+                    Db::name('task_keys_reply_record')->insertGetId($keys_record);
+                    
                     if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])){
                          custom_log('card_data',print_r($data,true));
                          return false;
