@@ -427,10 +427,10 @@ class Push extends Controller
                 if (!$is_have) 
                 {
                     custom_log('关注公众号-首次',print_r($user,true));
-                    // if($user['unionid']){
-                    //     $Wxservice = new Wxservice();
-                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
-                    // }
+                    if($user['unionid']){
+                        $Wxservice = new Wxservice();
+                        $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
@@ -456,10 +456,10 @@ class Push extends Controller
                 }
                 if(empty($is_have['subscribe_at'])){
                     custom_log('关注公众号-首次2',print_r($user,true));
-                    // if($user['unionid']){
-                    //     $Wxservice = new Wxservice();
-                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
-                    // }
+                    if($user['unionid']){
+                        $Wxservice = new Wxservice();
+                        $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];

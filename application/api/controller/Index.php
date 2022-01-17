@@ -1224,7 +1224,7 @@ class Index extends Base
             ->select();
         foreach($list as $key => $value){
             if($value['subscribe'] == 1){ //关注公众号 发模板
-                $tip = '今日推荐的12位相亲对象';
+                $tip = '今天已为您精准匹配30位相亲对象';
                 $remark = '点击查看资料';
                 $temp_id = 'yittRXCFWxzJSHJG6kWSCaed46Lr1JOdi_O-1lCvT2M';
                 $data = array();

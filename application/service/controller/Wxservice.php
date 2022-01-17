@@ -76,8 +76,8 @@ class Wxservice
     }
     //首次关注公众号 执行第一天的推送内容
     public function addTaskRecord($openid = '',$unionid = ''){
-        $openid = 'oJj4v55t8AK7ZxMemRGV8Amb8kRA';
-        $unionid = 'oKvpA6IGOIjxK4X2UvG0pkntko0A';
+        // $openid = 'oJj4v55t8AK7ZxMemRGV8Amb8kRA';
+        // $unionid = 'oKvpA6IGOIjxK4X2UvG0pkntko0A';
         if(empty($openid) ||empty($unionid)){
             custom_log("第一天推送", '错误_'.$openid);
             return [];
@@ -86,7 +86,10 @@ class Wxservice
             "touser" => $openid,
             "msgtype" => "text",
             "text" => [
-                "content" => '亲爱的家长您好，您是否在为孩子找一个合适的伴侣而烦恼呢？我们完美亲家是一个家长帮孩子脱单的平台。通过手机就能接触到更多适合孩子的人，所有用户均为实名认证，效率高，诚意高，脱单快，安全可靠。您离孩子脱单只差一步了哦，快去看看亲家的资料吧',
+                "content" => '亲爱的家长您好，您是否在为孩子找一个合适的伴侣而烦恼呢？
+我们完美亲家是一个家长帮孩子脱单的平台。通过手机就能接触到更多适合孩子的人， 
+所有用户均为实名认证，效率高，诚意高，脱单快，安全可靠。您离孩子脱单只差一步了哦，
+快去看看亲家的资料吧',
             ],
         ];
 
@@ -163,8 +166,7 @@ class Wxservice
                                 'appid'=>'wx70d65d2170dbacd7',
                             ],
                         ];
-                        $base = new Base();
-                        $res = $base->shiwuSendMsg($param);
+                        $res = $this->shiwuSendMsg($param);
                         // $res = 1;
                         if($res){
                             cache('push_first_'.$value['openid'],$value['openid']);
@@ -268,5 +270,30 @@ class Wxservice
         cache('Kefu_media_id', $media_id);
         curl_close($curl);
     }
-
+    /**
+     * @Notes:发送模板消息事务处理
+     * @Interface shiwuSendMsg
+     * @param $data
+     * @return bool
+     * @author: zy
+     * @Time: ${DATE}   ${TIME}
+     */
+    public function shiwuSendMsg($data,$type=0)
+    {
+        try {
+            if($type == 2){
+                $temp = WechatService::WeMiniNewtmpl(config('wechat.miniapp'));
+            }else{
+                $config['appid'] = 'wx33665f6f8d16b7c1';
+                $config['appsecret'] = '3148bd0bbda1b6aa7d084da6f698ac88';
+                $temp = WechatService::WeChatTemplate($config);
+            }
+            $temp->send($data);
+            //模板消息推送成功录入
+            return true;
+        } catch (\Exception $e) {
+            custom_log('新版发送订阅消息参数', json_encode($data) . $e->getMessage());
+            return false;
+        }
+    }
 }
