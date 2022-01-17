@@ -68,12 +68,13 @@ class Web extends Controller
         exit;
     }
     //授权
-    public function authBack($type)
+    public function authBack()
     {
         $json_obj = \We::WeChatOauth(config('wechat.wechat'))->getOauthAccessToken();
         $access_token = $json_obj['access_token'];
         $openid = $json_obj['openid'];
         custom_log("公众号支付", "授权参数_" . print_r($json_obj, true));
+        $type = input('type');
         custom_log("公众号支付", "type_" . $type);
         $map['openid'] = $openid;
         $is_have = Db::name('wechat_fans')->where($map)->find();
