@@ -18,6 +18,7 @@ class Web extends Controller
         $info = $this->fans;
         $map['openid'] = $info['openid'];
         $is_have = Db::name('wechat_fans')->where($map)->find();
+        custom_log("公众号支付", "信息" . print_r($info, true));
         if ($is_have) {
             $unionid = $is_have['unionid'];
             $uid = Db::name('userinfo')->where(['unionid' => $unionid])->value('id');
@@ -33,6 +34,7 @@ class Web extends Controller
         }
         $scope = 'snsapi_userinfo';//snsapi_userinfo
         $stip = 'https://' . $_SERVER['HTTP_HOST'] . '/web/web/authBack?type=0';
+        custom_log("公众号支付", "url" . print_r($stip, true));
         $url = \We::WeChatOauth(config('wechat.wechat'))->getOauthRedirect($stip, '', $scope);
         header("Location:" . $url);
         exit;
@@ -71,7 +73,8 @@ class Web extends Controller
         $json_obj = \We::WeChatOauth(config('wechat.wechat'))->getOauthAccessToken();
         $access_token = $json_obj['access_token'];
         $openid = $json_obj['openid'];
-
+        custom_log("公众号支付", "授权参数_" . print_r($json_obj, true));
+        custom_log("公众号支付", "type_" . $type);
         $map['openid'] = $openid;
         $is_have = Db::name('wechat_fans')->where($map)->find();
         if (!$is_have) {
