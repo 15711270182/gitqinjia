@@ -308,7 +308,8 @@ class Index extends Base
                         $uuInfo = ChildrenModel::childrenFind(['uid'=>$uid],'phone,sex,year,residence');
                         
                         $nickname = UserModel::userValue(['id'=>$uid],'nickname');
-                        $nickname = !empty($nickname)?$nickname:'匿名用户';
+                        // $nickname = !empty($nickname)?$nickname:'匿名用户';
+                        $nickname = '****';
                         if(!empty($uuInfo['phone'])){
                             $phone = substr_cut_phone($uuInfo['phone']);
                             $page = 'pages/details/details?id='.$uid;

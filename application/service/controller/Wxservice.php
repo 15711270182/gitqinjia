@@ -213,7 +213,7 @@ class Wxservice
             }
             curl_close($curl);
             $output_json = json_decode($output,true);
-            if($output_json['errcode'] == 40001){ //token问题
+            if($output_json['errcode'] == 40001 || $output_json['errcode'] == 42001){ //token问题
                 $this->del_accessToken();
                 self::sendKfMessage($data);
             }
