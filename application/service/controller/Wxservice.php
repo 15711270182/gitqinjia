@@ -82,34 +82,35 @@ class Wxservice
             custom_log("第一天推送", '错误_'.$openid);
             return [];
         }
-        $send1 = [
-            "touser" => $openid,
-            "msgtype" => "text",
-            "text" => [
-                "content" => '亲爱的家长您好,您是否在为孩子找一个合适的伴侣而烦恼呢？
+//         $send1 = [
+//             "touser" => $openid,
+//             "msgtype" => "text",
+//             "text" => [
+//                 "content" => '亲爱的家长您好,您是否在为孩子找一个合适的伴侣而烦恼呢？
 
-我们完美亲家是一个家长帮孩子脱单的平台。
+// 我们完美亲家是一个家长帮孩子脱单的平台。
 
-通过手机就能接触到更多适合孩子的人,
-所有用户均为实名认证,效率高,诚意高,脱单快,安全可靠。
+// 通过手机就能接触到更多适合孩子的人,
+// 所有用户均为实名认证,效率高,诚意高,脱单快,安全可靠。
 
-您离孩子脱单只差一步了哦,快去看看亲家的资料吧',
-            ],
-        ];
-        $sendRes1 = $this->sendKfMessage($send1);
-        // $sendRes1 = 1;
+// 您离孩子脱单只差一步了哦,快去看看亲家的资料吧',
+//             ],
+//         ];
+//         $sendRes1 = $this->sendKfMessage($send1);
+        $sendRes1 = 1;
         if($sendRes1){
-            $send2 = [
-                'msgtype' => 'miniprogrampage',
-                'touser' => $openid,
-                'miniprogrampage' => [
-                    "title" => '帮孩子找对象到完美亲家',
-                    "appid" => 'wx70d65d2170dbacd7',
-                    "pagepath" => 'pages/home/home',
-                    "thumb_media_id" => 'z24GvlpzOWKU8VKZVZzUEeoE4n4pcfYTEkPNX3U6mVw',
-                ],
-            ];
-            $sendRes2 = $this->sendKfMessage($send2);
+            // $send2 = [
+            //     'msgtype' => 'miniprogrampage',
+            //     'touser' => $openid,
+            //     'miniprogrampage' => [
+            //         "title" => '帮孩子找对象到完美亲家',
+            //         "appid" => 'wx70d65d2170dbacd7',
+            //         "pagepath" => 'pages/home/home',
+            //         "thumb_media_id" => 'z24GvlpzOWKU8VKZVZzUEeoE4n4pcfYTEkPNX3U6mVw',
+            //     ],
+            // ];
+            // $sendRes2 = $this->sendKfMessage($send2);
+            $sendRes2 = 1;
             if($sendRes2){
                 set_time_limit(2);
                 $send3 = [
