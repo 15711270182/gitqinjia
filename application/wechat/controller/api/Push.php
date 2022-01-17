@@ -21,6 +21,7 @@ use app\api\model\WechatFans;
 use app\wechat\service\FansService;
 use app\wechat\service\MediaService;
 use app\wechat\service\WechatService;
+use app\service\controller\Wxservice;
 use app\api\service\ScoreService;
 use library\Controller;
 use think\Db;
@@ -269,8 +270,23 @@ class Push extends Controller
                 if (!($mediaId = MediaService::upload($data['video_url'], 'video', $videoData))) return false;
                 return $this->sendMessage('video', ['media_id' => $mediaId, 'title' => $data['video_title'], 'description' => $data['video_desc']], $isCustom);
             case 'card':
-                    if($data['keys'] == 1){
-                        custom_log("推送","关键字内容_1");
+                    if($data['keys'] == 1 || $data['keys'] == 2){
+                        $openid = $this->openid;
+                        custom_log('推送','回复1或者2的用户_'.$openid);
+                        $where_r = [];
+                        $where_r['openid'] = $openid;
+                        $where_r['status'] = 0;
+                        $rData = Db::name('task_had_reply_record')->where($where_r)->find();
+                        if(!empty($rData)){
+                            custom_log('推送','修改回复状态_'.$openid);
+                            $where_r = [];
+                            $where_r['openid'] = $openid;
+
+                            $rUpdate = [];
+                            $rUpdate['status'] = 1;
+                            $rUpdate['reply_time'] = date('Y-m-d H:i:s'); 
+                            Db::name('task_had_reply_record')->where($where_r)->update($rUpdate);
+                        }
                     }
                     if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])){
                          custom_log('card_data',print_r($data,true));
@@ -411,6 +427,10 @@ class Push extends Controller
                 if (!$is_have) 
                 {
                     custom_log('关注公众号-首次',print_r($user,true));
+                    // if($user['unionid']){
+                    //     $Wxservice = new Wxservice();
+                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    // }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
@@ -436,6 +456,10 @@ class Push extends Controller
                 }
                 if(empty($is_have['subscribe_at'])){
                     custom_log('关注公众号-首次2',print_r($user,true));
+                    // if($user['unionid']){
+                    //     $Wxservice = new Wxservice();
+                    //     $Wxservice->addTaskRecord($this->openid,$user['unionid']);
+                    // }
                     //首次关注 松三次机会
                     $map = array();
                     $map['unionid'] = $user['unionid'];
