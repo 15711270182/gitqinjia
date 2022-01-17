@@ -223,17 +223,21 @@ class Push extends Controller
      */
     private function keys($rule, $isLast = false, $isCustom = false)
     {
-//        custom_log('qweqwe','url=>' . 123);
-
         list($table, $field, $value) = explode('#', $rule . '##');
-
-        custom_log("推送","rule_" . print_r($rule, true));
 
         $data = Db::name($table)->where([$field => $value])->find();
         if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
             return $isLast ? false : $this->keys('wechat_keys#keys#default', true, $isCustom);
         }
 
+        $rule_arr = explode('#', $rule . '##');
+        custom_log("推送","rule_" . print_r($rule_arr, true));
+        if(!empty($rule_arr)){
+            if($rule_arr[2] != 'subscribe' && $rule_arr[2] != 'default'){
+                //添加回复记录
+                $this->addKeysRecord($this->openid,$rule_arr[2]);
+            }
+        }
         switch (strtolower($data['type'])) {
             case 'keys':
                 $content = empty($data['content']) ? $data['name'] : $data['content'];
@@ -288,17 +292,7 @@ class Push extends Controller
                             Db::name('task_had_reply_record')->where($where_r)->update($rUpdate);
                         }
                     }
-                    //添加回复记录
-                    $unionid = Db::name('wechat_fans')->where(['openid'=>$openid])->value('unionid');
-                    $uid = Db::name('userinfo')->where(['unionid'=>$unionid])->value('id');
-                    $keys_record = [];
-                    $keys_record['openid'] = $openid;
-                    $keys_record['unionid'] = $unionid;
-                    $keys_record['uid'] = !empty($uid)?$uid:0;
-                    $keys_record['reply_content'] = $data['keys'];
-                    $keys_record['create_time'] = date('Y-m-d H:i:s');
-                    Db::name('task_keys_reply_record')->insertGetId($keys_record);
-                    
+
                     if (empty($data['card_url']) || !($mediaId = MediaService::upload($data['card_url'], 'image')) || empty($data['card_title'])){
                          custom_log('card_data',print_r($data,true));
                          return false;
@@ -508,4 +502,18 @@ class Push extends Controller
 			 Hook::exec(['app\\api\\behavior\\Ad','collect'],['type'=>4,'basic_id'=>536,'look_uid'=>0]);
 		}
 
+        //添加回复记录数据
+        public function addKeysRecord($openid,$content){
+            //添加回复记录
+            $unionid = Db::name('wechat_fans')->where(['openid'=>$openid])->value('unionid');
+            $uid = Db::name('userinfo')->where(['unionid'=>$unionid])->value('id');
+            $keys_record = [];
+            $keys_record['openid'] = $openid;
+            $keys_record['unionid'] = $unionid;
+            $keys_record['uid'] = !empty($uid)?$uid:0;
+            $keys_record['reply_content'] = $content;
+            $keys_record['create_time'] = date('Y-m-d H:i:s');
+            Db::name('task_keys_reply_record')->insertGetId($keys_record);
+            return [];
+        }
     }
