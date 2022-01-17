@@ -92,44 +92,44 @@ class Wxservice
 快去看看亲家的资料吧',
             ],
         ];
-
-        $send2 = [
-            'msgtype' => 'miniprogrampage',
-            'touser' => $openid,
-            'miniprogrampage' => [
-                "title" => '帮孩子找对象到完美亲家',
-                "appid" => 'wx70d65d2170dbacd7',
-                "pagepath" => 'pages/home/home',
-                "thumb_media_id" => 'z24GvlpzOWKU8VKZVZzUEeoE4n4pcfYTEkPNX3U6mVw',
-            ],
-        ];
-        $send3 = [
-            "touser" => $openid,
-            "msgtype" => "text",
-            "text" => [
-                "content" => '家长您好，请问您是找女婿还是找儿媳呢？找女婿请回复1，找儿媳请回复2',
-            ],
-        ];
         $sendRes1 = $this->sendKfMessage($send1);
-        
         // $sendRes1 = 1;
-        // $sendRes2 = 1;
-        // $sendRes3 = 1;
         if($sendRes1){
+            $send2 = [
+                'msgtype' => 'miniprogrampage',
+                'touser' => $openid,
+                'miniprogrampage' => [
+                    "title" => '帮孩子找对象到完美亲家',
+                    "appid" => 'wx70d65d2170dbacd7',
+                    "pagepath" => 'pages/home/home',
+                    "thumb_media_id" => 'z24GvlpzOWKU8VKZVZzUEeoE4n4pcfYTEkPNX3U6mVw',
+                ],
+            ];
             $sendRes2 = $this->sendKfMessage($send2);
             if($sendRes2){
+                set_time_limit(2);
+                $send3 = [
+                    "touser" => $openid,
+                    "msgtype" => "text",
+                    "text" => [
+                        "content" => '家长您好，请问您是找女婿还是找儿媳呢？找女婿请回复1，找儿媳请回复2',
+                    ],
+                ];
                 $sendRes3 = $this->sendKfMessage($send3);
             }
-            custom_log("第一天推送", "成功_" . $openid);
-            $rData = Db::name('task_had_reply_record')->where(['openid'=>$openid])->find();
-            if(empty($rData)){
-                //添加第一天的推送记录
-                $record_insert['openid'] = $openid;
-                $record_insert['unionid'] = $unionid;
-                $record_insert['uid']     = '4960';
-                $record_insert['create_time']   = date('Y-m-d H:i:s');
-                Db::name('task_had_reply_record')->insertGetId($record_insert);
-            }  
+            if($sendRes1 && $sendRes2 && $sendRes3){
+                custom_log("第一天推送", "成功_" . $openid);
+                $rData = Db::name('task_had_reply_record')->where(['openid'=>$openid])->find();
+                if(empty($rData)){
+                    //添加第一天的推送记录
+                    $record_insert['openid'] = $openid;
+                    $record_insert['unionid'] = $unionid;
+                    $record_insert['uid']     = '4960';
+                    $record_insert['create_time']   = date('Y-m-d H:i:s');
+                    Db::name('task_had_reply_record')->insertGetId($record_insert);
+                }  
+            }
+           
         }
         custom_log("第一天推送", "失败_" . $openid);
     }
