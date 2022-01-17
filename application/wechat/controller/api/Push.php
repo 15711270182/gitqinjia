@@ -233,7 +233,7 @@ class Push extends Controller
                 $this->addKeysRecord($this->openid,$rule_arr[2]);
             }
         }
-        
+
         $data = Db::name($table)->where([$field => $value])->find();
         if (empty($data['type']) || (array_key_exists('status', $data) && empty($data['status']))) {
             return $isLast ? false : $this->keys('wechat_keys#keys#default', true, $isCustom);
@@ -426,7 +426,7 @@ class Push extends Controller
         {
             custom_log('111',333);
             if ($subscribe) {
-            
+                
                 $user = WechatService::WeChatUser()->getUserInfo($this->openid);
                 $map = array();
                 $map['openid'] = $this->openid;
@@ -486,14 +486,15 @@ class Push extends Controller
                         ];
                         Db::name('tel_count')->strict(false)->insertGetId($params);
                     }
+                }else{ //非首次关注
+                     custom_log('关注公众号-首次','非首次'.print($user,true));
+
+                    $Wxservice = new Wxservice();
+                    $Wxservice->taskPush($this->openid,$user['unionid']);
+
                 }
                 return $res = FansService::set(array_merge($user, ['subscribe' => '1', 'appid' => $this->appid]));
 
-                
-
-                
-                
-          
             } else {
                 $user = ['subscribe' => '0', 'openid' => $this->openid, 'appid' => $this->appid];
                 return data_save('WechatFans', $user, 'openid', ['appid' => $this->appid]);

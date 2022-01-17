@@ -141,6 +141,34 @@ class Wxservice
         }
         custom_log("第一天推送", "失败_" . $openid);
     }
+    //非首次关注公众号 推送内容
+    public function taskPush($openid = '',$unionid = ''){
+        // $openid = 'oJj4v55t8AK7ZxMemRGV8Amb8kRA';
+        // $unionid = 'oKvpA6IGOIjxK4X2UvG0pkntko0A';
+        if(empty($openid) ||empty($unionid)){
+            custom_log("第一天推送", '错误_'.$openid);
+            return [];
+        }
+        $send = [
+            "touser" => $openid,
+            "msgtype" => "text",
+            "text" => [
+                "content" => "【1、什么是完美亲家？】
+完美亲家是一个家长帮孩子脱单的平台。通过手机就能接触到更多适合孩子的人，所有用户均已实名认证，效率高，诚意高，脱单快，安全可靠。
+
+【2、怎么开始帮孩子找对象？】
+< a href=' ' data-miniprogram-appid='wx70d65d2170dbacd7' data-miniprogram-path='pages/home/home'>点击开始</ a>
+
+【3、遇到问题，需要帮助？】
+点击下方菜单栏「帮助」-「联系客服」",
+            ],
+        ];
+        $sendRes1 = $this->sendKfMessage($send);
+        if($sendRes1){
+            custom_log("第一天推送", "成功1_" . $openid);
+        }
+        custom_log("第一天推送", "失败1_" . $openid);
+    }
     /**
      * 第一天的消息推送 1.未回复—模版消息(15分钟后) 2.未付费(60分钟后) 3.未付费(70分钟后)
      * @return boolean|string
