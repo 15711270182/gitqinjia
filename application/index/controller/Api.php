@@ -294,8 +294,8 @@ class Api extends Controller
             $params = [
                 'uid' => $app_user['id'],
                 'type' => 1,
-                'count' => 3,
-                'remarks' => '关注公众号增加3次',
+                'count' => 1,
+                'remarks' => '关注公众号增加1次',
                 'create_at' => time()
             ];
             Db::name('tel_count')->strict(false)->insertGetId($params);

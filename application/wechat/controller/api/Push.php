@@ -453,13 +453,13 @@ class Push extends Controller
                     {
                         $map = array();
                         $map['id'] = $userinfo['id'];
-                        db::name('userinfo')->where($map)->setInc('count',3);
+                        db::name('userinfo')->where($map)->setInc('count',1);
                         //添加增加记录
                         $params = [
                             'uid' => $userinfo['id'],
                             'type' => 1,
-                            'count' => 3,
-                            'remarks' => '关注公众号增加3次',
+                            'count' => 1,
+                            'remarks' => '关注公众号增加1次',
                             'create_at' => time()
                         ];
                         Db::name('tel_count')->strict(false)->insertGetId($params);
@@ -482,13 +482,13 @@ class Push extends Controller
                     {
                         $map = array();
                         $map['id'] = $userinfo['id'];
-                        db::name('userinfo')->where($map)->setInc('count',3);
+                        db::name('userinfo')->where($map)->setInc('count',1);
                         //添加增加记录
                         $params = [
                             'uid' => $userinfo['id'],
                             'type' => 1,
-                            'count' => 3,
-                            'remarks' => '关注公众号增加3次',
+                            'count' => 1,
+                            'remarks' => '关注公众号增加1次',
                             'create_at' => time()
                         ];
                         Db::name('tel_count')->strict(false)->insertGetId($params);

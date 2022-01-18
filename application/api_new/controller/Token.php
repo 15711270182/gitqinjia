@@ -80,6 +80,7 @@ class Token extends Base
                             RelationModel::relationAdd($relation);
                         }
                     }
+                    $this->gxWechatCount($unionid);
                     $userInfo = UserModel::userFind(['id'=>$resId],'id as uid,openid,unionid');
                 }
                 $c_data = $userInfo;
@@ -110,6 +111,7 @@ class Token extends Base
         // $is_have = UserModel::userFind(['openid' => $openid]);
         $is_have = UserModel::userFind(['unionid' => $unionid]);
         if ($is_have) {
+            $this->gxWechatCount($unionid);
             UserModel::userEdit(['id' => $is_have['id']],$data);
             $data = [];
             $data['uid'] = $is_have['id'];
@@ -133,7 +135,7 @@ class Token extends Base
         $data['session_key'] = $session_key;
         $session3rd = randomFromDev(16);
         cache(config('wechat.miniapp.appid') . '_SESSION__' . $session3rd, $data);
-
+        $this->gxWechatCount($unionid);
         return $this->successReturn($session3rd, '成功', self::errcode_ok);
     }
     /**
@@ -180,5 +182,45 @@ class Token extends Base
         custom_log('授权获取手机号',print_r($result,true));
         //手机号已存在 返回已授权
         return json_encode(['code' => 200, 'data' => $result]);
+    }
+    /**
+     * @Notes:判断用户是否关注公众号赠送次数
+     * @Interface gxWechatCount
+     * @author: zy
+     * @Time: 2022/01/18   10:11
+     */
+    public function gxWechatCount($unionid = ''){
+        // $unionid = 'oKvpA6Pcrqz3MuREtaboiTTQBguw';
+        if(empty($unionid)){
+            custom_log('关注公众号','登录接口unionid为空');
+        }   
+        $is_have = UserModel::userFind(['unionid' => $unionid]);
+        if($is_have){
+            $where_c = "type = 1 and uid = '{$is_have['id']}' and remarks like '关注公众号%'";
+            $count_have = Db::name('tel_count')->where($where_c)->find(); //是否赠送关注公众号的次数
+            // var_dump(Db::name('tel_count')->getLastsql());die;
+            $where_f = [];
+            $where_f['unionid'] = $unionid;
+            $where_f['subscribe'] = 1;
+            $gx_have = Db::name('wechat_fans')->where($where_f)->find(); //是否关注公众号
+            //var_dump($gx_have);die;
+            if(empty($count_have) && !empty($gx_have)){
+                custom_log('关注公众号','未赠送次数-登录时赠送_'.$unionid);
+                //赠送联系次数
+                $map = [];
+                $map['id'] = $is_have['id'];
+                Db::name('userinfo')->where($map)->setInc('count',1);
+                //添加增加记录
+                $params = [
+                    'uid' => $is_have['id'],
+                    'type' => 1,
+                    'count' => 1,
+                    'remarks' => '关注公众号增加1次',
+                    'create_at' => time()
+                ];
+                Db::name('tel_count')->strict(false)->insertGetId($params);
+            }
+            custom_log('关注公众号','已赠送次数-登录时_'.$unionid);
+        }
     }
 }
