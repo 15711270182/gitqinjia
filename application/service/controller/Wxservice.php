@@ -119,8 +119,8 @@ class Wxservice
                     "text" => [
                         "content" => '家长您好，请问您是找女婿还是找儿媳呢？
 
-[礼物]回复“1”找【女婿】
-[爱心]回复“2”找【儿媳】',
+ < a href="weixin://bizmsgmenu?msgmenucontent=1&msgmenuid=1">点这里 找【女婿】</ a>
+ < a href="weixin://bizmsgmenu?msgmenucontent=2&msgmenuid=1">点这里 找【儿媳】</ a>',
                     ],
                 ];
                 $sendRes3 = $this->sendKfMessage($send3);
